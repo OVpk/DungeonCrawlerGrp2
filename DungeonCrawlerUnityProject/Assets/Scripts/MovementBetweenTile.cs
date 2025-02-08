@@ -14,7 +14,6 @@ public class MovementBetweenTile : MonoBehaviour
 
     public enum Directions
     {
-        Up,
         Down,
         Right,
         Left
@@ -27,7 +26,6 @@ public class MovementBetweenTile : MonoBehaviour
         switch (context.control.name)
         {
             case "down" : SwitchTile(Directions.Down); break;
-            case "up" : SwitchTile(Directions.Up); break;
             case "left" : SwitchTile(Directions.Left); break;
             case "right" : SwitchTile(Directions.Right); break;
         }
@@ -35,21 +33,18 @@ public class MovementBetweenTile : MonoBehaviour
 
     private void SwitchTile(Directions direction)
     {
-        (int x, int y) nextTilePosition = LevelManager.Instance.currentTile.coordinates;
+        Tile.TileType nextTileType;
         switch (direction)
         {
-            case Directions.Down: nextTilePosition.x -= 1; break;
-            case Directions.Up: nextTilePosition.x += 1; break;
-            case Directions.Left: nextTilePosition.y -= 1; break;
-            case Directions.Right: nextTilePosition.y += 1; break;
+            case Directions.Down: nextTileType = LevelManager.Instance.nextDownTile; break;
+            case Directions.Left: nextTileType = LevelManager.Instance.nextLeftTile; break;
+            case Directions.Right: nextTileType = LevelManager.Instance.nextRightTile; break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
         }
         
-        if (LevelManager.Instance.IsOutSideLimits(nextTilePosition)) return;
+        LevelManager.Instance.GenerateTile(nextTileType);
         
-        LevelManager.Instance.GenerateTile(nextTilePosition);
-        
-        Tile nextTile = LevelManager.Instance.level[nextTilePosition.x, nextTilePosition.y];
-        LevelManager.Instance.currentTile = nextTile;
     }
     
 }
