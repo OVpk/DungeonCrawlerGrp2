@@ -8,129 +8,201 @@ using Random = UnityEngine.Random;
 
 public class LevelManager : MonoBehaviour
 {
-    public Tile currentTile;
-    private GameObject currentTileObject;
-
-    public Tile.TileType nextLeftTile { get; private set;}
-    public Tile.TileType nextRightTile { get; private set;}
-    public Tile.TileType nextDownTile { get; private set;}
+    private AreaData[,] level;
+    [Header("Level size")]
+    public int levelHeight;
+    public int levelWidth;
     
-    [SerializeField] private GameObject shopTilePrefab;
-    [SerializeField] private GameObject fightTilePrefab;
+    [Header("Percent of chance for each Area type")]
+    public int chanceOfFight;
+    public int chanceOfShop;
+
+    private int normalizedFightChance;
+    private int normalizedShopChance;
+
+    [Header("Max consecutive same area")] 
+    public int maxConsecutiveFightArea;
+    public int maxConsecutiveShopArea;
     
-    [SerializeField] private SpriteRenderer leftIndication;
-    [SerializeField] private SpriteRenderer rightIndication;
-    [SerializeField] private SpriteRenderer downIndication;
+    [Header("All Areas Data")]
+    [SerializeField] private FightAreaData[] allFightArea;
+    [SerializeField] private ShopAreaData[] allShopArea;
 
-    [SerializeField] private Sprite fightIndication;
-    [SerializeField] private Sprite shopIndication;
-
-    private Dictionary<Tile.TileType, Sprite> tileIndications;
-
-    private int consecutiveSameRoomCount = 0;
-
-    [SerializeField] private int maxConsecutiveFightRoom;
-    [SerializeField] private int maxConsecutiveShopRoom;
-    
-    
+    private AreaData currentArea;
+    private (int x, int y) currentAreaPosition;
 
     public static LevelManager Instance;
     
+    private int seed;
+
+    
     private void Awake()
     {
-        Instance = this;
+        if (Instance != null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(this);
+        }
     }
 
     private void Start()
     {
-        tileIndications = new Dictionary<Tile.TileType, Sprite>
-        {
-            { Tile.TileType.Fight, fightIndication },
-            { Tile.TileType.Shop, shopIndication }
-        };
+        InitSeed();
+        
+        level = new AreaData[levelHeight,levelWidth];
+        currentAreaPosition = (0, levelWidth / 2);
+        GenerateAreaAtPosition(currentAreaPosition);
+        currentArea = level[currentAreaPosition.x, currentAreaPosition.y];
 
-        // Initialisation de la tuile actuelle avec une tuile par défaut
-        currentTileObject = Instantiate(shopTilePrefab, Vector3.zero, quaternion.identity); // Par exemple, une tuile Shop
-        currentTile = currentTileObject.GetComponent<Tile>();
-
-        // Génération de la première tuile
-        Tile.TileType firstTileType = ChoiceTileType();
-        GenerateTile(firstTileType);
+        GenerateNextAreas();
+        Display();
     }
 
-    public void GenerateTile(Tile.TileType newTileType)
+
+    private void InitSeed(int? customSeed = null)
     {
-        if (newTileType == currentTile.type)
-        {
-            consecutiveSameRoomCount++;
-        }
-        else
-        {
-            consecutiveSameRoomCount = 0;
-        }
-        GameObject newTileObject;
-        switch (newTileType)
-        {
-            case Tile.TileType.Fight : newTileObject = fightTilePrefab; break;
-            case Tile.TileType.Shop : newTileObject = shopTilePrefab; break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(newTileType), newTileType, null);
-        }
-        Destroy(currentTileObject);
-        currentTileObject = Instantiate(newTileObject, Vector3.zero, quaternion.identity);
-        currentTile = currentTileObject.GetComponent<Tile>();
+        seed = customSeed ?? System.DateTime.Now.Ticks.GetHashCode();
+        Random.InitState(seed);
+        Debug.Log($"Seed utilisée : {seed}");
+    }
 
-        nextLeftTile = ChoiceTileType();
-        nextRightTile = ChoiceTileType();
-        nextDownTile = ChoiceTileType();
 
-        switch (nextLeftTile)
+
+    [SerializeField] private GameObject areaIconPrefab;
+    private SpriteRenderer[,] displayedAreas = new SpriteRenderer[3, 3];
+
+    private void Display()
+    {
+        InitDisplay();
+        DisplayAreas();
+    }
+
+    private void InitDisplay()
+    {
+        for (int i = 0; i < 3; i++)
         {
-            case Tile.TileType.Fight : leftIndication.sprite = fightIndication; break;
-            case Tile.TileType.Shop : leftIndication.sprite = shopIndication; break;
+            for (int j = 0; j < 3; j++)
+            {
+                displayedAreas[i,j] = 
+                    Instantiate(areaIconPrefab, new Vector3(j, 2 - i, 0) * 6, quaternion.identity).GetComponent<SpriteRenderer>();
+            }
+        }
+    }
+
+    private void DisplayAreas()
+    {
+        displayedAreas[0, 1].sprite = level[currentAreaPosition.x, currentAreaPosition.y].iconDistance1;
+        displayedAreas[0, 2].sprite = level[currentAreaPosition.x, currentAreaPosition.y + 1].iconDistance1;
+        displayedAreas[0, 0].sprite = level[currentAreaPosition.x, currentAreaPosition.y - 1].iconDistance1;
+        displayedAreas[1, 1].sprite = level[currentAreaPosition.x + 1, currentAreaPosition.y].iconDistance1;
+    }
+
+    public void GenerateAreaAtPosition((int x, int y) position)
+    {
+        if (level[position.x, position.y] != null) return;
+        
+        Type newAreaType = ChoiceAreaType();
+
+        if (newAreaType == typeof(FightAreaData))
+        {
+            int rnd = Random.Range(0, allFightArea.Length);
+            level[position.x, position.y] = allFightArea[rnd];
+        }
+        else if (newAreaType == typeof(ShopAreaData))
+        {
+            int rnd = Random.Range(0, allShopArea.Length);
+            level[position.x, position.y] = allShopArea[rnd];
         }
         
-        leftIndication.sprite = tileIndications.ContainsKey(nextLeftTile) ? tileIndications[nextLeftTile] : null;
-        rightIndication.sprite = tileIndications.ContainsKey(nextRightTile) ? tileIndications[nextRightTile] : null;
-        downIndication.sprite = tileIndications.ContainsKey(nextDownTile) ? tileIndications[nextDownTile] : null;
     }
 
-    public Tile.TileType ChoiceTileType()
+    private bool IsOutsideLimits((int x, int y) position)
     {
-        List<Tile.TileType> possibleTypes = DefinePossibleTypes();
+        return position.x < 0 || position.y < 0 || position.x >= levelWidth || position.y >= levelHeight;
+    }
 
+    public void GenerateNextAreas()
+    {
+        (int x, int y)[] directions = 
+        {
+            (0, 1),  // Droite
+            (0, -1), // Gauche
+            (1, 0),  // Bas
+        };
+
+        foreach (var direction in directions)
+        {
+            (int x, int y) newPosition = (currentAreaPosition.x + direction.x, currentAreaPosition.y + direction.y);
+            
+            if (!IsOutsideLimits(newPosition))
+            {
+                GenerateAreaAtPosition(newPosition);
+            }
+        }
+    }
+    
+    public bool HaveReachConsecutiveSameAreaLimit((int x, int y) position, Type areaType, int maxCount)
+    {
+        if (maxCount <= 0) return true;
+
+        (int x, int y)[] directions = 
+        {
+            (0, 1),  // Droite
+            (0, -1), // Gauche
+            (1, 0),  // Bas
+            (-1, 0)  // Haut
+        };
+        
+        foreach (var direction in directions)
+        {
+            (int x, int y) newPosition = (position.x + direction.x, position.y + direction.y);
+
+            if (IsOutsideLimits((newPosition.x, newPosition.y))) continue;
+            if (level[newPosition.x, newPosition.y] == null) continue;
+                
+            if (level[newPosition.x, newPosition.y].GetType() == areaType)
+            {
+                return HaveReachConsecutiveSameAreaLimit((newPosition.x, newPosition.y), areaType, maxCount - 1);
+            }
+        }
+        
+        return false;
+    }
+
+    private Type ChoiceAreaType()
+    {
+        List<Type> possibleTypes = DefinePossibleTypes();
         return SelectByProbability(possibleTypes);
     }
 
-    public List<Tile.TileType> DefinePossibleTypes()
+    private List<Type> DefinePossibleTypes()
     {
-        List<Tile.TileType> possibleTypes = new List<Tile.TileType>();
-
-        if (!(currentTile.type == Tile.TileType.Fight && consecutiveSameRoomCount >= maxConsecutiveFightRoom -1))
-        {
-            possibleTypes.Add(Tile.TileType.Fight);
-        }
-        if (!(currentTile.type == Tile.TileType.Shop && consecutiveSameRoomCount >= maxConsecutiveShopRoom -1))
-        {
-            possibleTypes.Add(Tile.TileType.Shop);
-        }
+        List<Type> possibleTypes = new List<Type>();
+        /*
+        ajouter condition pour chaque ajout
+        */
+        possibleTypes.Add(typeof(FightAreaData));
+        possibleTypes.Add(typeof(ShopAreaData));
 
         return possibleTypes;
     }
-
-    public int chanceOfFight;
-    public int chanceOfShop;
     
-    public Tile.TileType SelectByProbability(List<Tile.TileType> possibleTypes)
+
+
+    private void NormalizeProbabilities(List<Type> possibleAreaTypes)
     {
-        
         int fightChance = chanceOfFight;
         int shopChance = chanceOfShop;
-
-        
         int totalChance = 0;
 
-        if (possibleTypes.Contains(Tile.TileType.Fight))
+        bool containsFightArea = possibleAreaTypes.Contains(typeof(FightAreaData));
+        bool containsShopArea = possibleAreaTypes.Contains(typeof(ShopAreaData));
+
+        if (containsFightArea)
         {
             totalChance += fightChance;
         }
@@ -139,7 +211,7 @@ public class LevelManager : MonoBehaviour
             fightChance = 0;
         }
 
-        if (possibleTypes.Contains(Tile.TileType.Shop))
+        if (containsShopArea)
         {
             totalChance += shopChance;
         }
@@ -148,25 +220,28 @@ public class LevelManager : MonoBehaviour
             shopChance = 0;
         }
 
-        
-        int normalizedFightChance = (fightChance * 100) / totalChance;
-        int normalizedShopChance = (shopChance * 100) / totalChance;
+        if (totalChance > 0)
+        {
+            normalizedFightChance = (fightChance * 100) / totalChance;
+            normalizedShopChance = (shopChance * 100) / totalChance;
+        }
+    }
 
-        
+    private Type SelectByProbability(List<Type> possibleTypes)
+    {
+        NormalizeProbabilities(possibleTypes);
         int rndNb = Random.Range(0, 100);
 
-        
         if (rndNb < normalizedFightChance)
         {
-            return Tile.TileType.Fight;
+            return typeof(FightAreaData);
         }
-        else if (rndNb < normalizedFightChance + normalizedShopChance)
+        if (rndNb < normalizedFightChance + normalizedShopChance)
         {
-            return Tile.TileType.Shop;
+            return typeof(ShopAreaData);
         }
 
-        
-        return possibleTypes[0]; //default return (normally never append)
+        return possibleTypes[0]; // Retour par défaut
     }
     
 }
