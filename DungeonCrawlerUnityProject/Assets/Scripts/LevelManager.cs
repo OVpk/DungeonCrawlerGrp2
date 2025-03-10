@@ -1,17 +1,17 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class LevelManager : MonoBehaviour
 {
-    private AreaData[,] level;
+    public AreaData[,] level { get; private set; }
+    
     [Header("Level size")]
     public int levelHeight;
     public int levelWidth;
+    
+
     
     [Header("Percent of chance for each Area type")]
     public int chanceOfFight;
@@ -29,11 +29,16 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private ShopAreaData[] allShopArea;
 
     private AreaData currentArea;
-    private (int x, int y) currentAreaPosition;
+    public (int x, int y) currentAreaPosition { get; private set; }
+    
+    private Queue<FightAreaData> lastFightAreas = new Queue<FightAreaData>();
+    public int maxNbOfFightAreasSaved;
 
     public static LevelManager Instance;
     
     private int seed;
+    
+
 
     
     private void Awake()
@@ -47,65 +52,39 @@ public class LevelManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(this);
         }
-    }
-
-    private void Start()
-    {
-        InitSeed();
         
-        level = new AreaData[levelHeight,levelWidth];
-        currentAreaPosition = (0, levelWidth / 2);
-        GenerateAreaAtPosition(currentAreaPosition);
-        currentArea = level[currentAreaPosition.x, currentAreaPosition.y];
-
-        GenerateNextAreas();
-        Display();
+        InitSeed();
+        InitLevel();
     }
 
+    private void SaveFightArea(FightAreaData fightArea)
+    {
+        if (lastFightAreas.Count == maxNbOfFightAreasSaved)
+        {
+            lastFightAreas.Dequeue();
+        }
+        lastFightAreas.Enqueue(fightArea);
+    }
 
+    
     private void InitSeed(int? customSeed = null)
     {
-        seed = customSeed ?? System.DateTime.Now.Ticks.GetHashCode();
+        seed = customSeed ?? Math.Abs(DateTime.Now.Ticks.GetHashCode());
         Random.InitState(seed);
         Debug.Log($"Seed utilisée : {seed}");
     }
 
 
 
-    [SerializeField] private GameObject areaIconPrefab;
-    private SpriteRenderer[,] displayedAreas = new SpriteRenderer[3, 3];
 
-    private void Display()
-    {
-        InitDisplay();
-        DisplayAreas();
-    }
 
-    private void InitDisplay()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                displayedAreas[i,j] = 
-                    Instantiate(areaIconPrefab, new Vector3(j, 2 - i, 0) * 6, quaternion.identity).GetComponent<SpriteRenderer>();
-            }
-        }
-    }
 
-    private void DisplayAreas()
-    {
-        displayedAreas[0, 1].sprite = level[currentAreaPosition.x, currentAreaPosition.y].iconDistance1;
-        displayedAreas[0, 2].sprite = level[currentAreaPosition.x, currentAreaPosition.y + 1].iconDistance1;
-        displayedAreas[0, 0].sprite = level[currentAreaPosition.x, currentAreaPosition.y - 1].iconDistance1;
-        displayedAreas[1, 1].sprite = level[currentAreaPosition.x + 1, currentAreaPosition.y].iconDistance1;
-    }
 
     public void GenerateAreaAtPosition((int x, int y) position)
     {
         if (level[position.x, position.y] != null) return;
         
-        Type newAreaType = ChoiceAreaType();
+        Type newAreaType = ChoiceAreaType(position);
 
         if (newAreaType == typeof(FightAreaData))
         {
@@ -119,28 +98,58 @@ public class LevelManager : MonoBehaviour
         }
         
     }
+    
+    private (int x, int y)[] directions =
+    {
+        (0, 1),  // Droite
+        (0, -1), // Gauche
+        (1, 0),  // Bas
+        (-1, 0)  // Haut
+    };
 
     private bool IsOutsideLimits((int x, int y) position)
     {
         return position.x < 0 || position.y < 0 || position.x >= levelWidth || position.y >= levelHeight;
     }
 
-    public void GenerateNextAreas()
+    private void SwitchCurrentAreaTo((int x, int y) position)
     {
-        (int x, int y)[] directions = 
-        {
-            (0, 1),  // Droite
-            (0, -1), // Gauche
-            (1, 0),  // Bas
-        };
+        currentAreaPosition = position;
+        currentArea = level[currentAreaPosition.x, currentAreaPosition.y];
+    }
 
-        foreach (var direction in directions)
+    private void InitLevel()
+    {
+        level = new AreaData[levelHeight,levelWidth];
+        
+        (int x, int y) firstPosition = (0, levelWidth / 2);
+        GenerateAreaAtPosition(firstPosition);
+        SwitchCurrentAreaTo(firstPosition);
+        
+        GenerateLevel();
+    }
+    
+    public void GenerateLevel()
+    {
+        
+        Queue<(int x, int y)> positionsToGenerate = new Queue<(int x, int y)>();
+
+        positionsToGenerate.Enqueue(currentAreaPosition);
+        
+        while (positionsToGenerate.Count > 0)
         {
-            (int x, int y) newPosition = (currentAreaPosition.x + direction.x, currentAreaPosition.y + direction.y);
-            
-            if (!IsOutsideLimits(newPosition))
+            var position = positionsToGenerate.Dequeue();
+
+            GenerateAreaAtPosition(position);
+
+            foreach (var direction in directions)
             {
-                GenerateAreaAtPosition(newPosition);
+                (int x, int y) newPosition = (position.x + direction.x, position.y + direction.y);
+
+                if (!IsOutsideLimits(newPosition) && level[newPosition.x, newPosition.y] == null)
+                {
+                    positionsToGenerate.Enqueue(newPosition);
+                }
             }
         }
     }
@@ -148,14 +157,6 @@ public class LevelManager : MonoBehaviour
     public bool HaveReachConsecutiveSameAreaLimit((int x, int y) position, Type areaType, int maxCount)
     {
         if (maxCount <= 0) return true;
-
-        (int x, int y)[] directions = 
-        {
-            (0, 1),  // Droite
-            (0, -1), // Gauche
-            (1, 0),  // Bas
-            (-1, 0)  // Haut
-        };
         
         foreach (var direction in directions)
         {
@@ -173,20 +174,24 @@ public class LevelManager : MonoBehaviour
         return false;
     }
 
-    private Type ChoiceAreaType()
+    private Type ChoiceAreaType((int x, int y) position)
     {
-        List<Type> possibleTypes = DefinePossibleTypes();
+        List<Type> possibleTypes = DefinePossibleTypes(position);
         return SelectByProbability(possibleTypes);
     }
 
-    private List<Type> DefinePossibleTypes()
+    private List<Type> DefinePossibleTypes((int x, int y) position)
     {
         List<Type> possibleTypes = new List<Type>();
-        /*
-        ajouter condition pour chaque ajout
-        */
-        possibleTypes.Add(typeof(FightAreaData));
-        possibleTypes.Add(typeof(ShopAreaData));
+        
+        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(FightAreaData), maxConsecutiveFightArea))
+        {
+            possibleTypes.Add(typeof(FightAreaData));
+        }
+        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(ShopAreaData), maxConsecutiveShopArea))
+        {
+            possibleTypes.Add(typeof(ShopAreaData));
+        }
 
         return possibleTypes;
     }
@@ -243,5 +248,9 @@ public class LevelManager : MonoBehaviour
 
         return possibleTypes[0]; // Retour par défaut
     }
+
+
+
+
     
 }
