@@ -214,16 +214,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 512c51a5f7af6954fb3c56649e2fed46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelHeight: 10
-  levelWidth: 10
-  chanceOfFight: 50
-  chanceOfShop: 50
+  levelHeight: 11
+  levelWidth: 11
+  chanceOfFight: 25
+  chanceOfShop: 25
+  chanceOfGambling: 25
+  chanceOfLoot: 25
   maxConsecutiveFightArea: 2
   maxConsecutiveShopArea: 2
+  maxConsecutiveGamblingArea: 2
+  maxConsecutiveLootArea: 2
   allFightArea:
   - {fileID: 11400000, guid: f2965eb6c24445345b9007000962e7b9, type: 2}
   allShopArea:
   - {fileID: 11400000, guid: e6d76e96c1d49be4a801224ebc43ebab, type: 2}
+  allGamblingArea:
+  - {fileID: 11400000, guid: 1102b538b725b0543a5f044b2d0d7411, type: 2}
+  allLootArea:
+  - {fileID: 11400000, guid: 0e50ec3ad139a8448b03edf5f4ff11b6, type: 2}
   maxNbOfFightAreasSaved: 3
 --- !u!114 &325485840
 MonoBehaviour:
@@ -237,8 +245,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2634818c93fc0f54480cc304033544f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayedLevelHeight: 8
-  displayedLevelWidth: 5
+  displayedLevelHeight: 11
+  displayedLevelWidth: 11
   areaIconPrefab: {fileID: 3430707772966388562, guid: 102713a0ef0fae74da8054c65d5fe657, type: 3}
 --- !u!1 &519420028
 GameObject:

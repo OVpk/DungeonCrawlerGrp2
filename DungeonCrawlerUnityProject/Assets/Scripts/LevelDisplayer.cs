@@ -27,11 +27,19 @@ public class LevelDisplayer : MonoBehaviour
                     Instantiate(areaIconPrefab, new Vector3(j, 2 - i, 0) * 6, quaternion.identity).GetComponent<SpriteRenderer>();
             }
         }
-        
-        displayedAreas[0, displayedLevelWidth/2].sprite = LevelManager.Instance.level[LevelManager.Instance.currentAreaPosition.x, LevelManager.Instance.currentAreaPosition.y].iconDistance1;
-        displayedAreas[0, displayedLevelWidth/2 +1].sprite = LevelManager.Instance.level[LevelManager.Instance.currentAreaPosition.x, LevelManager.Instance.currentAreaPosition.y+1].iconDistance1;
-        displayedAreas[0, displayedLevelWidth/2 -1].sprite = LevelManager.Instance.level[LevelManager.Instance.currentAreaPosition.x, LevelManager.Instance.currentAreaPosition.y-1].iconDistance1;
-        displayedAreas[1, displayedLevelWidth/2].sprite = LevelManager.Instance.level[LevelManager.Instance.currentAreaPosition.x+1, LevelManager.Instance.currentAreaPosition.y].iconDistance1;
+
+        for (int i = 0; i < displayedLevelHeight; i++)
+        {
+            displayedAreas[i, displayedLevelWidth/2].sprite = LevelManager.Instance.level[LevelManager.Instance.currentAreaPosition.x + i, LevelManager.Instance.currentAreaPosition.y].iconDistance1;
+            
+            for (int j = 1; j < displayedLevelWidth/2+1; j++)
+            {
+                displayedAreas[i, displayedLevelWidth/2 +j].sprite = LevelManager.Instance.level[LevelManager.Instance.currentAreaPosition.x+i, LevelManager.Instance.currentAreaPosition.y+j].iconDistance1;
+                displayedAreas[i, displayedLevelWidth/2 -j].sprite = LevelManager.Instance.level[LevelManager.Instance.currentAreaPosition.x+i, LevelManager.Instance.currentAreaPosition.y-j].iconDistance1;
+            }
+        }
     }
+    
+
     
 }

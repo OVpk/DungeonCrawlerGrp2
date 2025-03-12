@@ -16,17 +16,25 @@ public class LevelManager : MonoBehaviour
     [Header("Percent of chance for each Area type")]
     public int chanceOfFight;
     public int chanceOfShop;
+    public int chanceOfGambling;
+    public int chanceOfLoot;
 
     private int normalizedFightChance;
     private int normalizedShopChance;
+    private int normalizedGamblingChance;
+    private int normalizedLootChance;
 
     [Header("Max consecutive same area")] 
     public int maxConsecutiveFightArea;
     public int maxConsecutiveShopArea;
+    public int maxConsecutiveGamblingArea;
+    public int maxConsecutiveLootArea;
     
     [Header("All Areas Data")]
     [SerializeField] private FightAreaData[] allFightArea;
     [SerializeField] private ShopAreaData[] allShopArea;
+    [SerializeField] private GamblingAreaData[] allGamblingArea;
+    [SerializeField] private LootAreaData[] allLootArea;
 
     private AreaData currentArea;
     public (int x, int y) currentAreaPosition { get; private set; }
@@ -75,12 +83,7 @@ public class LevelManager : MonoBehaviour
     }
 
 
-
-
-
-
-
-    public void GenerateAreaAtPosition((int x, int y) position)
+    private void GenerateAreaAtPosition((int x, int y) position)
     {
         if (level[position.x, position.y] != null) return;
         
@@ -95,6 +98,16 @@ public class LevelManager : MonoBehaviour
         {
             int rnd = Random.Range(0, allShopArea.Length);
             level[position.x, position.y] = allShopArea[rnd];
+        }
+        else if (newAreaType == typeof(GamblingAreaData))
+        {
+            int rnd = Random.Range(0, allGamblingArea.Length);
+            level[position.x, position.y] = allGamblingArea[rnd];
+        }
+        else if (newAreaType == typeof(LootAreaData))
+        {
+            int rnd = Random.Range(0, allLootArea.Length);
+            level[position.x, position.y] = allLootArea[rnd];
         }
         
     }
@@ -128,8 +141,8 @@ public class LevelManager : MonoBehaviour
         
         GenerateLevel();
     }
-    
-    public void GenerateLevel()
+
+    private void GenerateLevel()
     {
         
         Queue<(int x, int y)> positionsToGenerate = new Queue<(int x, int y)>();
@@ -154,25 +167,30 @@ public class LevelManager : MonoBehaviour
         }
     }
     
-    public bool HaveReachConsecutiveSameAreaLimit((int x, int y) position, Type areaType, int maxCount)
+    
+
+    private bool HaveReachConsecutiveSameAreaLimit((int x, int y) position, Type areaType, int maxCount, (int x, int y) lastDirection = default)
     {
         if (maxCount <= 0) return true;
         
         foreach (var direction in directions)
         {
             (int x, int y) newPosition = (position.x + direction.x, position.y + direction.y);
-
+            
+            if (lastDirection != default && direction == (-lastDirection.x, -lastDirection.y)) continue; // ne verifie pas la zone deja verifiée précedement
             if (IsOutsideLimits((newPosition.x, newPosition.y))) continue;
             if (level[newPosition.x, newPosition.y] == null) continue;
                 
             if (level[newPosition.x, newPosition.y].GetType() == areaType)
             {
-                return HaveReachConsecutiveSameAreaLimit((newPosition.x, newPosition.y), areaType, maxCount - 1);
+                return HaveReachConsecutiveSameAreaLimit((newPosition.x, newPosition.y), areaType, maxCount - 1, direction);
             }
         }
         
         return false;
     }
+    
+    
 
     private Type ChoiceAreaType((int x, int y) position)
     {
@@ -192,6 +210,14 @@ public class LevelManager : MonoBehaviour
         {
             possibleTypes.Add(typeof(ShopAreaData));
         }
+        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(GamblingAreaData), maxConsecutiveGamblingArea))
+        {
+            possibleTypes.Add(typeof(GamblingAreaData));
+        }
+        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(LootAreaData), maxConsecutiveLootArea))
+        {
+            possibleTypes.Add(typeof(LootAreaData));
+        }
 
         return possibleTypes;
     }
@@ -202,10 +228,16 @@ public class LevelManager : MonoBehaviour
     {
         int fightChance = chanceOfFight;
         int shopChance = chanceOfShop;
+        int gamblingChance = chanceOfFight;
+        int lootChance = chanceOfShop;
+        
+        
         int totalChance = 0;
 
         bool containsFightArea = possibleAreaTypes.Contains(typeof(FightAreaData));
         bool containsShopArea = possibleAreaTypes.Contains(typeof(ShopAreaData));
+        bool containsGamblingArea = possibleAreaTypes.Contains(typeof(GamblingAreaData));
+        bool containsLootArea = possibleAreaTypes.Contains(typeof(LootAreaData));
 
         if (containsFightArea)
         {
@@ -224,11 +256,31 @@ public class LevelManager : MonoBehaviour
         {
             shopChance = 0;
         }
+        
+        if (containsGamblingArea)
+        {
+            totalChance += gamblingChance;
+        }
+        else
+        {
+            gamblingChance = 0;
+        }
+        
+        if (containsLootArea)
+        {
+            totalChance += lootChance;
+        }
+        else
+        {
+            lootChance = 0;
+        }
 
         if (totalChance > 0)
         {
             normalizedFightChance = (fightChance * 100) / totalChance;
             normalizedShopChance = (shopChance * 100) / totalChance;
+            normalizedGamblingChance = (gamblingChance * 100) / totalChance;
+            normalizedLootChance = (lootChance * 100) / totalChance;
         }
     }
 
@@ -244,6 +296,14 @@ public class LevelManager : MonoBehaviour
         if (rndNb < normalizedFightChance + normalizedShopChance)
         {
             return typeof(ShopAreaData);
+        }
+        if (rndNb < normalizedFightChance + normalizedShopChance + normalizedGamblingChance)
+        {
+            return typeof(GamblingAreaData);
+        }
+        if (rndNb < normalizedFightChance + normalizedShopChance + normalizedGamblingChance + normalizedLootChance)
+        {
+            return typeof(LootAreaData);
         }
 
         return possibleTypes[0]; // Retour par défaut
