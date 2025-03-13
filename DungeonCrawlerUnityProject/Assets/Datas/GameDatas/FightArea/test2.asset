@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a99700eacad8841478c992eab9eada1e, type: 3}
   m_Name: test2
   m_EditorClassIdentifier: 
-  <nextAreaIcon>k__BackingField: {fileID: 0}
-  <nextAreaIcon2>k__BackingField: {fileID: 0}
-  <nextAreaIcon3>k__BackingField: {fileID: 0}
+  <areaName>k__BackingField: fight2
+  <iconDistance1>k__BackingField: {fileID: 21300000, guid: 472bf4c705bef8f44975b91451de892a, type: 3}
+  <iconDistance2>k__BackingField: {fileID: 0}
+  <iconDistance3>k__BackingField: {fileID: 0}
   <background>k__BackingField: {fileID: 0}
   <boss>k__BackingField: {fileID: 0}

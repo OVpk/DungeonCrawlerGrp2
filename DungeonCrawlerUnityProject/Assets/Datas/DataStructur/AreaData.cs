@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class AreaData : ScriptableObject
 {
+    [field:SerializeField] public string areaName { get; private set; }
+    
     [field : Header("Common Area values in map")]
     [field:SerializeField] public Sprite iconDistance1 { get; private set; }
     [field:SerializeField] public Sprite iconDistance2 { get; private set; }

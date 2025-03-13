@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70d4498972ce9c24c88d6f66337d9707, type: 3}
   m_Name: s1
   m_EditorClassIdentifier: 
+  <areaName>k__BackingField: s1
   <iconDistance1>k__BackingField: {fileID: 21300000, guid: 5c5adbdb5c9e9c747bd7e478b4100398, type: 3}
   <iconDistance2>k__BackingField: {fileID: 0}
   <iconDistance3>k__BackingField: {fileID: 0}

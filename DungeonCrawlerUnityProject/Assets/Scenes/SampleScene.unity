@@ -233,6 +233,7 @@ MonoBehaviour:
   allLootArea:
   - {fileID: 11400000, guid: 0e50ec3ad139a8448b03edf5f4ff11b6, type: 2}
   maxNbOfFightAreasSaved: 3
+  customLevelData: {fileID: 11400000, guid: 0a09d253e8a4dc248bd26b44753e7068, type: 2}
 --- !u!114 &325485840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,8 +246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2634818c93fc0f54480cc304033544f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayedLevelHeight: 11
-  displayedLevelWidth: 11
+  displayedLevelHeight: 5
+  displayedLevelWidth: 5
   areaIconPrefab: {fileID: 3430707772966388562, guid: 102713a0ef0fae74da8054c65d5fe657, type: 3}
 --- !u!1 &519420028
 GameObject:

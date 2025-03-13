@@ -45,8 +45,17 @@ public class LevelManager : MonoBehaviour
     public static LevelManager Instance;
     
     private int seed;
-    
 
+
+    [SerializeField] private CustomLevelData customLevelData;
+
+    public enum LevelMode
+    {
+        Generate,
+        Custom
+    }
+
+    [SerializeField] private LevelMode currentLevelMode;
 
     
     private void Awake()
@@ -60,9 +69,19 @@ public class LevelManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(this);
         }
-        
-        InitSeed();
-        InitLevel();
+
+        switch (currentLevelMode)
+        {
+            case LevelMode.Generate : 
+                InitSeed();
+                InitLevel();
+                break;
+            case LevelMode.Custom :
+                (int x, int y) firstPosition = (0, 5 / 2);
+                level = customLevelData.customLevel2d;
+                SwitchCurrentAreaTo(firstPosition);
+                break;
+        }
     }
 
     private void SaveFightArea(FightAreaData fightArea)
