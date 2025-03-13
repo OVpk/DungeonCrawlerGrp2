@@ -233,7 +233,8 @@ MonoBehaviour:
   allLootArea:
   - {fileID: 11400000, guid: 0e50ec3ad139a8448b03edf5f4ff11b6, type: 2}
   maxNbOfFightAreasSaved: 3
-  customLevelData: {fileID: 11400000, guid: 0a09d253e8a4dc248bd26b44753e7068, type: 2}
+  customLevelData: {fileID: 11400000, guid: a6e2d0e531741824f82bbf98c07ffd0d, type: 2}
+  currentLevelMode: 1
 --- !u!114 &325485840
 MonoBehaviour:
   m_ObjectHideFlags: 0

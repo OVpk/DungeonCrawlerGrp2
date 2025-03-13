@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class CustomLevelData : ScriptableObject
 {
-    private int height;
-    private int width;
-    private AreaData[] customLevel;
+    [SerializeField] private int height;
+    [SerializeField] private int width;
+    [SerializeField] private AreaData[] customLevel;
     public AreaData[,] customLevel2d => ConvertTo2dArray();
 
     public void Init(AreaData[,] levelToSave)

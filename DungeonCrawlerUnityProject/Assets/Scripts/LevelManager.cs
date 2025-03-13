@@ -78,6 +78,7 @@ public class LevelManager : MonoBehaviour
                 break;
             case LevelMode.Custom :
                 (int x, int y) firstPosition = (0, 5 / 2);
+                Debug.Log(customLevelData.customLevel2d.Length);
                 level = customLevelData.customLevel2d;
                 SwitchCurrentAreaTo(firstPosition);
                 break;
