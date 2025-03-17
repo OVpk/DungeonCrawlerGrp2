@@ -17,4 +17,5 @@ MonoBehaviour:
   <iconDistance2>k__BackingField: {fileID: 0}
   <iconDistance3>k__BackingField: {fileID: 0}
   <background>k__BackingField: {fileID: 0}
+  <availableStep>k__BackingField: 1
   <availablePacks>k__BackingField: []

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -48,6 +50,14 @@ public class LevelManager : MonoBehaviour
 
 
     [SerializeField] private CustomLevelData customLevelData;
+    
+    public enum AreaTypes
+    {
+        FightArea,
+        ShopArea,
+        LootArea,
+        GamblingArea
+    }
 
     public enum LevelMode
     {
@@ -109,27 +119,57 @@ public class LevelManager : MonoBehaviour
         
         Type newAreaType = ChoiceAreaType(position);
 
+        level[position.x, position.y] = ChoiceArea(position, newAreaType);
+    }
+
+    private AreaData ChoiceArea((int x, int y) position, Type newAreaType)
+    {
+        int currentStep = DefineStepByPosition(position);
         if (newAreaType == typeof(FightAreaData))
         {
-            int rnd = Random.Range(0, allFightArea.Length);
-            level[position.x, position.y] = allFightArea[rnd];
+            List<FightAreaData> filteredFightAreas = allFightArea
+                .Where(fightArea => fightArea.availableStep == currentStep)
+                .ToList();
+            int rnd = Random.Range(0, filteredFightAreas.Count);
+            return filteredFightAreas[rnd];
         }
         else if (newAreaType == typeof(ShopAreaData))
         {
-            int rnd = Random.Range(0, allShopArea.Length);
-            level[position.x, position.y] = allShopArea[rnd];
+            List<ShopAreaData> filteredShopAreas = allShopArea
+                .Where(shopArea => shopArea.availableStep == currentStep)
+                .ToList();
+            int rnd = Random.Range(0, filteredShopAreas.Count);
+            return filteredShopAreas[rnd];
         }
         else if (newAreaType == typeof(GamblingAreaData))
         {
-            int rnd = Random.Range(0, allGamblingArea.Length);
-            level[position.x, position.y] = allGamblingArea[rnd];
+            List<GamblingAreaData> filteredGamblingAreas = allGamblingArea
+                .Where(gamblingArea => gamblingArea.availableStep == currentStep)
+                .ToList();
+            int rnd = Random.Range(0, filteredGamblingAreas.Count);
+            return filteredGamblingAreas[rnd];
         }
         else if (newAreaType == typeof(LootAreaData))
         {
-            int rnd = Random.Range(0, allLootArea.Length);
-            level[position.x, position.y] = allLootArea[rnd];
+            List<LootAreaData> filteredLootAreas = allLootArea
+                .Where(lootArea => lootArea.availableStep == currentStep)
+                .ToList();
+            int rnd = Random.Range(0, filteredLootAreas.Count);
+            return filteredLootAreas[rnd];
         }
-        
+        throw new InvalidOperationException("Aucun type valide.");
+    }
+
+    [SerializeField] private int nbOfStep;
+
+    private int DefineStepByPosition((int x, int y) position)
+    {
+        for (int i = 1; i < nbOfStep; i++)
+        {
+            if (position.x <= levelHeight / nbOfStep *i) return i;
+        }
+
+        return nbOfStep;
     }
     
     private (int x, int y)[] directions =
@@ -188,27 +228,42 @@ public class LevelManager : MonoBehaviour
     }
     
     
-
-    private bool HaveReachConsecutiveSameAreaLimit((int x, int y) position, Type areaType, int maxCount, (int x, int y) lastDirection = default)
+    
+    private bool HaveReachConsecutiveSameAreaLimit((int x, int y) position, Type areaType, int maxCount)
     {
-        if (maxCount <= 0) return true;
-        
+        return CountConsecutiveSameArea(position, areaType) >= maxCount;
+    }
+    
+    private int CountConsecutiveSameArea((int x, int y) position, Type areaType, (int x, int y) lastDirection = default, HashSet<(int x, int y)> visitedAreas = null)
+    {
+        visitedAreas ??= new HashSet<(int x, int y)>();
+        if (visitedAreas.Contains(position))
+        {
+            return 0;
+        }
+
+        visitedAreas.Add(position);
+
+        int count = 0;
         foreach (var direction in directions)
         {
             (int x, int y) newPosition = (position.x + direction.x, position.y + direction.y);
-            
+
             if (lastDirection != default && direction == (-lastDirection.x, -lastDirection.y)) continue; // ne verifie pas la zone deja verifiée précedement
-            if (IsOutsideLimits((newPosition.x, newPosition.y))) continue;
+            if (IsOutsideLimits(newPosition)) continue;
             if (level[newPosition.x, newPosition.y] == null) continue;
-                
+
             if (level[newPosition.x, newPosition.y].GetType() == areaType)
             {
-                return HaveReachConsecutiveSameAreaLimit((newPosition.x, newPosition.y), areaType, maxCount - 1, direction);
+                count++;
+                count += CountConsecutiveSameArea(newPosition, areaType, direction, visitedAreas);
             }
         }
-        
-        return false;
+
+        return count;
     }
+
+
     
     
 
@@ -259,7 +314,7 @@ public class LevelManager : MonoBehaviour
         bool containsGamblingArea = possibleAreaTypes.Contains(typeof(GamblingAreaData));
         bool containsLootArea = possibleAreaTypes.Contains(typeof(LootAreaData));
 
-        if (containsFightArea)
+        if (chanceOfFight != 0 && containsFightArea)
         {
             totalChance += fightChance;
         }
@@ -268,7 +323,7 @@ public class LevelManager : MonoBehaviour
             fightChance = 0;
         }
 
-        if (containsShopArea)
+        if (chanceOfShop != 0 && containsShopArea)
         {
             totalChance += shopChance;
         }
@@ -277,7 +332,7 @@ public class LevelManager : MonoBehaviour
             shopChance = 0;
         }
         
-        if (containsGamblingArea)
+        if (chanceOfGambling != 0 && containsGamblingArea)
         {
             totalChance += gamblingChance;
         }
@@ -286,7 +341,7 @@ public class LevelManager : MonoBehaviour
             gamblingChance = 0;
         }
         
-        if (containsLootArea)
+        if (chanceOfLoot != 0 && containsLootArea)
         {
             totalChance += lootChance;
         }
@@ -325,7 +380,7 @@ public class LevelManager : MonoBehaviour
         {
             return typeof(LootAreaData);
         }
-
+        
         return possibleTypes[0]; // Retour par défaut
     }
 

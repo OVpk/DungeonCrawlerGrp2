@@ -14,4 +14,7 @@ public abstract class AreaData : ScriptableObject
     [field : Header("Common Area values in scene")]
     [field:SerializeField] public Sprite background { get; private set; }
     
+    [field : Header("Step where this area is available")]
+    [field:SerializeField] public int availableStep { get; private set; }
+    
 }
