@@ -1,0 +1,24 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(menuName = "Data/Entity/Character")]
+public class CharacterData : EntityData
+{
+    [field: SerializeField] public CharacterData nextLayer { get; private set; }
+    
+    public override EntityDataInstance Instance()
+    {
+        return new CharacterDataInstance(this);
+    }
+ 
+}
+
+public class CharacterDataInstance : EntityDataInstance
+{
+
+    public CharacterDataInstance(CharacterData data) : base(data)
+    {
+        
+    }
+}
