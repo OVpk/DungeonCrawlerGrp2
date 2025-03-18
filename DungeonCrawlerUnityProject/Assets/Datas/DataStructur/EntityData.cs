@@ -10,7 +10,7 @@ public abstract class EntityData : ScriptableObject
     }
     
     [field: Header("Stats"), SerializeField]
-    public string name { get; private set; }
+    public string entityName { get; private set; }
     [field: SerializeField] public int durability { get; private set; }
     
     [field: SerializeField] public int speed { get; private set; }

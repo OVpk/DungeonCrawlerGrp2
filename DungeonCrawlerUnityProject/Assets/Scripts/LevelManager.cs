@@ -39,6 +39,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private LootAreaData[] allLootArea;
 
     private AreaData currentArea;
+
+    private int currentStep = 1;
     public (int x, int y) currentAreaPosition { get; private set; }
     
     private Queue<FightAreaData> lastFightAreas = new Queue<FightAreaData>();
@@ -117,50 +119,53 @@ public class LevelManager : MonoBehaviour
     {
         if (level[position.x, position.y] != null) return;
         
-        Type newAreaType = ChoiceAreaType(position);
+        AreaTypes newAreaType = ChoiceAreaType(position);
 
         level[position.x, position.y] = ChoiceArea(position, newAreaType);
     }
 
-    private AreaData ChoiceArea((int x, int y) position, Type newAreaType)
+    private AreaData ChoiceArea((int x, int y) position, AreaTypes newAreaType)
     {
-        int currentStep = DefineStepByPosition(position);
-        if (newAreaType == typeof(FightAreaData))
+        AreaData choiceArea;
+        int rnd;
+        switch (newAreaType)
         {
-            List<FightAreaData> filteredFightAreas = allFightArea
-                .Where(fightArea => fightArea.availableStep == currentStep)
-                .ToList();
-            int rnd = Random.Range(0, filteredFightAreas.Count);
-            return filteredFightAreas[rnd];
+            case AreaTypes.FightArea :
+                List<FightAreaData> filteredFightAreas = allFightArea
+                    .Where(fightArea => fightArea.availableStep == currentStep)
+                    .ToList();
+                rnd = Random.Range(0, filteredFightAreas.Count);
+                choiceArea = filteredFightAreas[rnd];
+                break;
+            case AreaTypes.ShopArea :
+                List<ShopAreaData> filteredShopAreas = allShopArea
+                    .Where(shopArea => shopArea.availableStep == currentStep)
+                    .ToList();
+                rnd = Random.Range(0, filteredShopAreas.Count);
+                choiceArea = filteredShopAreas[rnd];
+                break;
+            case AreaTypes.GamblingArea :
+                List<GamblingAreaData> filteredGamblingAreas = allGamblingArea
+                    .Where(gamblingArea => gamblingArea.availableStep == currentStep)
+                    .ToList();
+                rnd = Random.Range(0, filteredGamblingAreas.Count);
+                choiceArea = filteredGamblingAreas[rnd];
+                break;
+            case AreaTypes.LootArea :
+                List<LootAreaData> filteredLootAreas = allLootArea
+                    .Where(lootArea => lootArea.availableStep == currentStep)
+                    .ToList();
+                rnd = Random.Range(0, filteredLootAreas.Count);
+                choiceArea = filteredLootAreas[rnd];
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(newAreaType), newAreaType, null);
         }
-        else if (newAreaType == typeof(ShopAreaData))
-        {
-            List<ShopAreaData> filteredShopAreas = allShopArea
-                .Where(shopArea => shopArea.availableStep == currentStep)
-                .ToList();
-            int rnd = Random.Range(0, filteredShopAreas.Count);
-            return filteredShopAreas[rnd];
-        }
-        else if (newAreaType == typeof(GamblingAreaData))
-        {
-            List<GamblingAreaData> filteredGamblingAreas = allGamblingArea
-                .Where(gamblingArea => gamblingArea.availableStep == currentStep)
-                .ToList();
-            int rnd = Random.Range(0, filteredGamblingAreas.Count);
-            return filteredGamblingAreas[rnd];
-        }
-        else if (newAreaType == typeof(LootAreaData))
-        {
-            List<LootAreaData> filteredLootAreas = allLootArea
-                .Where(lootArea => lootArea.availableStep == currentStep)
-                .ToList();
-            int rnd = Random.Range(0, filteredLootAreas.Count);
-            return filteredLootAreas[rnd];
-        }
-        throw new InvalidOperationException("Aucun type valide.");
+
+        return choiceArea;
     }
 
-    [SerializeField] private int nbOfStep;
+    [SerializeField] private int steps;
 
     private int DefineStepByPosition((int x, int y) position)
     {
@@ -267,31 +272,31 @@ public class LevelManager : MonoBehaviour
     
     
 
-    private Type ChoiceAreaType((int x, int y) position)
+    private AreaTypes ChoiceAreaType((int x, int y) position)
     {
-        List<Type> possibleTypes = DefinePossibleTypes(position);
+        List<AreaTypes> possibleTypes = DefinePossibleTypes(position);
         return SelectByProbability(possibleTypes);
     }
 
-    private List<Type> DefinePossibleTypes((int x, int y) position)
+    private List<AreaTypes> DefinePossibleTypes((int x, int y) position)
     {
-        List<Type> possibleTypes = new List<Type>();
+        List<AreaTypes> possibleTypes = new List<AreaTypes>();
         
         if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(FightAreaData), maxConsecutiveFightArea))
         {
-            possibleTypes.Add(typeof(FightAreaData));
+            possibleTypes.Add(AreaTypes.FightArea);
         }
         if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(ShopAreaData), maxConsecutiveShopArea))
         {
-            possibleTypes.Add(typeof(ShopAreaData));
+            possibleTypes.Add(AreaTypes.ShopArea);
         }
         if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(GamblingAreaData), maxConsecutiveGamblingArea))
         {
-            possibleTypes.Add(typeof(GamblingAreaData));
+            possibleTypes.Add(AreaTypes.GamblingArea);
         }
         if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(LootAreaData), maxConsecutiveLootArea))
         {
-            possibleTypes.Add(typeof(LootAreaData));
+            possibleTypes.Add(AreaTypes.LootArea);
         }
 
         return possibleTypes;
@@ -299,7 +304,7 @@ public class LevelManager : MonoBehaviour
     
 
 
-    private void NormalizeProbabilities(List<Type> possibleAreaTypes)
+    private void NormalizeProbabilities(List<AreaTypes> possibleAreaTypes)
     {
         int fightChance = chanceOfFight;
         int shopChance = chanceOfShop;
@@ -309,10 +314,10 @@ public class LevelManager : MonoBehaviour
         
         int totalChance = 0;
 
-        bool containsFightArea = possibleAreaTypes.Contains(typeof(FightAreaData));
-        bool containsShopArea = possibleAreaTypes.Contains(typeof(ShopAreaData));
-        bool containsGamblingArea = possibleAreaTypes.Contains(typeof(GamblingAreaData));
-        bool containsLootArea = possibleAreaTypes.Contains(typeof(LootAreaData));
+        bool containsFightArea = possibleAreaTypes.Contains(AreaTypes.FightArea);
+        bool containsShopArea = possibleAreaTypes.Contains(AreaTypes.ShopArea);
+        bool containsGamblingArea = possibleAreaTypes.Contains(AreaTypes.GamblingArea);
+        bool containsLootArea = possibleAreaTypes.Contains(AreaTypes.LootArea);
 
         if (chanceOfFight != 0 && containsFightArea)
         {
@@ -359,26 +364,26 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private Type SelectByProbability(List<Type> possibleTypes)
+    private AreaTypes SelectByProbability(List<AreaTypes> possibleTypes)
     {
         NormalizeProbabilities(possibleTypes);
         int rndNb = Random.Range(0, 100);
 
         if (rndNb < normalizedFightChance)
         {
-            return typeof(FightAreaData);
+            return AreaTypes.FightArea;
         }
         if (rndNb < normalizedFightChance + normalizedShopChance)
         {
-            return typeof(ShopAreaData);
+            return AreaTypes.ShopArea;
         }
         if (rndNb < normalizedFightChance + normalizedShopChance + normalizedGamblingChance)
         {
-            return typeof(GamblingAreaData);
+            return AreaTypes.GamblingArea;
         }
         if (rndNb < normalizedFightChance + normalizedShopChance + normalizedGamblingChance + normalizedLootChance)
         {
-            return typeof(LootAreaData);
+            return AreaTypes.LootArea;
         }
         
         return possibleTypes[0]; // Retour par défaut
