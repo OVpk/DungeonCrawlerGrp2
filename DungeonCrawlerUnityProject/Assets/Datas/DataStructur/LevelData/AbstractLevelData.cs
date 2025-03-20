@@ -4,6 +4,6 @@ using UnityEngine;
 
 public abstract class AbstractLevelData : ScriptableObject
 {
-    [SerializeField] protected int height { get; set; }
-    [SerializeField] protected int width { get; set; }
+    [field:SerializeField] public int height { get; protected set; }
+    [field:SerializeField] public int width { get; protected set; }
 }
