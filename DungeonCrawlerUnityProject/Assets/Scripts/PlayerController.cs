@@ -12,8 +12,10 @@ public abstract class PlayerController : MonoBehaviour
         Up
     }
     
-    protected virtual void DPadAction(InputAction.CallbackContext context)
+    public void MovementAction(InputAction.CallbackContext context)
     {
+        if (!context.performed) return;
+        
         Directions selectedDirection = context.control.name switch
         {
             "down" => Directions.Down,
@@ -22,6 +24,9 @@ public abstract class PlayerController : MonoBehaviour
             "right" => Directions.Right,
             _ => throw new ArgumentOutOfRangeException()
         };
+        Move(selectedDirection);
     }
+
+    protected abstract void Move(Directions direction);
 
 }

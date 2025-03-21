@@ -33,7 +33,6 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField]private int maxConsecutiveGamblingArea;
     [SerializeField]private int maxConsecutiveLootArea;
     
-    private (int x, int y) firstPosition = (0, 0);
     private AreaData[,] newLevel;
 
     private enum AreaTypes
@@ -70,7 +69,6 @@ public class LevelGenerator : MonoBehaviour
         LoadNewStepData(newStep);
         
         newLevel = new AreaData[levelHeight,levelWidth];
-        GenerateAreaAtPosition(firstPosition);
         
         GenerateLevel();
         return newLevel;
@@ -88,7 +86,8 @@ public class LevelGenerator : MonoBehaviour
     
     private void GenerateLevel()
     {
-        Queue<(int x, int y)> positionsToGenerate = new Queue<(int x, int y)>();
+        Queue<(int x, int y)> positionsToGenerate = new Queue<(int x, int y)>(); 
+        (int x, int y) firstPosition = (levelHeight/2, levelWidth/2);
 
         positionsToGenerate.Enqueue(firstPosition);
         
@@ -116,7 +115,7 @@ public class LevelGenerator : MonoBehaviour
         
         AreaTypes newAreaType = ChoiceAreaType(position);
 
-        newLevel[position.x, position.y] = ChoiceArea(position, newAreaType);
+        newLevel[position.x, position.y] = ChoiceArea(newAreaType);
     }
     
         private AreaTypes ChoiceAreaType((int x, int y) position)
@@ -268,7 +267,7 @@ public class LevelGenerator : MonoBehaviour
         return count;
     }
     
-    private AreaData ChoiceArea((int x, int y) position, AreaTypes newAreaType)
+    private AreaData ChoiceArea(AreaTypes newAreaType)
     {
         AreaData choiceArea;
         int rnd;
@@ -299,6 +298,6 @@ public class LevelGenerator : MonoBehaviour
 
     private bool IsOutsideLimits((int x, int y) position)
     {
-        return position.x < 0 || position.y < 0 || position.x >= levelWidth || position.y >= levelHeight;
+        return position.x < 0 || position.y < 0 || position.x >= levelHeight || position.y >= levelWidth;
     }
 }

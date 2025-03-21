@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance;
     [SerializeField]private LevelGenerator levelGenerator;
-    [SerializeField]private LevelDisplayer levelDisplayer;
+    [field:SerializeField]public LevelDisplayer levelDisplayer { get; private set; }
     
     public AreaData[,] level { get; private set; }
     private AreaData currentArea; 
@@ -50,7 +50,7 @@ public class LevelManager : MonoBehaviour
             LevelMode.Custom => customLevelData.customLevel2d,
             _ => throw new Exception("Mode non valide")
         };
-        SwitchCurrentAreaTo((0, level.GetLength(1)));
+        SwitchCurrentAreaTo((0, level.GetLength(1)/2));
         levelDisplayer.InitDisplay();
     }
 

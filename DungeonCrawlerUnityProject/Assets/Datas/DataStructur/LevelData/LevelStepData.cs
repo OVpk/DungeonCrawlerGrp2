@@ -1,9 +1,10 @@
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Data/LevelStep")]
 public class LevelStepData : AbstractLevelData
 {
-    [SerializeField] public FightAreaData[] availableFightAreas { get; private set; }
-    [SerializeField] public ShopAreaData[] availableShopAreas { get; private set; }
-    [SerializeField] public GamblingAreaData[] availableGamblingAreas { get; private set; }
-    [SerializeField] public LootAreaData[] availableLootAreas { get; private set; }
+    [field:SerializeField] public FightAreaData[] availableFightAreas { get; private set; }
+    [field:SerializeField] public ShopAreaData[] availableShopAreas { get; private set; }
+    [field:SerializeField] public GamblingAreaData[] availableGamblingAreas { get; private set; }
+    [field:SerializeField] public LootAreaData[] availableLootAreas { get; private set; }
 }
