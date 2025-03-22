@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c0eca329b705a24408df9327f0a969d4, type: 3}
-  m_Name: Step1.1(test)
+  m_Name: Step2.1(test)
   m_EditorClassIdentifier: 
-  <height>k__BackingField: 10
-  <width>k__BackingField: 10
+  <height>k__BackingField: 5
+  <width>k__BackingField: 5
   <availableFightAreas>k__BackingField:
   - {fileID: 11400000, guid: f2965eb6c24445345b9007000962e7b9, type: 2}
   - {fileID: 11400000, guid: 671d882ba2a531a4a8ce1425842c21c1, type: 2}

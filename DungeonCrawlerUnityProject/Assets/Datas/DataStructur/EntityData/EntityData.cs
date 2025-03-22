@@ -1,20 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class EntityData : ScriptableObject
 {
-    public enum EntityType
+    public enum EntityTypes
     {
         
     }
     
-    [field: Header("Stats"), SerializeField]
+    [field: Header("Common Entity values"), SerializeField]
     public string entityName { get; private set; }
     [field: SerializeField] public int durability { get; private set; }
     
     [field: SerializeField] public int speed { get; private set; }
-    [field: SerializeField] public EntityType type{ get; private set; }
+    [field: SerializeField] public EntityTypes type{ get; private set; }
     
     [field: SerializeField] public Sprite sprite{ get; private set; }
     public abstract EntityDataInstance Instance();
@@ -25,7 +23,7 @@ public class EntityDataInstance
 {
     public string name;
     public int durability;
-    public EntityData.EntityType type;
+    public EntityData.EntityTypes type;
     public Sprite sprite;
     public int speed;
 

@@ -16,6 +16,6 @@ MonoBehaviour:
   <iconDistance1>k__BackingField: {fileID: 21300000, guid: 472bf4c705bef8f44975b91451de892a, type: 3}
   <iconDistance2>k__BackingField: {fileID: 0}
   <iconDistance3>k__BackingField: {fileID: 0}
+  <description>k__BackingField: description test4
   <background>k__BackingField: {fileID: 0}
-  <availableStep>k__BackingField: 1
   <boss>k__BackingField: {fileID: 0}

@@ -1,8 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using AreaTypes = AreaData.AreaTypes;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -35,13 +35,7 @@ public class LevelGenerator : MonoBehaviour
     
     private AreaData[,] newLevel;
 
-    private enum AreaTypes
-    {
-        FightArea,
-        ShopArea,
-        LootArea,
-        GamblingArea
-    }
+    private LevelManager levelManager => LevelManager.Instance;
     
     private (int x, int y)[] directions =
     {
@@ -65,7 +59,7 @@ public class LevelGenerator : MonoBehaviour
     
     public AreaData[,] NewLevel()
     {
-        LevelStepData newStep = LevelManager.Instance.allSteps[LevelManager.Instance.currentStep];
+        LevelStepData newStep = levelManager.allSteps[levelManager.currentStep];
         LoadNewStepData(newStep);
         
         newLevel = new AreaData[levelHeight,levelWidth];
@@ -128,19 +122,19 @@ public class LevelGenerator : MonoBehaviour
     {
         List<AreaTypes> possibleTypes = new List<AreaTypes>();
         
-        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(FightAreaData), maxConsecutiveFightArea))
+        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), AreaTypes.FightArea, maxConsecutiveFightArea))
         {
             possibleTypes.Add(AreaTypes.FightArea);
         }
-        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(ShopAreaData), maxConsecutiveShopArea))
+        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), AreaTypes.ShopArea, maxConsecutiveShopArea))
         {
             possibleTypes.Add(AreaTypes.ShopArea);
         }
-        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(GamblingAreaData), maxConsecutiveGamblingArea))
+        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), AreaTypes.GamblingArea, maxConsecutiveGamblingArea))
         {
             possibleTypes.Add(AreaTypes.GamblingArea);
         }
-        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), typeof(LootAreaData), maxConsecutiveLootArea))
+        if (!HaveReachConsecutiveSameAreaLimit((position.x, position.y), AreaTypes.LootArea, maxConsecutiveLootArea))
         {
             possibleTypes.Add(AreaTypes.LootArea);
         }
@@ -233,12 +227,12 @@ public class LevelGenerator : MonoBehaviour
         return possibleTypes[0]; // Retour par défaut
     }
     
-    private bool HaveReachConsecutiveSameAreaLimit((int x, int y) position, Type areaType, int maxCount)
+    private bool HaveReachConsecutiveSameAreaLimit((int x, int y) position, AreaTypes areaType, int maxCount)
     {
         return CountConsecutiveSameArea(position, areaType) >= maxCount;
     }
     
-    private int CountConsecutiveSameArea((int x, int y) position, Type areaType, (int x, int y) lastDirection = default, HashSet<(int x, int y)> visitedAreas = null)
+    private int CountConsecutiveSameArea((int x, int y) position, AreaTypes areaType, (int x, int y) lastDirection = default, HashSet<(int x, int y)> visitedAreas = null)
     {
         visitedAreas ??= new HashSet<(int x, int y)>();
         if (visitedAreas.Contains(position))
@@ -257,7 +251,7 @@ public class LevelGenerator : MonoBehaviour
             if (IsOutsideLimits(newPosition)) continue;
             if (newLevel[newPosition.x, newPosition.y] == null) continue;
 
-            if (newLevel[newPosition.x, newPosition.y].GetType() == areaType)
+            if (newLevel[newPosition.x, newPosition.y].areaType == areaType)
             {
                 count++;
                 count += CountConsecutiveSameArea(newPosition, areaType, direction, visitedAreas);
