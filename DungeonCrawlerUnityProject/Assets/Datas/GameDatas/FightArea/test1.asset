@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: test1
   m_EditorClassIdentifier: 
   <areaName>k__BackingField: fight1
-  <iconDistance1>k__BackingField: {fileID: 21300000, guid: 472bf4c705bef8f44975b91451de892a, type: 3}
-  <iconDistance2>k__BackingField: {fileID: 0}
-  <iconDistance3>k__BackingField: {fileID: 0}
+  <iconDistance1>k__BackingField: {fileID: 21300000, guid: d31601c16468a5e4b8c487ca0cd28eeb, type: 3}
+  <iconDistance2>k__BackingField: {fileID: 21300000, guid: b8322d6e472130e46af718c51d040be0, type: 3}
+  <iconDistance3>k__BackingField: {fileID: 21300000, guid: b8322d6e472130e46af718c51d040be0, type: 3}
   <background>k__BackingField: {fileID: 0}
   <boss>k__BackingField: {fileID: 0}
