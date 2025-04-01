@@ -11,7 +11,6 @@ public abstract class EntityData : ScriptableObject
     public string entityName { get; private set; }
     [field: SerializeField] public int durability { get; private set; }
     
-    [field: SerializeField] public int speed { get; private set; }
     [field: SerializeField] public EntityTypes type{ get; private set; }
     
     [field: SerializeField] public Sprite sprite{ get; private set; }
@@ -25,7 +24,6 @@ public class EntityDataInstance
     public int durability;
     public EntityData.EntityTypes type;
     public Sprite sprite;
-    public int speed;
 
     public EntityDataInstance(EntityData data)
     {
@@ -33,6 +31,5 @@ public class EntityDataInstance
         durability = data.durability;
         type = data.type;
         sprite = data.sprite;
-        speed = data.speed;
     }
 }
