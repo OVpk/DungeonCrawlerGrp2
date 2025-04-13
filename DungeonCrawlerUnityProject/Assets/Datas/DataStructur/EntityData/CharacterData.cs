@@ -13,9 +13,10 @@ public class CharacterData : EntityData
 
 public class CharacterDataInstance : EntityDataInstance
 {
+    public CharacterData nextLayer;
 
     public CharacterDataInstance(CharacterData data) : base(data)
     {
-        
+        nextLayer = data.nextLayer;
     }
 }

@@ -10,7 +10,7 @@ public class PatternData : ScriptableObject
         positions = new List<Vector2Int>();
         foreach (var cell in selectedCells)
         {
-            positions.Add(new Vector2Int(cell.x, cell.y));
+            positions.Add(new Vector2Int(cell.y, cell.x));
         }
     }
 }

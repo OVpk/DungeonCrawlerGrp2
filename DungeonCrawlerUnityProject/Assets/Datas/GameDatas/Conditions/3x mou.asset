@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5c1aebfcde940c4da2cfb1a1e9a68bf, type: 3}
-  m_Name: NewPatternData2
+  m_Script: {fileID: 11500000, guid: 271dfbe72f319354a99f12d6b7146472, type: 3}
+  m_Name: 3x mou
   m_EditorClassIdentifier: 
-  <positions>k__BackingField:
-  - {x: 0, y: 0}
-  - {x: 1, y: 0}
-  - {x: 1, y: 1}
-  - {x: 0, y: 1}
+  targetType: 0
+  requiredCount: 3

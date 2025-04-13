@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/Attack")]
+[CreateAssetMenu(menuName = "Fight/Attack")]
 public class AttackData : ScriptableObject
 {
-    [field: SerializeField] public PatternData attackPattern { get; private set; }
-    
-    
+    [field: SerializeField] public AttackStageData[] attackStages { get; private set; }
 }
