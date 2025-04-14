@@ -2,13 +2,22 @@
     "name": "Controls",
     "maps": [
         {
-            "name": "New action map",
+            "name": "X-Box Controller",
             "id": "01231861-99c0-4f7c-bebd-59fd04bf4448",
             "actions": [
                 {
                     "name": "D-Pad",
                     "type": "Button",
                     "id": "0922f714-a847-4893-befd-1946c8367a5c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Buttons",
+                    "type": "Button",
+                    "id": "35881838-97ac-4a41-a730-dcf60010f9fe",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -20,7 +29,7 @@
                     "name": "",
                     "id": "0bf7feef-706b-4d9e-866a-35c520db9716",
                     "path": "<Gamepad>/dpad/down",
-                    "interactions": "Press",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "D-Pad",
@@ -31,7 +40,7 @@
                     "name": "",
                     "id": "6883d665-7a42-4d8d-9641-c512b0234b85",
                     "path": "<Gamepad>/dpad/left",
-                    "interactions": "Press",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "D-Pad",
@@ -42,7 +51,7 @@
                     "name": "",
                     "id": "7d730b57-ae76-42d2-af49-18716e2ed096",
                     "path": "<Gamepad>/dpad/right",
-                    "interactions": "Press",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "D-Pad",
@@ -53,10 +62,54 @@
                     "name": "",
                     "id": "516c7f82-c9ca-45b1-bf33-4893a192deb4",
                     "path": "<Gamepad>/dpad/up",
-                    "interactions": "Press",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "D-Pad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4b89f9d6-f51d-401f-b545-3f73e3997798",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Buttons",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3419092b-18f8-4481-83ea-0b565a1dc0da",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Buttons",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "521af7f5-edd1-4f98-b61f-0aec0f729618",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Buttons",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8a1d3faa-5a94-489e-a080-328888fabb8c",
+                    "path": "<XInputController>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Buttons",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
