@@ -45,7 +45,7 @@ public class FightAreaController : PlayerController
         if (FightManager.Instance.IsOutsideLimit(FightManager.Instance.playerGrid, (playerGridSelectorPosition.x+directionToGo.x, playerGridSelectorPosition.y+directionToGo.y))) return;
         
         playerGridSelectorPosition = (playerGridSelectorPosition.x + directionToGo.x, playerGridSelectorPosition.y + directionToGo.y);
-        FightManager.Instance.MoveSelectorDisplayTo(playerGridSelectorPosition);
+        FightManager.Instance.displayer.MoveSelectorDisplayTo(playerGridSelectorPosition);
     }
 
     private void MoveAttackPattern((int x, int y) directionToGo)
@@ -55,13 +55,13 @@ public class FightAreaController : PlayerController
 
         attackOriginPosition = (attackOriginPosition.x + directionToGo.x, attackOriginPosition.y + directionToGo.y);
         
-        FightManager.Instance.DisplayPattern(attackOriginPosition, pattern);
+        FightManager.Instance.displayer.DisplayPattern(attackOriginPosition, pattern);
     }
 
     private void SelectCharacterAt((int x, int y) position)
     {
         selectedCharacter = FightManager.Instance.playerGrid[position.x, position.y];
-        FightManager.Instance.DisplayPattern(attackOriginPosition, FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions);
+        FightManager.Instance.displayer.DisplayPattern(attackOriginPosition, FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions);
         
         SwitchState(SelectorState.SelectAttackPosition);
 
@@ -69,7 +69,7 @@ public class FightAreaController : PlayerController
 
     private void CancelAttack()
     {
-        FightManager.Instance.CleanPatternDisplay();
+        FightManager.Instance.displayer.CleanPatternDisplay();
         
         SwitchState(SelectorState.OnPlayerGrid);
     }

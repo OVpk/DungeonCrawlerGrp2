@@ -449,6 +449,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1704880383}
   - component: {fileID: 1704880382}
+  - component: {fileID: 1704880384}
   m_Layer: 0
   m_Name: FightArea
   m_TagString: Untagged
@@ -470,10 +471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterTest: {fileID: 11400000, guid: f215ff55990f753488b04fc58c13d96f, type: 2}
   characterTest2: {fileID: 11400000, guid: cd1e506e7fa51c54b8585c17a9ba23c3, type: 2}
-  entityLocationPrefab: {fileID: 1482113083994708128, guid: 34ee6617a2a370e4f85cc3487493ee10, type: 3}
-  playerGridPosition: {fileID: 1982124496}
-  enemyGridPosition: {fileID: 487890756}
-  selectorDisplayed: {fileID: 2119682809}
+  <displayer>k__BackingField: {fileID: 1704880384}
 --- !u!4 &1704880383
 Transform:
   m_ObjectHideFlags: 0
@@ -489,6 +487,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1704880384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704880381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2307f8d79555fc34b9299cb7979d92e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityLocationPrefab: {fileID: 1482113083994708128, guid: 34ee6617a2a370e4f85cc3487493ee10, type: 3}
+  playerGridPosition: {fileID: 1982124496}
+  enemyGridPosition: {fileID: 487890756}
+  selectorDisplayed: {fileID: 2119682809}
 --- !u!1 &1982124496
 GameObject:
   m_ObjectHideFlags: 0
