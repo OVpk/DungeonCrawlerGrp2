@@ -4,17 +4,20 @@ public abstract class EntityData : ScriptableObject
 {
     public enum EntityTypes
     {
-        
+        Mou,
+        Dur
     }
     
     [field: Header("Common Entity values"), SerializeField]
     public string entityName { get; private set; }
     [field: SerializeField] public int durability { get; private set; }
     
-    [field: SerializeField] public int speed { get; private set; }
     [field: SerializeField] public EntityTypes type{ get; private set; }
     
     [field: SerializeField] public Sprite sprite{ get; private set; }
+    
+    [field: SerializeField] public AttackData attack{ get; private set; }
+    
     public abstract EntityDataInstance Instance();
 
 } 
@@ -25,14 +28,14 @@ public class EntityDataInstance
     public int durability;
     public EntityData.EntityTypes type;
     public Sprite sprite;
-    public int speed;
+    public AttackData attack;
 
     public EntityDataInstance(EntityData data)
     {
-        name = data.name;
+        name = data.entityName;
         durability = data.durability;
         type = data.type;
         sprite = data.sprite;
-        speed = data.speed;
+        attack = data.attack;
     }
 }

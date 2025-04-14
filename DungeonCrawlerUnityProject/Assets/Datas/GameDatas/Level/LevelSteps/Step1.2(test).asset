@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0eca329b705a24408df9327f0a969d4, type: 3}
+  m_Name: Step1.2(test)
+  m_EditorClassIdentifier: 
+  <height>k__BackingField: 15
+  <width>k__BackingField: 15
+  <availableFightAreas>k__BackingField:
+  - {fileID: 11400000, guid: f2965eb6c24445345b9007000962e7b9, type: 2}
+  - {fileID: 11400000, guid: 671d882ba2a531a4a8ce1425842c21c1, type: 2}
+  - {fileID: 11400000, guid: e83856362eb412747bf81871554a5b8a, type: 2}
+  - {fileID: 11400000, guid: 54d5d29ccb9dfee4fa76518f70f1f018, type: 2}
+  - {fileID: 11400000, guid: fde0c5b749ad0fe48ab863750a00460c, type: 2}
+  - {fileID: 11400000, guid: 0775da11d7c642c43adc6d790d9eb1b6, type: 2}
+  <availableShopAreas>k__BackingField:
+  - {fileID: 11400000, guid: e6d76e96c1d49be4a801224ebc43ebab, type: 2}
+  - {fileID: 11400000, guid: f0f5ca7bd3a91434dac09112050a880e, type: 2}
+  - {fileID: 11400000, guid: 47230ace7dd377743936f9e70a37805f, type: 2}
+  - {fileID: 11400000, guid: 7be74f63ae80eb343963b22995be7c50, type: 2}
+  - {fileID: 11400000, guid: 02ca49a9149eefe49bd77bf9d71b10b3, type: 2}
+  - {fileID: 11400000, guid: b6fc8f33fdaeee14c9dd87fdc7c9a6b5, type: 2}
+  <availableGamblingAreas>k__BackingField:
+  - {fileID: 11400000, guid: 1102b538b725b0543a5f044b2d0d7411, type: 2}
+  - {fileID: 11400000, guid: eda07fe6632c3d848bed3ee38d912156, type: 2}
+  - {fileID: 11400000, guid: 269d09fb74ce623479249c63b23154fd, type: 2}
+  <availableLootAreas>k__BackingField:
+  - {fileID: 11400000, guid: 0e50ec3ad139a8448b03edf5f4ff11b6, type: 2}
+  - {fileID: 11400000, guid: 46c0868400932e7418f54b288de5ac28, type: 2}
+  - {fileID: 11400000, guid: 295132f41880cdc4092513ab26707bbe, type: 2}

@@ -9,14 +9,14 @@ public class CharacterData : EntityData
     {
         return new CharacterDataInstance(this);
     }
- 
 }
 
 public class CharacterDataInstance : EntityDataInstance
 {
+    public CharacterData nextLayer;
 
     public CharacterDataInstance(CharacterData data) : base(data)
     {
-        
+        nextLayer = data.nextLayer;
     }
 }
