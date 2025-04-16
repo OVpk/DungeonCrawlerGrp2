@@ -8,17 +8,20 @@ public class FightManager : MonoBehaviour
     public enum TurnState
     {
         Player,
-        Ai
+        Enemy
     }
     public TurnState currentTurn { get; private set; }
 
     public void SwitchTurn()
     {
-        currentTurn = currentTurn == TurnState.Player ? TurnState.Ai : TurnState.Player;
+        currentTurn = currentTurn == TurnState.Player ? TurnState.Enemy : TurnState.Player;
     }
 
     public CharacterDataInstance[,] playerGrid { get; private set; } = new CharacterDataInstance[2, 3];
     public EnemyDataInstance[,] enemyGrid {get ; private set;} = new EnemyDataInstance[3, 3];
+
+    private HashSet<(int x, int y)> playerAlreadyPlayedPositions = new HashSet<(int x, int y)>();
+    private HashSet<(int x, int y)> enemyAlreadyPlayedPositions = new HashSet<(int x, int y)>();
 
     public CharacterData characterTest;
     public CharacterData characterTest2;
@@ -82,7 +85,36 @@ public class FightManager : MonoBehaviour
                position.y >= gridToCheck.GetLength(1);
     }
 
-    public void ApplyAttackPattern(EntityDataInstance[,] gridToApply, (int x, int y) originPosition, AttackStageData attackToApply)
+    private void AddPositionToAlreadyPlayed((int x, int y) position,  TurnState positionTeam)
+    {
+        switch (positionTeam)
+        {
+            case TurnState.Player : playerAlreadyPlayedPositions.Add(position); break;
+            case TurnState.Enemy : enemyAlreadyPlayedPositions.Add(position); break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(positionTeam), positionTeam, null);
+        }
+    }
+
+    public void Attack((int x, int y) attackerPosition, (int x, int y) attackOriginPosition, TurnState attackerTeam)
+    {
+        EntityDataInstance[,] attackerGrid;
+        EntityDataInstance[,] opponentGrid;
+        attackerGrid = attackerTeam == TurnState.Player ? playerGrid : enemyGrid; 
+        opponentGrid = attackerTeam == TurnState.Player ? enemyGrid : playerGrid;
+        
+        EntityDataInstance attacker = attackerGrid[attackerPosition.x, attackerPosition.y];
+        AttackStageData attackToApply = FindBestUnlockedStage(attacker.attack);
+        
+        // selon les data une attaque peut se faire sur son propre terrain plutot que opponent grid
+        ApplyAttackPattern(opponentGrid, attackOriginPosition, attackToApply);
+        EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
+        AddPositionToAlreadyPlayed(attackerPosition, attackerTeam);
+        
+        SwitchTurn();
+    }
+
+    private void ApplyAttackPattern(EntityDataInstance[,] gridToApply, (int x, int y) originPosition, AttackStageData attackToApply)
     {
         foreach (var position in attackToApply.pattern.positions)
         {
@@ -93,12 +125,12 @@ public class FightManager : MonoBehaviour
 
     private void ApplyDamageAtPosition(EntityDataInstance[,] gridToApply, (int x, int y) position, int damages)
     {
-        EntityDataInstance entityAtPosition = gridToApply[position.x, position.y];
-        if (entityAtPosition == null) return;
-        EntityTakeDamage(entityAtPosition, damages);
+        EntityDataInstance entity = gridToApply[position.x, position.y];
+        if (entity == null) return;
+        EntityTakeDamage(entity, position, damages);
     }
 
-    private void EntityTakeDamage(EntityDataInstance entity, int damages)
+    private void EntityTakeDamage(EntityDataInstance entity, (int x, int y) entityPosition, int damages)
     {
         entity.durability -= damages;
 
@@ -106,26 +138,37 @@ public class FightManager : MonoBehaviour
         {
             switch (entity)
             {
-                case CharacterDataInstance character : CharacterDeath(ref character); break;
-                case EnemyDataInstance enemy : EnemyDeath(enemy); break;
+                case CharacterDataInstance : CharacterDeathAt(entityPosition); break;
+                case EnemyDataInstance : EnemyDeathAt(entityPosition); break;
             }
         }
     }
 
-    private void CharacterDeath(ref CharacterDataInstance character)
+    private void CharacterDeathAt((int x, int y) position)
     {
-        if (character.nextLayer == null) character = null;
-        else character = (CharacterDataInstance)character.nextLayer.Instance();
+        playerGrid[position.x, position.y] = playerGrid[position.x, position.y].nextLayer == null
+            ? null
+            : (CharacterDataInstance)playerGrid[position.x, position.y].nextLayer.Instance();
     }
     
-    private void EnemyDeath(EnemyDataInstance enemy)
+    private void EnemyDeathAt((int x, int y) position)
     {
-        
+        enemyGrid[position.x, position.y] = null;
     }
 
     private void PlaceCharacterAtPosition(CharacterDataInstance character, (int x, int y) position)
     {
         playerGrid[position.x, position.y] = character;
+    }
+
+    public void BreakLayerAt((int x, int y) position)
+    {
+        CharacterDeathAt(position);
+    }
+
+    public bool IsPositionAlreadyPlayed((int x, int y) position)
+    {
+        return playerAlreadyPlayedPositions.Contains(position);
     }
     
     
