@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5acff76ebb994e249a9ac601e3807dd3, type: 3}
-  m_Name: 3x mou AND 3x dur
+  m_Script: {fileID: 11500000, guid: 271dfbe72f319354a99f12d6b7146472, type: 3}
+  m_Name: 3xMou
   m_EditorClassIdentifier: 
-  conditionA: {fileID: 11400000, guid: 64686dc6706ca5448832456561bbd72d, type: 2}
-  operatorType: 0
-  conditionB: {fileID: 11400000, guid: d20dc5ae6ecbc7b44a35af75c7b8a8a8, type: 2}
+  targetType: 0
+  requiredCount: 3
