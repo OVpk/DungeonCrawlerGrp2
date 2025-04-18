@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: Attack2
   m_EditorClassIdentifier: 
   <attackStages>k__BackingField:
-  - {fileID: 11400000, guid: ce68bc5f95eb7f74e97fefa6e147cd0e, type: 2}
-  - {fileID: 11400000, guid: ce68bc5f95eb7f74e97fefa6e147cd0e, type: 2}
+  - {fileID: 11400000, guid: f3492f895f148314a99658d46ef255af, type: 2}

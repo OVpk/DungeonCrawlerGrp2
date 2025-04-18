@@ -16,5 +16,5 @@ MonoBehaviour:
   <durability>k__BackingField: 3
   <type>k__BackingField: 0
   <sprite>k__BackingField: {fileID: 0}
-  <attack>k__BackingField: {fileID: 0}
+  <attack>k__BackingField: {fileID: 11400000, guid: 760f5e0558367fb44874704c0444d2bf, type: 2}
   <nextLayer>k__BackingField: {fileID: 0}

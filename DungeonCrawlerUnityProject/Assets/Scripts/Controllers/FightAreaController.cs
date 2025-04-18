@@ -22,7 +22,7 @@ public class FightAreaController : PlayerController
     
     protected override void Move(Directions direction)
     {
-        if (FightManager.Instance.currentTurn == FightManager.TurnState.Ai) return;
+        //if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
         
         (int x, int y) directionToGo = direction switch
         {
@@ -58,13 +58,21 @@ public class FightAreaController : PlayerController
         FightManager.Instance.displayer.DisplayPattern(attackOriginPosition, pattern);
     }
 
-    private void SelectCharacterAt((int x, int y) position)
+    private void SelectCharacter()
     {
-        selectedCharacter = FightManager.Instance.playerGrid[position.x, position.y];
-        FightManager.Instance.displayer.DisplayPattern(attackOriginPosition, FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions);
+        if (FightManager.Instance.IsPositionAlreadyPlayed(playerGridSelectorPosition)) return;
+        selectedCharacter = FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y];
         
+        if (selectedCharacter == null) return;
         SwitchState(SelectorState.SelectAttackPosition);
+        
+        FightManager.Instance.displayer.DisplayPattern(attackOriginPosition, FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions);
 
+    }
+
+    private void CharacterLooseLayer()
+    {
+        FightManager.Instance.BreakLayerAt(playerGridSelectorPosition);
     }
 
     private void CancelAttack()
@@ -74,10 +82,9 @@ public class FightAreaController : PlayerController
         SwitchState(SelectorState.OnPlayerGrid);
     }
 
-    private void DoAttackAt((int x, int y) position)
+    private void DoAttack()
     {
-        FightManager.Instance.ApplyAttackPattern(FightManager.Instance.enemyGrid, position, FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack));
-        FightManager.Instance.SwitchTurn();
+        FightManager.Instance.Attack(playerGridSelectorPosition, attackOriginPosition, FightManager.TurnState.Player);
     }
 
     private void SwitchState(SelectorState newState)
@@ -95,12 +102,13 @@ public class FightAreaController : PlayerController
 
     protected override void Press(Buttons button)
     {
-        if (FightManager.Instance.currentTurn == FightManager.TurnState.Ai) return;
+        //if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
         
         switch (button)
         {
             case Buttons.A : PressA(); break;
             case Buttons.B : PressB(); break;
+            case Buttons.X : PressX(); break;
         }
     }
 
@@ -108,8 +116,8 @@ public class FightAreaController : PlayerController
     {
         switch (currentState)
         {
-            case SelectorState.OnPlayerGrid : SelectCharacterAt(playerGridSelectorPosition); break;
-            case SelectorState.SelectAttackPosition : DoAttackAt(attackOriginPosition); break;
+            case SelectorState.OnPlayerGrid : SelectCharacter(); break;
+            case SelectorState.SelectAttackPosition : DoAttack(); break;
         }
     }
 
@@ -121,4 +129,14 @@ public class FightAreaController : PlayerController
             case SelectorState.SelectAttackPosition : CancelAttack(); break;
         }
     }
+    
+    private void PressX()
+    {
+        switch (currentState)
+        {
+            case SelectorState.OnPlayerGrid : CharacterLooseLayer(); break;
+            case SelectorState.SelectAttackPosition : ; break;
+        }
+    }
+    
 }

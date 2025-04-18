@@ -15,3 +15,4 @@ MonoBehaviour:
   <pattern>k__BackingField: {fileID: 11400000, guid: c68d06f8a6e89dc4ab7b00322a1b465b, type: 2}
   <damage>k__BackingField: 10
   <unlockCondition>k__BackingField: {fileID: 0}
+  <selfDamage>k__BackingField: 1
