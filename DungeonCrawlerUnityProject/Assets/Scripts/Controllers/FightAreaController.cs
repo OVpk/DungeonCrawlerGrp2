@@ -22,7 +22,7 @@ public class FightAreaController : PlayerController
     
     protected override void Move(Directions direction)
     {
-        //if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
+        if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
         
         (int x, int y) directionToGo = direction switch
         {
@@ -102,7 +102,7 @@ public class FightAreaController : PlayerController
 
     protected override void Press(Buttons button)
     {
-        //if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
+        if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
         
         switch (button)
         {

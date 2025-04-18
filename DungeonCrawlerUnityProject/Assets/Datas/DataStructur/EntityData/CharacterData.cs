@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/Entity/Character")]
+[CreateAssetMenu(menuName = "Data/Fight/Entity/Character")]
 public class CharacterData : EntityData
 {
     [field: SerializeField] public CharacterData nextLayer { get; private set; }

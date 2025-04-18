@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/Entity/Enemy")]
+[CreateAssetMenu(menuName = "Data/Fight/Entity/Enemy")]
 public class EnemyData : EntityData
 {
     
