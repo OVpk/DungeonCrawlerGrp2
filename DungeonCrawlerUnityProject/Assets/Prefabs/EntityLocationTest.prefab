@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7087323889860871727}
   - component: {fileID: 1687376808673934737}
   m_Layer: 0
-  m_Name: EntityLocation
+  m_Name: EntityLocationTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

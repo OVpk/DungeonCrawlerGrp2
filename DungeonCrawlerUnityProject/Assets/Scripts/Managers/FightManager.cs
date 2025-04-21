@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class FightManager : MonoBehaviour
 {
+    
+    [field: SerializeField] public FightEventSpeaker sendInformation { get; private set; }
+    
     public enum TurnState
     {
         Player,
@@ -37,8 +40,6 @@ public class FightManager : MonoBehaviour
     public EnemyData enemyTest;
 
     public static FightManager Instance;
-
-    [field:SerializeField] public FightDisplayer displayer { get; private set; }
     
     private void Awake()
     {
@@ -55,8 +56,8 @@ public class FightManager : MonoBehaviour
 
     private void Start()
     {
-        displayer.InitDisplayedGrid(playerGrid);
-        displayer.InitDisplayedGrid(enemyGrid);
+        InitDisplayedGrid(playerGrid);
+        InitDisplayedGrid(enemyGrid);
         
         playerGrid[0, 0] = (CharacterDataInstance)characterTest.Instance();
         playerGrid[0, 1] = (CharacterDataInstance)characterTest.Instance();
@@ -69,6 +70,47 @@ public class FightManager : MonoBehaviour
         enemyGrid[0, 1] = (EnemyDataInstance)enemyTest.Instance();
         enemyGrid[0, 2] = (EnemyDataInstance)enemyTest.Instance();
     }
+
+    #region Display
+
+    public GameObject entityLocationPrefab;
+    public GameObject playerGridContainer;
+    public GameObject enemyGridContainer;
+
+    public void InitDisplayedGrid(EntityDataInstance[,] grid)
+    {
+        GameObject container;
+        TurnState team;
+
+        switch (grid)
+        {
+            case CharacterDataInstance[,] : 
+                container = playerGridContainer;
+                team = TurnState.Player;
+                break;
+            case EnemyDataInstance[,] :
+                container = enemyGridContainer;
+                team = TurnState.Enemy;
+                break;
+            default: throw new Exception("Invalid Type");
+        }
+        
+        for (int i = 0; i < grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < grid.GetLength(1); j++)
+            {
+                GameObject entityLocation = Instantiate(entityLocationPrefab, container.transform);
+                entityLocation.transform.localPosition = new Vector3(j, i) * 2f;
+                EntityDisplayController entityController = entityLocation.GetComponent<EntityDisplayController>();
+                entityController.team = team;
+                entityController.positionInGrid = (i, j);
+                entityController.Init();
+                sendInformation.Register(entityController);
+            }
+        }
+    }
+
+    #endregion
 
     public AttackStageData FindBestUnlockedStage(AttackData attack)
     {
