@@ -10,11 +10,20 @@ public class FightManager : MonoBehaviour
         Player,
         Enemy
     }
-    public TurnState currentTurn { get; private set; }
 
-    public void SwitchTurn()
+    public TurnState currentTurn { get; private set; }
+    
+    [field:SerializeField] public SimpleAi aiController { get; private set; }
+
+    private void SwitchTurn()
     {
+        if (IsCleaningGridNecessary(currentTurn)) CleanAlreadyPlayedPositions(currentTurn);
+        
         currentTurn = currentTurn == TurnState.Player ? TurnState.Enemy : TurnState.Player;
+        
+        if (IsCleaningGridNecessary(currentTurn)) CleanAlreadyPlayedPositions(currentTurn);
+        
+        if (currentTurn == TurnState.Enemy) aiController.PlayTurn();
     }
 
     public CharacterDataInstance[,] playerGrid { get; private set; } = new CharacterDataInstance[2, 3];
@@ -25,6 +34,7 @@ public class FightManager : MonoBehaviour
 
     public CharacterData characterTest;
     public CharacterData characterTest2;
+    public EnemyData enemyTest;
 
     public static FightManager Instance;
 
@@ -54,15 +64,29 @@ public class FightManager : MonoBehaviour
         playerGrid[1, 0] = (CharacterDataInstance)characterTest2.Instance();
         playerGrid[1, 1] = (CharacterDataInstance)characterTest2.Instance();
         playerGrid[1, 2] = (CharacterDataInstance)characterTest2.Instance();
+        
+        enemyGrid[0, 0] = (EnemyDataInstance)enemyTest.Instance();
+        enemyGrid[0, 1] = (EnemyDataInstance)enemyTest.Instance();
+        enemyGrid[0, 2] = (EnemyDataInstance)enemyTest.Instance();
     }
 
     public AttackStageData FindBestUnlockedStage(AttackData attack)
     {
-        AttackStageData bestStage = attack.attackStages[0];
-        for (int i = 1; i < attack.attackStages.Length; i++)
+        EntityDataInstance[,] gridToCheck = attack.gridToCheck switch
         {
-            if (!attack.attackStages[i].IsUnlock(playerGrid, enemyGrid)) break;
-            bestStage = attack.attackStages[i];
+            TurnState.Player => playerGrid,
+            TurnState.Enemy => enemyGrid,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        
+        AttackStageData bestStage = attack.attackStages[0];
+        for (int i = attack.attackStages.Length-1; i >= 0; i--)
+        {
+            if (attack.attackStages[i].IsUnlock(gridToCheck))
+            {
+                bestStage = attack.attackStages[i];
+                break;
+            }
         }
         return bestStage;
     }
@@ -85,7 +109,7 @@ public class FightManager : MonoBehaviour
                position.y >= gridToCheck.GetLength(1);
     }
 
-    private void AddPositionToAlreadyPlayed((int x, int y) position,  TurnState positionTeam)
+    private void AddPositionToAlreadyPlayed((int x, int y) position, TurnState positionTeam)
     {
         switch (positionTeam)
         {
@@ -96,18 +120,28 @@ public class FightManager : MonoBehaviour
         }
     }
 
+    private void CleanAlreadyPlayedPositions(TurnState teamToClean)
+    {
+        switch (teamToClean)
+        {
+            case TurnState.Player : playerAlreadyPlayedPositions.Clear(); break;
+            case TurnState.Enemy : enemyAlreadyPlayedPositions.Clear(); break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(teamToClean), teamToClean, null);
+        }
+    }
+
     public void Attack((int x, int y) attackerPosition, (int x, int y) attackOriginPosition, TurnState attackerTeam)
     {
         EntityDataInstance[,] attackerGrid;
-        EntityDataInstance[,] opponentGrid;
+        EntityDataInstance[,] gridToApplyAttack;
         attackerGrid = attackerTeam == TurnState.Player ? playerGrid : enemyGrid; 
-        opponentGrid = attackerTeam == TurnState.Player ? enemyGrid : playerGrid;
         
         EntityDataInstance attacker = attackerGrid[attackerPosition.x, attackerPosition.y];
+        gridToApplyAttack = attacker.attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
         AttackStageData attackToApply = FindBestUnlockedStage(attacker.attack);
         
-        // selon les data une attaque peut se faire sur son propre terrain plutot que opponent grid
-        ApplyAttackPattern(opponentGrid, attackOriginPosition, attackToApply);
+        ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
         EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
         AddPositionToAlreadyPlayed(attackerPosition, attackerTeam);
         
@@ -170,7 +204,56 @@ public class FightManager : MonoBehaviour
     {
         return playerAlreadyPlayedPositions.Contains(position);
     }
-    
-    
-    
+
+    private bool IsCleaningGridNecessary(TurnState teamToCheck)
+    {
+        return AreAllPositionsPlayed(teamToCheck) ||
+               IsCharacterStockEmpty(teamToCheck) && ArePossiblePositionsEmpty(teamToCheck);
+    }
+
+    private bool AreAllPositionsPlayed(TurnState teamToCheck)
+    {
+        return teamToCheck switch
+        {
+            TurnState.Player => playerAlreadyPlayedPositions.Count >= playerGrid.GetLength(0) * playerGrid.GetLength(1),
+            TurnState.Enemy => enemyAlreadyPlayedPositions.Count >= enemyGrid.GetLength(0) * enemyGrid.GetLength(1),
+            _ => throw new ArgumentOutOfRangeException(nameof(teamToCheck), teamToCheck, null)
+        };
+    }
+
+    private bool ArePossiblePositionsEmpty(TurnState teamToCheck)
+    {
+        EntityDataInstance[,] gridToCheck = teamToCheck switch
+        {
+            TurnState.Player => playerGrid,
+            TurnState.Enemy => enemyGrid,
+            _ => throw new ArgumentOutOfRangeException(nameof(teamToCheck), teamToCheck, null)
+        };
+        HashSet<(int x, int y)> alreadyPlayedPositions = teamToCheck switch
+        {
+            TurnState.Player => playerAlreadyPlayedPositions,
+            TurnState.Enemy => enemyAlreadyPlayedPositions,
+            _ => throw new ArgumentOutOfRangeException(nameof(teamToCheck), teamToCheck, null)
+        };
+        for (int i = 0; i < gridToCheck.GetLength(0); i++)
+        {
+            for (int j = 0; j < gridToCheck.GetLength(1); j++)
+            {
+                if (alreadyPlayedPositions.Contains((i, j))) continue;
+                if (gridToCheck[i, j] != null) return false;
+            }
+        }
+        return true;
+    }
+
+    private bool IsCharacterStockEmpty(TurnState teamToCheck)
+    {
+        // à changer par une verification de l'inventaire
+        return teamToCheck switch
+        {
+            TurnState.Player => false,
+            TurnState.Enemy => true,
+            _ => throw new ArgumentOutOfRangeException(nameof(teamToCheck), teamToCheck, null)
+        };
+    }
 }

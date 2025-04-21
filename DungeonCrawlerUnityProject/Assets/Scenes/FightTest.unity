@@ -450,6 +450,7 @@ GameObject:
   - component: {fileID: 1704880383}
   - component: {fileID: 1704880382}
   - component: {fileID: 1704880384}
+  - component: {fileID: 1704880385}
   m_Layer: 0
   m_Name: FightArea
   m_TagString: Untagged
@@ -469,6 +470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96144d12f0316154d8d6bc5494167114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <aiController>k__BackingField: {fileID: 1704880385}
   characterTest: {fileID: 11400000, guid: f215ff55990f753488b04fc58c13d96f, type: 2}
   characterTest2: {fileID: 11400000, guid: cd1e506e7fa51c54b8585c17a9ba23c3, type: 2}
   <displayer>k__BackingField: {fileID: 1704880384}
@@ -503,6 +505,18 @@ MonoBehaviour:
   playerGridPosition: {fileID: 1982124496}
   enemyGridPosition: {fileID: 487890756}
   selectorDisplayed: {fileID: 2119682809}
+--- !u!114 &1704880385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704880381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b989cea9c860a8340b438d9297b80b5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1982124496
 GameObject:
   m_ObjectHideFlags: 0

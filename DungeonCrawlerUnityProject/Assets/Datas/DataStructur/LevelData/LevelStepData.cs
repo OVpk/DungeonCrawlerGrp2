@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/LevelStep")]
+[CreateAssetMenu(menuName = "Data/Level/LevelStep")]
 public class LevelStepData : AbstractLevelData
 {
     [field:SerializeField] public FightAreaData[] availableFightAreas { get; private set; }
