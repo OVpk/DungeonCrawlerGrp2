@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Carambar2Animator
+  m_Controller: {fileID: 9100000, guid: 09fe2c31d512a6c4a9a2b5becd6ee58d, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 69d88e57a15809e4c929c092de973c9e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d496f23aa4f247e48b8274f522d1ed74, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: fc20fbd430d1bcf4abbecdab25a58f12, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d914c7c678c100044ade7c8301dacba9, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 9052a12fb1b9008499cf909495f6313d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 95ac456178cdeb34c93a80eb11cfba9d, type: 2}
