@@ -56,21 +56,25 @@ public class FightAreaController : PlayerController
         List<Vector2Int> pattern = FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions;
         if (FightManager.Instance.IsPatternOutsideLimit(FightManager.Instance.enemyGrid, (attackOriginPosition.x+directionToGo.x, attackOriginPosition.y+directionToGo.y), pattern)) return;
 
+        FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attack.gridToApply);
+        
         attackOriginPosition = (attackOriginPosition.x + directionToGo.x, attackOriginPosition.y + directionToGo.y);
         
-        //displayPattern
+        FightManager.Instance.sendInformation.EntitiesTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attack.gridToApply);
     }
 
     private void SelectCharacter()
     {
         if (FightManager.Instance.IsPositionAlreadyPlayed(playerGridSelectorPosition)) return;
         selectedCharacter = FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y];
-        
         if (selectedCharacter == null) return;
+        
+        FightManager.Instance.sendInformation.EntityNoLongerHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        FightManager.Instance.sendInformation.EntitySelectedAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        
         SwitchState(SelectorState.SelectAttackPosition);
         
-        //displayPattern
-
+        MoveAttackPattern(attackOriginPosition);
     }
 
     private void CharacterLooseLayer()
@@ -80,13 +84,19 @@ public class FightAreaController : PlayerController
 
     private void CancelAttack()
     {
-        //cleanPattern
+        List<Vector2Int> pattern = FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions;
+        
+        FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attack.gridToApply);
+        FightManager.Instance.sendInformation.EntityNoLongerSelectedAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        FightManager.Instance.sendInformation.EntityHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
         
         SwitchState(SelectorState.OnPlayerGrid);
     }
 
     private void DoAttack()
     {
+        CancelAttack();
+        
         FightManager.Instance.Attack(playerGridSelectorPosition, attackOriginPosition, FightManager.TurnState.Player);
     }
 

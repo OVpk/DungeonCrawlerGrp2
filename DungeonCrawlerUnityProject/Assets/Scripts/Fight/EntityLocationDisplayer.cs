@@ -18,6 +18,8 @@ public class EntityLocationDisplayer : MonoBehaviour
         // Clone material instance to avoid global changes
         _instanceMaterial = new Material(baseRenderer.sharedMaterial);
         baseRenderer.material = _instanceMaterial;
+        ClearHighlight();
+        _instanceMaterial.SetFloat(OutlineSize, 20f);
     }
 
     public void SetTeam(FightManager.TurnState team)
@@ -33,12 +35,10 @@ public class EntityLocationDisplayer : MonoBehaviour
     public void SetHighlight(Color color)
     {
         _instanceMaterial.SetColor(OutlineColor, color);
-        _instanceMaterial.SetFloat(OutlineSize, 20f); // Change size if needed
-        Debug.Log("hightlight");
     }
 
     public void ClearHighlight()
     {
-        _instanceMaterial.SetFloat(OutlineSize, 0f);
+        _instanceMaterial.SetColor(OutlineColor, Color.clear);
     }
 }

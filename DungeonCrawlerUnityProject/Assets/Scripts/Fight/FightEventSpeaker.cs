@@ -33,13 +33,14 @@ public class FightEventSpeaker : MonoBehaviour
         }
     }
 
-    public void EntitySpawnAt((int x, int y) position, FightManager.TurnState team)
+    public void EntitySpawnAt((int x, int y) position, FightManager.TurnState team, EntityDataInstance entityData)
     {
         foreach (var listener in listeners)
         {
-            listener.OnEntitySpawn(position, team);
+            listener.OnEntitySpawn(position, team, entityData);
         }
     }
+
 
     public void EntityHoveredAt((int x, int y) position, FightManager.TurnState team)
     {
@@ -54,6 +55,80 @@ public class FightEventSpeaker : MonoBehaviour
         foreach (var listener in listeners)
         {
             listener.OnEntityNoLongerHovered(position, team);
+        }
+    }
+    
+    public void EntityTargetedAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityTargeted(position, team);
+        }
+    }
+    
+    public void EntityNoLongerTargetedAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityNoLongerTargeted(position, team);
+        }
+    }
+
+    public void EntitiesTargetedByPatternAt((int x, int y) originPosition, List<Vector2Int> pattern, FightManager.TurnState team)
+    {
+        foreach (var position in pattern)
+        {
+            (int x, int y) positionInGrid = (originPosition.x + position.x, originPosition.y + position.y);
+            EntityTargetedAt(positionInGrid, team);
+        }
+    }
+    
+    public void EntitiesNoLongerTargetedByPatternAt((int x, int y) originPosition, List<Vector2Int> pattern, FightManager.TurnState team)
+    {
+        foreach (var position in pattern)
+        {
+            (int x, int y) positionInGrid = (originPosition.x + position.x, originPosition.y + position.y);
+            EntityNoLongerTargetedAt(positionInGrid, team);
+        }
+    }
+    
+    public void EntitySelectedAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntitySelected(position, team);
+        }
+    }
+    
+    public void EntityNoLongerSelectedAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityNoLongerSelected(position, team);
+        }
+    }
+
+    public void EntitiesLocationEnabledAt(HashSet<(int x, int y)> positions, FightManager.TurnState team)
+    {
+        foreach (var position in positions)
+        {
+            EntityLocationEnabledAt(position, team);
+        }
+    }
+    
+    public void EntityLocationDisabledAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityLocationDisabled(position, team);
+        }
+    }
+    
+    public void EntityLocationEnabledAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityLocationEnabled(position, team);
         }
     }
 }

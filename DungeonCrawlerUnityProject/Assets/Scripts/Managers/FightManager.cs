@@ -58,13 +58,13 @@ public class FightManager : MonoBehaviour
     {
         InitDisplayedGrid(playerGrid);
         InitDisplayedGrid(enemyGrid);
-        
-        playerGrid[0, 0] = (CharacterDataInstance)characterTest.Instance();
-        playerGrid[0, 1] = (CharacterDataInstance)characterTest.Instance();
-        playerGrid[0, 2] = (CharacterDataInstance)characterTest.Instance();
-        playerGrid[1, 0] = (CharacterDataInstance)characterTest2.Instance();
-        playerGrid[1, 1] = (CharacterDataInstance)characterTest2.Instance();
-        playerGrid[1, 2] = (CharacterDataInstance)characterTest2.Instance();
+
+        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (0, 0));
+        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (0, 1));
+        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (0, 2));
+        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (1, 0));
+        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (1, 1));
+        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (1, 2));
         
         enemyGrid[0, 0] = (EnemyDataInstance)enemyTest.Instance();
         enemyGrid[0, 1] = (EnemyDataInstance)enemyTest.Instance();
@@ -153,6 +153,8 @@ public class FightManager : MonoBehaviour
 
     private void AddPositionToAlreadyPlayed((int x, int y) position, TurnState positionTeam)
     {
+        sendInformation.EntityLocationDisabledAt(position, positionTeam);
+        
         switch (positionTeam)
         {
             case TurnState.Player : playerAlreadyPlayedPositions.Add(position); break;
@@ -164,13 +166,14 @@ public class FightManager : MonoBehaviour
 
     private void CleanAlreadyPlayedPositions(TurnState teamToClean)
     {
-        switch (teamToClean)
+        HashSet<(int x, int y)> positionsToClean = teamToClean switch
         {
-            case TurnState.Player : playerAlreadyPlayedPositions.Clear(); break;
-            case TurnState.Enemy : enemyAlreadyPlayedPositions.Clear(); break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(teamToClean), teamToClean, null);
-        }
+            TurnState.Player => playerAlreadyPlayedPositions,
+            TurnState.Enemy => enemyAlreadyPlayedPositions,
+            _ => throw new ArgumentOutOfRangeException(nameof(teamToClean), teamToClean, null)
+        };
+        sendInformation.EntitiesLocationEnabledAt(positionsToClean, teamToClean);
+        positionsToClean.Clear();
     }
 
     public void Attack((int x, int y) attackerPosition, (int x, int y) attackOriginPosition, TurnState attackerTeam)
@@ -235,6 +238,7 @@ public class FightManager : MonoBehaviour
     private void PlaceCharacterAtPosition(CharacterDataInstance character, (int x, int y) position)
     {
         playerGrid[position.x, position.y] = character;
+        sendInformation.EntitySpawnAt(position, TurnState.Player, character);
     }
 
     public void BreakLayerAt((int x, int y) position)
