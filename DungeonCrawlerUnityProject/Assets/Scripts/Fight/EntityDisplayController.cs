@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class EntityDisplayController : MonoBehaviour, IFightEventListener
@@ -20,6 +21,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     public void Init()
     {
         entityLocation.SetTeam(team);
+        entityLocation.GetComponent<SpriteRenderer>().sortingOrder -= positionInGrid.x;
+        entity.GetComponent<SpriteRenderer>().sortingOrder -= positionInGrid.x;
     }
     
 

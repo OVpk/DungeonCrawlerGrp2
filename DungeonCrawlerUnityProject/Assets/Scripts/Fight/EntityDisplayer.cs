@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EntityDisplayer : MonoBehaviour
@@ -55,4 +56,19 @@ public class EntityDisplayer : MonoBehaviour
     public void PlaySpawnAnim() => animator.SetTrigger(TriggerSpawn);
     public void PlayAttackAnim() => animator.SetTrigger(TriggerAttack);
     public void PlayHitAnim() => animator.SetTrigger(TriggerHit);
+    
+    
+    private bool canContinue = false;
+    
+    public void CanContinueEvent()
+    {
+        canContinue = true;
+    }
+    
+    public IEnumerator WaitForAnimation()
+    {
+        canContinue = false;
+        yield return new WaitUntil(() => canContinue);
+    }
+    
 }

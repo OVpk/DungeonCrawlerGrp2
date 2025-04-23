@@ -192,6 +192,10 @@ public class FightManager : MonoBehaviour
         gridToApplyAttack = attacker.attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
         AttackStageData attackToApply = FindBestUnlockedStage(attacker.attack);
         
+        sendInformation.EntityAttackAt(attackerPosition, attackerTeam); // l'information va donc etre traité et l'entité concerné va executer son animation d'attaque
+        
+        // ici le script se bloque et attend que l'event soit envoyer par une frame de l'animation lui indiquant q'il peut continuer
+        
         ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
         EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
         AddPositionToAlreadyPlayed(attackerPosition, attackerTeam);
