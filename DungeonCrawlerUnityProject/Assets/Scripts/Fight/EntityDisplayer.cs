@@ -25,6 +25,7 @@ public class EntityDisplayer : MonoBehaviour
         baseRenderer.material = _instanceMaterial;
         ClearHighlight();
         _instanceMaterial.SetFloat(OutlineSize, 6f);
+        gameObject.SetActive(false);
     }
     
     public void InitVisual(EntityDataInstance data)
@@ -32,12 +33,7 @@ public class EntityDisplayer : MonoBehaviour
         baseRenderer.sprite = data.sprite;
         animator.runtimeAnimatorController = data.animator;
     }
-
-
-    public void SetTeam(FightManager.TurnState team)
-    {
-        if (team == FightManager.TurnState.Enemy) baseRenderer.flipX = true;
-    }
+    
 
     public void SetGrayscale(bool active)
     {

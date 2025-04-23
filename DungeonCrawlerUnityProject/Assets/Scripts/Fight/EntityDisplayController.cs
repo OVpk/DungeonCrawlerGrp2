@@ -20,7 +20,6 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     public void Init()
     {
         entityLocation.SetTeam(team);
-        entity.SetTeam(team);
     }
     
 
@@ -31,20 +30,21 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
 
-        // TODO: déclencher animation de mort, vider l'affichage, etc.
+        entity.gameObject.SetActive(false);
     }
 
     public void OnEntityAttack((int x, int y) position, FightManager.TurnState team)
     {
         if (!IsConcerned(position, team)) return;
 
-        // TODO: animation d’attaque, clignotement, etc.
+        entity.PlayAttackAnim();
     }
 
     public void OnEntitySpawn((int x, int y) position, FightManager.TurnState team, EntityDataInstance entityData)
     {
         if (!IsConcerned(position, team)) return;
 
+        entity.gameObject.SetActive(true);
         entity.InitVisual(entityData);
         entity.PlaySpawnAnim();
     }
@@ -54,6 +54,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
 
         entityLocation.SetHighlight(pink);
+        entity.SetHighlight(pink);
     }
 
     public void OnEntityNoLongerHovered((int x, int y) position, FightManager.TurnState team)
@@ -61,6 +62,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.ClearHighlight();
+        entity.ClearHighlight();
     }
     
     public void OnEntityTargeted((int x, int y) position, FightManager.TurnState team)
@@ -68,6 +70,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetHighlight(orange);
+        entity.SetHighlight(orange);
     }
     
     public void OnEntityNoLongerTargeted((int x, int y) position, FightManager.TurnState team)
@@ -75,6 +78,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.ClearHighlight();
+        entity.ClearHighlight();
     }
 
     public void OnEntitySelected((int x, int y) position, FightManager.TurnState team)
@@ -82,6 +86,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetHighlight(hibiscus);
+        entity.SetHighlight(hibiscus);
     }
 
     public void OnEntityNoLongerSelected((int x, int y) position, FightManager.TurnState team)
@@ -89,6 +94,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.ClearHighlight();
+        entity.ClearHighlight();
     }
 
     public void OnEntityLocationDisabled((int x, int y) position, FightManager.TurnState team)
@@ -96,6 +102,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetGrayscale(true);
+        entity.PlaySleepAnim();
     }
 
     public void OnEntityLocationEnabled((int x, int y) position, FightManager.TurnState team)
@@ -103,5 +110,6 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetGrayscale(false);
+        entity.PlayIdleAnim();
     }
 }

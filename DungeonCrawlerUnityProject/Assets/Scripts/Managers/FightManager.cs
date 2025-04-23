@@ -59,16 +59,22 @@ public class FightManager : MonoBehaviour
         InitDisplayedGrid(playerGrid);
         InitDisplayedGrid(enemyGrid);
 
-        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (0, 0));
-        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (0, 1));
-        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (0, 2));
-        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (1, 0));
-        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (1, 1));
-        PlaceCharacterAtPosition((CharacterDataInstance)characterTest.Instance(), (1, 2));
+        PlaceEntityAtPosition(characterTest, (0, 0), TurnState.Player);
+        PlaceEntityAtPosition(characterTest, (0, 1), TurnState.Player);
+        PlaceEntityAtPosition(characterTest, (0, 2), TurnState.Player);
+        PlaceEntityAtPosition(characterTest2, (1, 0), TurnState.Player);
+        PlaceEntityAtPosition(characterTest2, (1, 1), TurnState.Player);
+        PlaceEntityAtPosition(characterTest2, (1, 2), TurnState.Player);
         
-        enemyGrid[0, 0] = (EnemyDataInstance)enemyTest.Instance();
-        enemyGrid[0, 1] = (EnemyDataInstance)enemyTest.Instance();
-        enemyGrid[0, 2] = (EnemyDataInstance)enemyTest.Instance();
+        PlaceEntityAtPosition(enemyTest, (0, 0), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (0, 1), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (0, 2), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (1, 0), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (1, 1), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (1, 2), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (2, 0), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (2, 1), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (2, 2), TurnState.Enemy);
     }
 
     #region Display
@@ -225,20 +231,29 @@ public class FightManager : MonoBehaviour
 
     private void CharacterDeathAt((int x, int y) position)
     {
-        playerGrid[position.x, position.y] = playerGrid[position.x, position.y].nextLayer == null
-            ? null
-            : (CharacterDataInstance)playerGrid[position.x, position.y].nextLayer.Instance();
+        if (playerGrid[position.x, position.y].nextLayer == null)
+        {
+            playerGrid[position.x, position.y] = null;
+            sendInformation.EntityDeathAt(position, TurnState.Player);
+        }
+        else
+        {
+            sendInformation.EntityDeathAt(position, TurnState.Player);
+            PlaceEntityAtPosition(playerGrid[position.x, position.y].nextLayer, position, TurnState.Player);
+        }
     }
     
     private void EnemyDeathAt((int x, int y) position)
     {
         enemyGrid[position.x, position.y] = null;
+        sendInformation.EntityDeathAt(position, TurnState.Enemy);
     }
 
-    private void PlaceCharacterAtPosition(CharacterDataInstance character, (int x, int y) position)
+    private void PlaceEntityAtPosition(EntityData entity, (int x, int y) position, TurnState team)
     {
-        playerGrid[position.x, position.y] = character;
-        sendInformation.EntitySpawnAt(position, TurnState.Player, character);
+        EntityDataInstance[,] gridToPlace = team == TurnState.Player ? playerGrid : enemyGrid;
+        gridToPlace[position.x, position.y] = entity.Instance();
+        sendInformation.EntitySpawnAt(position, team, gridToPlace[position.x, position.y]);
     }
 
     public void BreakLayerAt((int x, int y) position)
