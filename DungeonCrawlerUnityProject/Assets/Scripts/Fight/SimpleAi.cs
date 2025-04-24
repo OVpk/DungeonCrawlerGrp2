@@ -52,7 +52,7 @@ public class SimpleAi : MonoBehaviour
 
         (int x, int y) bestAttackPosition = FindBestOriginPosition(bestAttackStage);
 
-        fightManager.Attack(chosenPosition, bestAttackPosition, FightManager.TurnState.Enemy);
+        StartCoroutine(fightManager.Attack(chosenPosition, bestAttackPosition, FightManager.TurnState.Enemy));
     }
 
     private (int x, int y) FindBestOriginPosition(AttackStageData attackStage)

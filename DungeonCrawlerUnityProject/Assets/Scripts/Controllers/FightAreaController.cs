@@ -97,7 +97,7 @@ public class FightAreaController : PlayerController
     {
         CancelAttack();
         
-        FightManager.Instance.Attack(playerGridSelectorPosition, attackOriginPosition, FightManager.TurnState.Player);
+        StartCoroutine(FightManager.Instance.Attack(playerGridSelectorPosition, attackOriginPosition, FightManager.TurnState.Player));
     }
 
     private void SwitchState(SelectorState newState)

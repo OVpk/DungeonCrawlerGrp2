@@ -33,7 +33,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
 
-        entity.gameObject.SetActive(false);
+        entity.PlayDeathAnim();
     }
 
     public void OnEntityAttack((int x, int y) position, FightManager.TurnState team)
@@ -114,5 +114,12 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         
         entityLocation.SetGrayscale(false);
         entity.PlayIdleAnim();
+    }
+
+    public void OnEntityTakeDamage((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        entity.PlayHitAnim();
     }
 }
