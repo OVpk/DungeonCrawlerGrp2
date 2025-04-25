@@ -3,8 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FightManager : MonoBehaviour
+public class FightManager : MonoBehaviour, IFightDisplayerListener
 {
+    
+    [field: SerializeField] public FightEventSpeaker sendInformation { get; private set; }
+    
     public enum TurnState
     {
         Player,
@@ -37,8 +40,6 @@ public class FightManager : MonoBehaviour
     public EnemyData enemyTest;
 
     public static FightManager Instance;
-
-    [field:SerializeField] public FightDisplayer displayer { get; private set; }
     
     private void Awake()
     {
@@ -55,20 +56,67 @@ public class FightManager : MonoBehaviour
 
     private void Start()
     {
-        displayer.InitDisplayedGrid(playerGrid);
-        displayer.InitDisplayedGrid(enemyGrid);
+        InitDisplayedGrid(playerGrid);
+        InitDisplayedGrid(enemyGrid);
+
+        PlaceEntityAtPosition(characterTest, (0, 0), TurnState.Player);
+        PlaceEntityAtPosition(characterTest, (0, 1), TurnState.Player);
+        PlaceEntityAtPosition(characterTest, (0, 2), TurnState.Player);
+        PlaceEntityAtPosition(characterTest2, (1, 0), TurnState.Player);
+        PlaceEntityAtPosition(characterTest2, (1, 1), TurnState.Player);
+        PlaceEntityAtPosition(characterTest2, (1, 2), TurnState.Player);
         
-        playerGrid[0, 0] = (CharacterDataInstance)characterTest.Instance();
-        playerGrid[0, 1] = (CharacterDataInstance)characterTest.Instance();
-        playerGrid[0, 2] = (CharacterDataInstance)characterTest.Instance();
-        playerGrid[1, 0] = (CharacterDataInstance)characterTest2.Instance();
-        playerGrid[1, 1] = (CharacterDataInstance)characterTest2.Instance();
-        playerGrid[1, 2] = (CharacterDataInstance)characterTest2.Instance();
-        
-        enemyGrid[0, 0] = (EnemyDataInstance)enemyTest.Instance();
-        enemyGrid[0, 1] = (EnemyDataInstance)enemyTest.Instance();
-        enemyGrid[0, 2] = (EnemyDataInstance)enemyTest.Instance();
+        PlaceEntityAtPosition(enemyTest, (0, 0), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (0, 1), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (0, 2), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (1, 0), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (1, 1), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (1, 2), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (2, 0), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (2, 1), TurnState.Enemy);
+        PlaceEntityAtPosition(enemyTest, (2, 2), TurnState.Enemy);
     }
+
+    #region Display
+
+    public GameObject entityLocationPrefab;
+    public GameObject playerGridContainer;
+    public GameObject enemyGridContainer;
+
+    public void InitDisplayedGrid(EntityDataInstance[,] grid)
+    {
+        GameObject container;
+        TurnState team;
+
+        switch (grid)
+        {
+            case CharacterDataInstance[,] : 
+                container = playerGridContainer;
+                team = TurnState.Player;
+                break;
+            case EnemyDataInstance[,] :
+                container = enemyGridContainer;
+                team = TurnState.Enemy;
+                break;
+            default: throw new Exception("Invalid Type");
+        }
+        
+        for (int i = 0; i < grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < grid.GetLength(1); j++)
+            {
+                GameObject entityLocation = Instantiate(entityLocationPrefab, container.transform);
+                entityLocation.transform.localPosition = new Vector3(j, i) * 2f;
+                EntityDisplayController entityController = entityLocation.GetComponent<EntityDisplayController>();
+                entityController.team = team;
+                entityController.positionInGrid = (i, j);
+                entityController.Init();
+                sendInformation.Register(entityController);
+            }
+        }
+    }
+
+    #endregion
 
     public AttackStageData FindBestUnlockedStage(AttackData attack)
     {
@@ -111,6 +159,8 @@ public class FightManager : MonoBehaviour
 
     private void AddPositionToAlreadyPlayed((int x, int y) position, TurnState positionTeam)
     {
+        sendInformation.EntityLocationDisabledAt(position, positionTeam);
+        
         switch (positionTeam)
         {
             case TurnState.Player : playerAlreadyPlayedPositions.Add(position); break;
@@ -122,16 +172,17 @@ public class FightManager : MonoBehaviour
 
     private void CleanAlreadyPlayedPositions(TurnState teamToClean)
     {
-        switch (teamToClean)
+        HashSet<(int x, int y)> positionsToClean = teamToClean switch
         {
-            case TurnState.Player : playerAlreadyPlayedPositions.Clear(); break;
-            case TurnState.Enemy : enemyAlreadyPlayedPositions.Clear(); break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(teamToClean), teamToClean, null);
-        }
+            TurnState.Player => playerAlreadyPlayedPositions,
+            TurnState.Enemy => enemyAlreadyPlayedPositions,
+            _ => throw new ArgumentOutOfRangeException(nameof(teamToClean), teamToClean, null)
+        };
+        sendInformation.EntitiesLocationEnabledAt(positionsToClean, teamToClean);
+        positionsToClean.Clear();
     }
 
-    public void Attack((int x, int y) attackerPosition, (int x, int y) attackOriginPosition, TurnState attackerTeam)
+    public IEnumerator Attack((int x, int y) attackerPosition, (int x, int y) attackOriginPosition, TurnState attackerTeam)
     {
         EntityDataInstance[,] attackerGrid;
         EntityDataInstance[,] gridToApplyAttack;
@@ -141,63 +192,85 @@ public class FightManager : MonoBehaviour
         gridToApplyAttack = attacker.attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
         AttackStageData attackToApply = FindBestUnlockedStage(attacker.attack);
         
-        ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
-        EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
+        sendInformation.EntityAttackAt(attackerPosition, attackerTeam); // l'information va donc etre traité et l'entité concerné va executer son animation d'attaque
+        yield return WaitAnimationEvent();
+        // ici le script se bloque et attend que l'event soit envoyer par une frame de l'animation lui indiquant q'il peut continuer
+        
+        yield return ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
+        yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
+        
         AddPositionToAlreadyPlayed(attackerPosition, attackerTeam);
         
         SwitchTurn();
     }
 
-    private void ApplyAttackPattern(EntityDataInstance[,] gridToApply, (int x, int y) originPosition, AttackStageData attackToApply)
+    private IEnumerator ApplyAttackPattern(EntityDataInstance[,] gridToApply, (int x, int y) originPosition, AttackStageData attackToApply)
     {
         foreach (var position in attackToApply.pattern.positions)
         {
             (int x, int y) positionInGrid = (originPosition.x + position.x, originPosition.y + position.y);
-            ApplyDamageAtPosition(gridToApply, positionInGrid, attackToApply.damage);
+            yield return ApplyDamageAtPosition(gridToApply, positionInGrid, attackToApply.damage);
         }
     }
 
-    private void ApplyDamageAtPosition(EntityDataInstance[,] gridToApply, (int x, int y) position, int damages)
+    private IEnumerator ApplyDamageAtPosition(EntityDataInstance[,] gridToApply, (int x, int y) position, int damages)
     {
         EntityDataInstance entity = gridToApply[position.x, position.y];
-        if (entity == null) return;
-        EntityTakeDamage(entity, position, damages);
+        if (entity == null) yield break;
+        yield return EntityTakeDamage(entity, position, damages);
     }
 
-    private void EntityTakeDamage(EntityDataInstance entity, (int x, int y) entityPosition, int damages)
+    private IEnumerator EntityTakeDamage(EntityDataInstance entity, (int x, int y) entityPosition, int damages)
     {
+        TurnState entityTeam = entity is CharacterDataInstance ? TurnState.Player : TurnState.Enemy;
         entity.durability -= damages;
+        
+        sendInformation.EntityTakeDamageAt(entityPosition, entityTeam);
+        yield return WaitAnimationEvent();
 
         if (entity.durability <= 0)
         {
-            switch (entity)
+            switch (entityTeam)
             {
-                case CharacterDataInstance : CharacterDeathAt(entityPosition); break;
-                case EnemyDataInstance : EnemyDeathAt(entityPosition); break;
+                case TurnState.Player : yield return CharacterDeathAt(entityPosition); break;
+                case TurnState.Enemy : yield return EnemyDeathAt(entityPosition); break;
             }
         }
     }
 
-    private void CharacterDeathAt((int x, int y) position)
+    private IEnumerator CharacterDeathAt((int x, int y) position)
     {
-        playerGrid[position.x, position.y] = playerGrid[position.x, position.y].nextLayer == null
-            ? null
-            : (CharacterDataInstance)playerGrid[position.x, position.y].nextLayer.Instance();
+        if (playerGrid[position.x, position.y].nextLayer == null)
+        {
+            playerGrid[position.x, position.y] = null;
+            sendInformation.EntityDeathAt(position, TurnState.Player);
+            yield return WaitAnimationEvent();
+        }
+        else
+        {
+            sendInformation.EntityDeathAt(position, TurnState.Player);
+            yield return WaitAnimationEvent();
+            PlaceEntityAtPosition(playerGrid[position.x, position.y].nextLayer, position, TurnState.Player);
+        }
     }
     
-    private void EnemyDeathAt((int x, int y) position)
+    private IEnumerator EnemyDeathAt((int x, int y) position)
     {
         enemyGrid[position.x, position.y] = null;
+        sendInformation.EntityDeathAt(position, TurnState.Enemy);
+        yield return WaitAnimationEvent();
     }
 
-    private void PlaceCharacterAtPosition(CharacterDataInstance character, (int x, int y) position)
+    private void PlaceEntityAtPosition(EntityData entity, (int x, int y) position, TurnState team)
     {
-        playerGrid[position.x, position.y] = character;
+        EntityDataInstance[,] gridToPlace = team == TurnState.Player ? playerGrid : enemyGrid;
+        gridToPlace[position.x, position.y] = entity.Instance();
+        sendInformation.EntitySpawnAt(position, team, gridToPlace[position.x, position.y]);
     }
 
     public void BreakLayerAt((int x, int y) position)
     {
-        CharacterDeathAt(position);
+        StartCoroutine(CharacterDeathAt(position));
     }
 
     public bool IsPositionAlreadyPlayed((int x, int y) position)
@@ -255,5 +328,17 @@ public class FightManager : MonoBehaviour
             TurnState.Enemy => true,
             _ => throw new ArgumentOutOfRangeException(nameof(teamToCheck), teamToCheck, null)
         };
+    }
+
+    private bool canContinue = false;
+
+    public void OnDisplayerSaidCanContinue() => canContinue = true;
+
+    public IEnumerator WaitAnimationEvent()
+    {
+        canContinue = false;
+        Debug.Log("attend une réponse");
+        yield return new WaitUntil(() => canContinue);
+        Debug.Log("reponse recu");
     }
 }
