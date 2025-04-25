@@ -22,7 +22,7 @@ public class FightAreaController : PlayerController
     
     protected override void Move(Directions direction)
     {
-        //if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
+        if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
         
         (int x, int y) directionToGo = direction switch
         {
@@ -44,8 +44,11 @@ public class FightAreaController : PlayerController
     {
         if (FightManager.Instance.IsOutsideLimit(FightManager.Instance.playerGrid, (playerGridSelectorPosition.x+directionToGo.x, playerGridSelectorPosition.y+directionToGo.y))) return;
         
+        FightManager.Instance.sendInformation.EntityNoLongerHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+            
         playerGridSelectorPosition = (playerGridSelectorPosition.x + directionToGo.x, playerGridSelectorPosition.y + directionToGo.y);
-        FightManager.Instance.displayer.MoveSelectorDisplayTo(playerGridSelectorPosition);
+        
+        FightManager.Instance.sendInformation.EntityHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
     }
 
     private void MoveAttackPattern((int x, int y) directionToGo)
@@ -53,21 +56,25 @@ public class FightAreaController : PlayerController
         List<Vector2Int> pattern = FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions;
         if (FightManager.Instance.IsPatternOutsideLimit(FightManager.Instance.enemyGrid, (attackOriginPosition.x+directionToGo.x, attackOriginPosition.y+directionToGo.y), pattern)) return;
 
+        FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attack.gridToApply);
+        
         attackOriginPosition = (attackOriginPosition.x + directionToGo.x, attackOriginPosition.y + directionToGo.y);
         
-        FightManager.Instance.displayer.DisplayPattern(attackOriginPosition, pattern);
+        FightManager.Instance.sendInformation.EntitiesTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attack.gridToApply);
     }
 
     private void SelectCharacter()
     {
         if (FightManager.Instance.IsPositionAlreadyPlayed(playerGridSelectorPosition)) return;
         selectedCharacter = FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y];
-        
         if (selectedCharacter == null) return;
+        
+        FightManager.Instance.sendInformation.EntityNoLongerHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        FightManager.Instance.sendInformation.EntitySelectedAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        
         SwitchState(SelectorState.SelectAttackPosition);
         
-        FightManager.Instance.displayer.DisplayPattern(attackOriginPosition, FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions);
-
+        MoveAttackPattern(attackOriginPosition);
     }
 
     private void CharacterLooseLayer()
@@ -77,14 +84,20 @@ public class FightAreaController : PlayerController
 
     private void CancelAttack()
     {
-        FightManager.Instance.displayer.CleanPatternDisplay();
+        List<Vector2Int> pattern = FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions;
+        
+        FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attack.gridToApply);
+        FightManager.Instance.sendInformation.EntityNoLongerSelectedAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        FightManager.Instance.sendInformation.EntityHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
         
         SwitchState(SelectorState.OnPlayerGrid);
     }
 
     private void DoAttack()
     {
-        FightManager.Instance.Attack(playerGridSelectorPosition, attackOriginPosition, FightManager.TurnState.Player);
+        CancelAttack();
+        
+        StartCoroutine(FightManager.Instance.Attack(playerGridSelectorPosition, attackOriginPosition, FightManager.TurnState.Player));
     }
 
     private void SwitchState(SelectorState newState)
@@ -102,7 +115,7 @@ public class FightAreaController : PlayerController
 
     protected override void Press(Buttons button)
     {
-        //if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
+        if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
         
         switch (button)
         {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Conditions/OperatorCondition")]
+[CreateAssetMenu(menuName = "Data/Fight/Conditions/OperatorCondition")]
 public class OperatorCondition : Condition
 {
     public enum LogicalOperator { AND, OR }
@@ -9,17 +9,17 @@ public class OperatorCondition : Condition
     public LogicalOperator operatorType;
     public Condition conditionB;
 
-    public override bool IsConditionComplete(CharacterDataInstance[,] playerGrid, EnemyDataInstance[,] enemyGrid)
+    public override bool IsConditionComplete(EntityDataInstance[,] gridToCheck)
     {
         if (conditionA == null || conditionB == null)
             throw new System.Exception("2 Conditions must be assigned");
 
         return operatorType switch
         {
-            LogicalOperator.AND => conditionA.IsConditionComplete(playerGrid, enemyGrid) &&
-                                   conditionB.IsConditionComplete(playerGrid, enemyGrid),
-            LogicalOperator.OR => conditionA.IsConditionComplete(playerGrid, enemyGrid) ||
-                                  conditionB.IsConditionComplete(playerGrid, enemyGrid),
+            LogicalOperator.AND => conditionA.IsConditionComplete(gridToCheck) &&
+                                   conditionB.IsConditionComplete(gridToCheck),
+            LogicalOperator.OR => conditionA.IsConditionComplete(gridToCheck) ||
+                                  conditionB.IsConditionComplete(gridToCheck),
             _ => throw new System.ArgumentOutOfRangeException()
         };
     }

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Malabar1AnimationOverrideController
+  m_Controller: {fileID: 9100000, guid: 09fe2c31d512a6c4a9a2b5becd6ee58d, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 4405fc3f807a1ed40bd741ec29353e3b, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 52467b67728115540b8f26b9f2153845, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 9052a12fb1b9008499cf909495f6313d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b42faf5970dc85b498f9dc9cd7791077, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 69d88e57a15809e4c929c092de973c9e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f1a0cfc1e002390489ee8c51f8702279, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 2988bf6c73becf541a1274f8fbf17e62, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b170a3863e838554daf9b0300c63c28f, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: fc20fbd430d1bcf4abbecdab25a58f12, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 24a324c0be14cda42b5ecd0becd55ec6, type: 2}
