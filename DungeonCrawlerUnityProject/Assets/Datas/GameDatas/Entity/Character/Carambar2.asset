@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e31adf74c2c2a1c4988d49de6ad39f04, type: 3}
-  m_Name: Character2
+  m_Name: Carambar2
   m_EditorClassIdentifier: 
-  <entityName>k__BackingField: Test2
-  <durability>k__BackingField: 3
-  <type>k__BackingField: 0
+  <entityName>k__BackingField: Carambar2
+  <durability>k__BackingField: 4
+  <type>k__BackingField: 1
   <sprite>k__BackingField: {fileID: 21300000, guid: 9dba0ce2a4be56a46b174ab42e8cbcd5, type: 3}
   <animator>k__BackingField: {fileID: 22100000, guid: d730e342978052340af6768e715b80a9, type: 2}
-  <attack>k__BackingField: {fileID: 11400000, guid: 760f5e0558367fb44874704c0444d2bf, type: 2}
+  <attack>k__BackingField: {fileID: 11400000, guid: 7b97f2e5507af81468ac26564f0a2e85, type: 2}
   <nextLayer>k__BackingField: {fileID: 0}
