@@ -241,7 +241,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1161227673548793881
 RectTransform:
   m_ObjectHideFlags: 0
@@ -258,7 +258,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.1, y: 0.7599999}
+  m_AnchoredPosition: {x: -1.1, y: 0.51}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &882530700116937035
@@ -508,6 +508,9 @@ MonoBehaviour:
   team: 0
   entityLocation: {fileID: 8453663680378663565}
   entity: {fileID: 8827492652587959774}
+  durabilityText: {fileID: 297034047936353008}
+  durabilityNb: 0
+  typeText: {fileID: 1128727339441324036}
 --- !u!1 &8802722504527562855
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,7 +528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5371113183190724472
 RectTransform:
   m_ObjectHideFlags: 0

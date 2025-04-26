@@ -132,11 +132,11 @@ public class FightEventSpeaker : MonoBehaviour
         }
     }
 
-    public void EntityTakeDamageAt((int x, int y) position, FightManager.TurnState team)
+    public void EntityTakeDamageAt((int x, int y) position, int nbDamages, FightManager.TurnState team)
     {
         foreach (var listener in listeners)
         {
-            listener.OnEntityTakeDamage(position, team);
+            listener.OnEntityTakeDamage(position, nbDamages, team);
         }
     }
     
