@@ -131,4 +131,13 @@ public class FightEventSpeaker : MonoBehaviour
             listener.OnEntityLocationEnabled(position, team);
         }
     }
+
+    public void EntityTakeDamageAt((int x, int y) position, int nbDamages, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityTakeDamage(position, nbDamages, team);
+        }
+    }
+    
 }

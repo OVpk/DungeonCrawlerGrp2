@@ -14,7 +14,7 @@ public class SimpleAi : MonoBehaviour
         {
             for (int j = 0; j < fightManager.enemyGrid.GetLength(1); j++)
             {
-                if (fightManager.IsPositionAlreadyPlayed((i, j))) continue;
+                if (IsPositionAlreadyPlayed((i, j))) continue;
                 if (fightManager.enemyGrid[i, j] == null) continue;
                 
                 positions.Add((i, j));
@@ -22,6 +22,11 @@ public class SimpleAi : MonoBehaviour
         }
 
         return positions;
+    }
+    
+    public bool IsPositionAlreadyPlayed((int x, int y) position)
+    {
+        return fightManager.enemyAlreadyPlayedPositions.Contains(position);
     }
 
     public void PlayTurn()
@@ -52,7 +57,7 @@ public class SimpleAi : MonoBehaviour
 
         (int x, int y) bestAttackPosition = FindBestOriginPosition(bestAttackStage);
 
-        fightManager.Attack(chosenPosition, bestAttackPosition, FightManager.TurnState.Enemy);
+        StartCoroutine(fightManager.Attack(chosenPosition, bestAttackPosition, FightManager.TurnState.Enemy));
     }
 
     private (int x, int y) FindBestOriginPosition(AttackStageData attackStage)

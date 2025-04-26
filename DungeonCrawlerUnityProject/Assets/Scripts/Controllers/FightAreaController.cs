@@ -2,24 +2,31 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.Interactions;
 
 public class FightAreaController : PlayerController
 {
+    [SerializeField] private UIFightController uiController;
     
     private (int x, int y) playerGridSelectorPosition = (0,0);
     private (int x, int y) attackOriginPosition = (0,0);
+
+    private int currentPackIndex => FightManager.Instance.packDisplayer.currentIndex;
+
+    private CandyPackDataInstance selectedPack;
 
     private CharacterDataInstance selectedCharacter;
 
     enum SelectorState
     {
         OnPlayerGrid,
-        SelectAttackPosition
+        SelectAttackPosition,
+        SelectPack,
+        PlaceCharacter
     }
 
-    private SelectorState currentState = SelectorState.OnPlayerGrid;
+    private SelectorState currentState = SelectorState.SelectPack;
     
+
     protected override void Move(Directions direction)
     {
         if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
@@ -36,8 +43,45 @@ public class FightAreaController : PlayerController
         {
             case SelectorState.OnPlayerGrid : MoveSelector(directionToGo); break;
             case SelectorState.SelectAttackPosition : MoveAttackPattern(directionToGo); break;
+            case SelectorState.SelectPack : MovePack(directionToGo); break;
+            case SelectorState.PlaceCharacter : MoveSelector(directionToGo); break;
         }
         
+    }
+
+    private void WantSeePack()
+    {
+        SwitchState(SelectorState.SelectPack);
+        uiController.ToggleC();
+    }
+
+    private void DontWantSeePack()
+    {
+        SwitchState(SelectorState.OnPlayerGrid);
+        uiController.ToggleC();
+    }
+
+    private void SelectPack()
+    {
+        selectedPack = FightManager.Instance.candyPack[currentPackIndex];
+        FightManager.Instance.sendInformation.EntityHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        SwitchState(SelectorState.PlaceCharacter);
+    }
+
+    private void UnselectPack()
+    {
+        SwitchState(SelectorState.SelectPack);
+    }
+
+    private void PlaceCharacter()
+    {
+        FightManager.Instance.PlaceCharacterFromPack(selectedPack, playerGridSelectorPosition);
+    }
+
+    private void MovePack((int x, int y) directionToGo)
+    {
+        if (directionToGo == (0, 1)) FightManager.Instance.packDisplayer.ScrollRight();
+        if (directionToGo == (0, -1)) FightManager.Instance.packDisplayer.ScrollLeft();
     }
 
     private void MoveSelector((int x, int y) directionToGo)
@@ -97,7 +141,7 @@ public class FightAreaController : PlayerController
     {
         CancelAttack();
         
-        FightManager.Instance.Attack(playerGridSelectorPosition, attackOriginPosition, FightManager.TurnState.Player);
+        StartCoroutine(FightManager.Instance.Attack(playerGridSelectorPosition, attackOriginPosition, FightManager.TurnState.Player));
     }
 
     private void SwitchState(SelectorState newState)
@@ -122,6 +166,7 @@ public class FightAreaController : PlayerController
             case Buttons.A : PressA(); break;
             case Buttons.B : PressB(); break;
             case Buttons.X : PressX(); break;
+            case Buttons.Y : PressY(); break;
         }
     }
 
@@ -131,6 +176,8 @@ public class FightAreaController : PlayerController
         {
             case SelectorState.OnPlayerGrid : SelectCharacter(); break;
             case SelectorState.SelectAttackPosition : DoAttack(); break;
+            case SelectorState.SelectPack : SelectPack(); break;
+            case SelectorState.PlaceCharacter : PlaceCharacter(); break;
         }
     }
 
@@ -140,6 +187,8 @@ public class FightAreaController : PlayerController
         {
             case SelectorState.OnPlayerGrid : ; break;
             case SelectorState.SelectAttackPosition : CancelAttack(); break;
+            case SelectorState.SelectPack : DontWantSeePack(); break;
+            case SelectorState.PlaceCharacter : UnselectPack(); break;
         }
     }
     
@@ -148,6 +197,15 @@ public class FightAreaController : PlayerController
         switch (currentState)
         {
             case SelectorState.OnPlayerGrid : CharacterLooseLayer(); break;
+            case SelectorState.SelectAttackPosition : ; break;
+        }
+    }
+
+    private void PressY()
+    {
+        switch (currentState)
+        {
+            case SelectorState.OnPlayerGrid : WantSeePack(); break;
             case SelectorState.SelectAttackPosition : ; break;
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class EntityDisplayController : MonoBehaviour, IFightEventListener
@@ -9,6 +10,10 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
 
     public EntityLocationDisplayer entityLocation;
     public EntityDisplayer entity;
+
+    public TMP_Text durabilityText;
+    public int durabilityNb;
+    public TMP_Text typeText;
 
     #region PossibleHightlightColors
 
@@ -33,7 +38,9 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
 
-        entity.gameObject.SetActive(false);
+        entity.PlayDeathAnim();
+        durabilityText.gameObject.SetActive(false);
+        typeText.gameObject.SetActive(false);
     }
 
     public void OnEntityAttack((int x, int y) position, FightManager.TurnState team)
@@ -50,6 +57,17 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         entity.gameObject.SetActive(true);
         entity.InitVisual(entityData);
         entity.PlaySpawnAnim();
+        durabilityText.gameObject.SetActive(true);
+        typeText.gameObject.SetActive(true);
+
+        durabilityNb = entityData.durability;
+        durabilityText.text = durabilityNb.ToString();
+        typeText.text = entityData.type switch
+        {
+            EntityData.EntityTypes.Mou => "Mou",
+            EntityData.EntityTypes.Dur => "Dur",
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 
     public void OnEntityHovered((int x, int y) position, FightManager.TurnState team)
@@ -114,5 +132,15 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         
         entityLocation.SetGrayscale(false);
         entity.PlayIdleAnim();
+    }
+
+    public void OnEntityTakeDamage((int x, int y) position, int nbDamages, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        entity.PlayHitAnim();
+
+        durabilityNb = Math.Clamp(durabilityNb - nbDamages, 0, durabilityNb);
+        durabilityText.text = durabilityNb.ToString();
     }
 }
