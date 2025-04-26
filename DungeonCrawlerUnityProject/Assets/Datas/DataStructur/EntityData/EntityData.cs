@@ -17,7 +17,7 @@ public abstract class EntityData : ScriptableObject
     [field: SerializeField] public Sprite sprite{ get; private set; }
     [field: SerializeField] public AnimatorOverrideController animator{ get; private set; }
     
-    [field: SerializeField] public AttackData attack{ get; private set; }
+    [field: SerializeField] public AttackData[] attacks { get; private set; }
     
     public abstract EntityDataInstance Instance();
 
@@ -30,7 +30,7 @@ public class EntityDataInstance
     public EntityData.EntityTypes type;
     public Sprite sprite;
     public AnimatorOverrideController animator;
-    public AttackData attack;
+    public AttackData[] attacks;
 
     public EntityDataInstance(EntityData data)
     {
@@ -39,6 +39,6 @@ public class EntityDataInstance
         type = data.type;
         sprite = data.sprite;
         animator = data.animator;
-        attack = data.attack;
+        attacks = data.attacks;
     }
 }
