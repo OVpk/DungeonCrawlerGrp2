@@ -17,6 +17,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     public TurnState currentTurn { get; private set; }
     
     [field:SerializeField] public SimpleAi aiController { get; private set; }
+    
+    public bool canUseControlls = true;
 
     private void SwitchTurn()
     {
@@ -25,6 +27,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         currentTurn = currentTurn == TurnState.Player ? TurnState.Enemy : TurnState.Player;
         
         if (IsCleaningGridNecessary(currentTurn)) CleanAlreadyPlayedPositions(currentTurn);
+
+        if (currentTurn == TurnState.Player) canUseControlls = true;
         
         if (currentTurn == TurnState.Enemy) aiController.PlayTurn();
     }
@@ -103,6 +107,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     {
         GameObject container;
         TurnState team;
+        float horizontalRapport = 2f;
+        float verticalRapport = 2f;
 
         switch (grid)
         {
@@ -113,6 +119,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
             case EnemyDataInstance[,] :
                 container = enemyGridContainer;
                 team = TurnState.Enemy;
+                verticalRapport = 1.5f;
                 break;
             default: throw new Exception("Invalid Type");
         }
@@ -122,7 +129,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
             for (int j = 0; j < grid.GetLength(1); j++)
             {
                 GameObject entityLocation = Instantiate(entityLocationPrefab, container.transform);
-                entityLocation.transform.localPosition = new Vector3(j, i) * 2f;
+                entityLocation.transform.localPosition = new Vector3(j * horizontalRapport, i * verticalRapport);
                 EntityDisplayController entityController = entityLocation.GetComponent<EntityDisplayController>();
                 entityController.team = team;
                 entityController.positionInGrid = (i, j);

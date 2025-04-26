@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class FightAreaController : PlayerController
 {
+    
     [SerializeField] private UIFightController uiController;
 
     [SerializeField] private ComplexCarousel attackSelectorController;
@@ -36,7 +37,7 @@ public class FightAreaController : PlayerController
 
     protected override void Move(Directions direction)
     {
-        if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
+        if (!FightManager.Instance.canUseControlls) return;
         
         (int x, int y) directionToGo = direction switch
         {
@@ -178,8 +179,8 @@ public class FightAreaController : PlayerController
 
     private void DoAttack()
     {
-        CancelAttack();
-        
+        FightManager.Instance.canUseControlls = false;
+        DontWantSelectAttack();
         StartCoroutine(FightManager.Instance.Attack(playerGridSelectorPosition, currentAttackIndex, attackOriginPosition, FightManager.TurnState.Player));
     }
 
@@ -201,7 +202,7 @@ public class FightAreaController : PlayerController
 
     protected override void Press(Buttons button)
     {
-        if (FightManager.Instance.currentTurn == FightManager.TurnState.Enemy) return;
+        if (!FightManager.Instance.canUseControlls) return;
         
         switch (button)
         {
