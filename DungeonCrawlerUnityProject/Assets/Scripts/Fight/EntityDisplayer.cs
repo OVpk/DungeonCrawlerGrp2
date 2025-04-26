@@ -49,12 +49,15 @@ public class EntityDisplayer : MonoBehaviour
 
     public void SetHighlight(Color color)
     {
-        _instanceMaterial.SetColor(OutlineColor, color);
+        _instanceMaterial.SetColor(OutlineColor, color); // Met à jour la couleur de l'outline
+        _instanceMaterial.SetColor("_Color", color); // Met à jour la teinte
     }
+
 
     public void ClearHighlight()
     {
         _instanceMaterial.SetColor(OutlineColor, Color.clear);
+        _instanceMaterial.SetColor("_Color", Color.white); // Met à jour la teinte
     }
 
     public void PlayIdleAnim() => animator.SetTrigger(TriggerIdle);

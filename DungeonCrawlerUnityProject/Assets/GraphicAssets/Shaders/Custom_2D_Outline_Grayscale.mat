@@ -30,6 +30,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _OutlineSize: 0
+    - _TintToOutlineAmount: 0
     - _UseGrayscale: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
