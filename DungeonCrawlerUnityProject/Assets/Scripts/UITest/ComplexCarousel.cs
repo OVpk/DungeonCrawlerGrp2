@@ -5,24 +5,10 @@ using DG.Tweening;
 using UnityEngine;
 using TMPro;
 
-[Serializable]
-public class VerticalEntry
-{
-    public string conditionText;
-    public string resultText;
-}
-
-[Serializable]
-public class ComplexCard
-{
-    public string mainText;
-    public List<VerticalEntry> verticalEntries;
-}
-
 public class ComplexCarousel : MonoBehaviour
 {
     [Header("Data")]
-    public List<ComplexCard> cards;
+    public List<AttackData> attacks =new List<AttackData>();
 
     [Header("Horizontal Containers")]
     public RectTransform leftCard;
@@ -45,13 +31,25 @@ public class ComplexCarousel : MonoBehaviour
     public float verticalDuration = 0.3f;
     public Ease verticalEase = Ease.OutQuad;
 
-    private int currentCard = 0;
-    private int currentEntry = 0;
+    public int currentAttack = 0;
+    private int currentAttackStage = 0;
     private bool isHorizontalAnimating = false;
     private bool isVerticalAnimating = false;
 
     private Vector2 leftCardPos, centerCardPos, rightCardPos;
     private Vector2 topEntryPos, centerEntryPos, bottomEntryPos;
+
+    public void LoadData(AttackData[] attacksData)
+    {
+        currentAttack = 0;
+        currentAttackStage = 0;
+        attacks.Clear();
+        foreach (var attackData in attacksData)
+        {
+            attacks.Add(attackData);
+        }
+        UpdateDisplay();
+    }
 
     void Start()
     {
@@ -63,20 +61,18 @@ public class ComplexCarousel : MonoBehaviour
         topEntryPos    = topEntry.anchoredPosition;
         centerEntryPos = centerEntry.anchoredPosition;
         bottomEntryPos = bottomEntry.anchoredPosition;
-
-        UpdateDisplay();
     }
 
-    private void ScrollHorizontal(int dir)
+    public void ScrollHorizontal(int dir)
     {
         isHorizontalAnimating = true;
-        int newCard = (currentCard + dir).Mod(cards.Count);
+        int newCard = (currentAttack + dir).Mod(attacks.Count);
 
         Vector2 leftTarget   = dir > 0 ? centerCardPos : rightCardPos;
         Vector2 centerTarget = dir > 0 ? rightCardPos  : leftCardPos;
         Vector2 rightTarget  = dir > 0 ? leftCardPos   : centerCardPos;
         
-        currentCard = newCard;
+        currentAttack = newCard;
 
         var seq = DOTween.Sequence();
         seq.Join(leftCard.DOAnchorPos(leftTarget, horizontalDuration).SetEase(horizontalEase));
@@ -85,18 +81,18 @@ public class ComplexCarousel : MonoBehaviour
 
         seq.OnComplete(() =>
         {
-            currentEntry = 0; // reset vertical on new card
+            currentAttackStage = 0; // reset vertical on new card
             ResetHorizontalPositions();
             UpdateDisplay();
             isHorizontalAnimating = false;
         });
     }
 
-    private void ScrollVertical(int dir)
+    public void ScrollVertical(int dir)
     {
-        if (cards[currentCard].verticalEntries.Count < 2) return;
+        if (attacks[currentAttack].attackStages.Length < 2) return;
         isVerticalAnimating = true;
-        int newEntry = (currentEntry + dir).Mod(cards[currentCard].verticalEntries.Count);
+        int newEntry = (currentAttackStage + dir).Mod(attacks[currentAttack].attackStages.Length);
 
         Vector2 topTarget    = dir > 0 ? topEntryPos    : centerEntryPos;
         Vector2 centerTarget = dir > 0 ? centerEntryPos : bottomEntryPos;
@@ -109,7 +105,7 @@ public class ComplexCarousel : MonoBehaviour
 
         seq.OnComplete(() =>
         {
-            currentEntry = newEntry;
+            currentAttackStage = newEntry;
             ResetVerticalPositions();
             UpdateDisplay();
             isVerticalAnimating = false;
@@ -133,11 +129,18 @@ public class ComplexCarousel : MonoBehaviour
     private void UpdateDisplay()
     {
         // Update center card text
-        var card = cards[currentCard];
-        centerMainText.text = card.mainText;
+        var attack = attacks[currentAttack];
+        centerMainText.text = attack.attackName;
         // Update center entry text
-        var entry = card.verticalEntries[currentEntry];
-        centerConditionText.text = entry.conditionText;
-        centerResultText.text    = entry.resultText;
+        var attackStage = attack.attackStages[currentAttackStage];
+        if (attackStage.unlockCondition == null)
+        {
+            centerConditionText.text = "X";
+        }
+        else
+        {
+            centerConditionText.text = attackStage.unlockCondition.description;
+        }
+        centerResultText.text    = attackStage.effectDescription;
     }
 }
