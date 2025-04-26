@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: Character2 Layer1
   m_EditorClassIdentifier: 
   <entityName>k__BackingField: Test1
-  <durability>k__BackingField: 3
+  <durability>k__BackingField: 1
   <type>k__BackingField: 1
-  <sprite>k__BackingField: {fileID: 0}
-  <attack>k__BackingField: {fileID: 11400000, guid: 87d0b6f4a61a3934c834f55f5107039e, type: 2}
+  <sprite>k__BackingField: {fileID: 21300000, guid: 59d24a905636e904ea6101ad5fbf921a, type: 3}
+  <animator>k__BackingField: {fileID: 22100000, guid: fb818636775b323458de2abafc63f808, type: 2}
+  <attacks>k__BackingField: []
   <nextLayer>k__BackingField: {fileID: 11400000, guid: d8dc627942263474d87c986331b9c3b9, type: 2}
+  <descriptionVisual>k__BackingField: {fileID: 0}
+  <description>k__BackingField: 

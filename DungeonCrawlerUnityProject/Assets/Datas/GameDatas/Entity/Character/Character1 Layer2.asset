@@ -15,6 +15,9 @@ MonoBehaviour:
   <entityName>k__BackingField: Test2
   <durability>k__BackingField: 3
   <type>k__BackingField: 1
-  <sprite>k__BackingField: {fileID: 0}
-  <attack>k__BackingField: {fileID: 11400000, guid: 87d0b6f4a61a3934c834f55f5107039e, type: 2}
+  <sprite>k__BackingField: {fileID: 21300000, guid: 9dba0ce2a4be56a46b174ab42e8cbcd5, type: 3}
+  <animator>k__BackingField: {fileID: 22100000, guid: d730e342978052340af6768e715b80a9, type: 2}
+  <attacks>k__BackingField: []
   <nextLayer>k__BackingField: {fileID: 0}
+  <descriptionVisual>k__BackingField: {fileID: 0}
+  <description>k__BackingField: 
