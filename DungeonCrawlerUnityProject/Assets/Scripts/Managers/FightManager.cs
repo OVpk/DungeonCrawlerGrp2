@@ -17,6 +17,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     public TurnState currentTurn { get; private set; }
     
     [field:SerializeField] public SimpleAi aiController { get; private set; }
+    
+    public bool canUseControlls = true;
 
     private void SwitchTurn()
     {
@@ -25,6 +27,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         currentTurn = currentTurn == TurnState.Player ? TurnState.Enemy : TurnState.Player;
         
         if (IsCleaningGridNecessary(currentTurn)) CleanAlreadyPlayedPositions(currentTurn);
+
+        if (currentTurn == TurnState.Player) canUseControlls = true;
         
         if (currentTurn == TurnState.Enemy) aiController.PlayTurn();
     }
