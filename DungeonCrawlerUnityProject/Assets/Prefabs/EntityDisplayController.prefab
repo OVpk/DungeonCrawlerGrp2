@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 711085615755849223}
   - component: {fileID: 8705906338550642835}
   - component: {fileID: 8827492652587959774}
+  - component: {fileID: 839498893035671972}
   m_Layer: 0
   m_Name: Entity
   m_TagString: Untagged
@@ -96,7 +97,7 @@ Animator:
   m_GameObject: {fileID: 436723842544629782}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c68989c91d8e46f40a7b8efb8a684bd9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -121,6 +122,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseRenderer: {fileID: 711085615755849223}
   animator: {fileID: 8705906338550642835}
+--- !u!111 &839498893035671972
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 436723842544629782}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 9a176f87ed639f249ba476272ef63506, type: 2}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &3004013710199664242
 GameObject:
   m_ObjectHideFlags: 0

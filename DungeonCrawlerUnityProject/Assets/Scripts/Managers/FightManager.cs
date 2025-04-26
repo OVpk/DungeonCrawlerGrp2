@@ -198,19 +198,19 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         positionsToClean.Clear();
     }
 
-    public IEnumerator Attack((int x, int y) attackerPosition, (int x, int y) attackOriginPosition, TurnState attackerTeam)
+    public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int x, int y) attackOriginPosition, TurnState attackerTeam)
     {
         EntityDataInstance[,] attackerGrid;
         EntityDataInstance[,] gridToApplyAttack;
         attackerGrid = attackerTeam == TurnState.Player ? playerGrid : enemyGrid; 
         
         EntityDataInstance attacker = attackerGrid[attackerPosition.x, attackerPosition.y];
-        gridToApplyAttack = attacker.attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
-        AttackStageData attackToApply = FindBestUnlockedStage(attacker.attack);
-        
-        sendInformation.EntityAttackAt(attackerPosition, attackerTeam); // l'information va donc etre traité et l'entité concerné va executer son animation d'attaque
+        AttackData attack = attacker.attacks[attackIndex];
+        gridToApplyAttack = attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
+        AttackStageData attackToApply = FindBestUnlockedStage(attack);
+
+        sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
         yield return WaitAnimationEvent();
-        // ici le script se bloque et attend que l'event soit envoyer par une frame de l'animation lui indiquant q'il peut continuer
         
         yield return ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
         yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);

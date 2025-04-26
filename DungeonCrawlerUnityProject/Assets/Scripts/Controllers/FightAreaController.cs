@@ -6,6 +6,8 @@ using UnityEngine;
 public class FightAreaController : PlayerController
 {
     [SerializeField] private UIFightController uiController;
+
+    [SerializeField] private ComplexCarousel attackSelectorController;
     
     private (int x, int y) playerGridSelectorPosition = (0,0);
     private (int x, int y) attackOriginPosition = (0,0);
@@ -16,9 +18,14 @@ public class FightAreaController : PlayerController
 
     private CharacterDataInstance selectedCharacter;
 
+    public HoveredInfoController hoveredInfoController;
+
+    private int currentAttackIndex => attackSelectorController.currentAttack;
+
     enum SelectorState
     {
         OnPlayerGrid,
+        SelectAttack,
         SelectAttackPosition,
         SelectPack,
         PlaceCharacter
@@ -42,6 +49,7 @@ public class FightAreaController : PlayerController
         switch (currentState)
         {
             case SelectorState.OnPlayerGrid : MoveSelector(directionToGo); break;
+            case SelectorState.SelectAttack : MoveAttackSelector(directionToGo); break;
             case SelectorState.SelectAttackPosition : MoveAttackPattern(directionToGo); break;
             case SelectorState.SelectPack : MovePack(directionToGo); break;
             case SelectorState.PlaceCharacter : MoveSelector(directionToGo); break;
@@ -61,10 +69,21 @@ public class FightAreaController : PlayerController
         uiController.ToggleC();
     }
 
+    private void DontWantSelectAttack()
+    {
+        List<Vector2Int> pattern = FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attacks[currentAttackIndex]).pattern.positions;
+        FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attacks[currentAttackIndex].gridToApply);
+        FightManager.Instance.sendInformation.EntityNoLongerSelectedAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        FightManager.Instance.sendInformation.EntityHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        SwitchState(SelectorState.OnPlayerGrid);
+        uiController.SwitchAB();
+    }
+
     private void SelectPack()
     {
         selectedPack = FightManager.Instance.candyPack[currentPackIndex];
         FightManager.Instance.sendInformation.EntityHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        hoveredInfoController.UpdateInformations(FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y]);
         SwitchState(SelectorState.PlaceCharacter);
     }
 
@@ -76,6 +95,7 @@ public class FightAreaController : PlayerController
     private void PlaceCharacter()
     {
         FightManager.Instance.PlaceCharacterFromPack(selectedPack, playerGridSelectorPosition);
+        hoveredInfoController.UpdateInformations(FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y]);
     }
 
     private void MovePack((int x, int y) directionToGo)
@@ -93,18 +113,20 @@ public class FightAreaController : PlayerController
         playerGridSelectorPosition = (playerGridSelectorPosition.x + directionToGo.x, playerGridSelectorPosition.y + directionToGo.y);
         
         FightManager.Instance.sendInformation.EntityHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        
+        hoveredInfoController.UpdateInformations(FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y]);
     }
 
     private void MoveAttackPattern((int x, int y) directionToGo)
     {
-        List<Vector2Int> pattern = FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions;
+        List<Vector2Int> pattern = FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attacks[currentAttackIndex]).pattern.positions;
         if (FightManager.Instance.IsPatternOutsideLimit(FightManager.Instance.enemyGrid, (attackOriginPosition.x+directionToGo.x, attackOriginPosition.y+directionToGo.y), pattern)) return;
 
-        FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attack.gridToApply);
+        FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attacks[currentAttackIndex].gridToApply);
         
         attackOriginPosition = (attackOriginPosition.x + directionToGo.x, attackOriginPosition.y + directionToGo.y);
         
-        FightManager.Instance.sendInformation.EntitiesTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attack.gridToApply);
+        FightManager.Instance.sendInformation.EntitiesTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attacks[currentAttackIndex].gridToApply);
     }
 
     private void SelectCharacter()
@@ -116,32 +138,49 @@ public class FightAreaController : PlayerController
         FightManager.Instance.sendInformation.EntityNoLongerHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
         FightManager.Instance.sendInformation.EntitySelectedAt(playerGridSelectorPosition, FightManager.TurnState.Player);
         
-        SwitchState(SelectorState.SelectAttackPosition);
-        
+        SwitchState(SelectorState.SelectAttack);
+        uiController.SwitchAB();
+        attackSelectorController.LoadData(selectedCharacter.attacks);
         MoveAttackPattern(attackOriginPosition);
+    }
+
+    private void MoveAttackSelector((int x, int y) directionToGo)
+    {
+        List<Vector2Int> pattern = FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attacks[currentAttackIndex]).pattern.positions;
+        FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attacks[currentAttackIndex].gridToApply);
+        if (directionToGo == (0, 1)) attackSelectorController.ScrollHorizontal(1);
+        if (directionToGo == (0, -1)) attackSelectorController.ScrollHorizontal(-1);
+        if (directionToGo == (1, 0)) attackSelectorController.ScrollVertical(1);
+        if (directionToGo == (-1, 0)) attackSelectorController.ScrollVertical(-1);
+        MoveAttackPattern(attackOriginPosition);
+    }
+
+    private void SelectAttack()
+    {
+        SwitchState(SelectorState.SelectAttackPosition);
     }
 
     private void CharacterLooseLayer()
     {
         FightManager.Instance.BreakLayerAt(playerGridSelectorPosition);
+        hoveredInfoController.UpdateInformations(FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y]);
     }
 
     private void CancelAttack()
     {
-        List<Vector2Int> pattern = FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attack).pattern.positions;
+        List<Vector2Int> pattern = FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attacks[currentAttackIndex]).pattern.positions;
         
-        FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attack.gridToApply);
-        FightManager.Instance.sendInformation.EntityNoLongerSelectedAt(playerGridSelectorPosition, FightManager.TurnState.Player);
-        FightManager.Instance.sendInformation.EntityHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
+        FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attacks[currentAttackIndex].gridToApply);
         
-        SwitchState(SelectorState.OnPlayerGrid);
+        SwitchState(SelectorState.SelectAttack);
+        MoveAttackPattern(attackOriginPosition);
     }
 
     private void DoAttack()
     {
         CancelAttack();
         
-        StartCoroutine(FightManager.Instance.Attack(playerGridSelectorPosition, attackOriginPosition, FightManager.TurnState.Player));
+        StartCoroutine(FightManager.Instance.Attack(playerGridSelectorPosition, currentAttackIndex, attackOriginPosition, FightManager.TurnState.Player));
     }
 
     private void SwitchState(SelectorState newState)
@@ -150,6 +189,9 @@ public class FightAreaController : PlayerController
         switch (currentState)
         {
             case SelectorState.SelectAttackPosition :
+                attackOriginPosition = (0, 0);
+                break;
+            case SelectorState.SelectAttack :
                 attackOriginPosition = (0, 0);
                 break;
         }
@@ -175,6 +217,7 @@ public class FightAreaController : PlayerController
         switch (currentState)
         {
             case SelectorState.OnPlayerGrid : SelectCharacter(); break;
+            case SelectorState.SelectAttack : SelectAttack(); break;
             case SelectorState.SelectAttackPosition : DoAttack(); break;
             case SelectorState.SelectPack : SelectPack(); break;
             case SelectorState.PlaceCharacter : PlaceCharacter(); break;
@@ -186,6 +229,7 @@ public class FightAreaController : PlayerController
         switch (currentState)
         {
             case SelectorState.OnPlayerGrid : ; break;
+            case SelectorState.SelectAttack : DontWantSelectAttack(); break;
             case SelectorState.SelectAttackPosition : CancelAttack(); break;
             case SelectorState.SelectPack : DontWantSeePack(); break;
             case SelectorState.PlaceCharacter : UnselectPack(); break;
