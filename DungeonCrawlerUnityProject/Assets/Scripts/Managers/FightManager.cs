@@ -33,11 +33,33 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     public EnemyDataInstance[,] enemyGrid {get ; private set;} = new EnemyDataInstance[3, 3];
 
     private HashSet<(int x, int y)> playerAlreadyPlayedPositions = new HashSet<(int x, int y)>();
-    private HashSet<(int x, int y)> enemyAlreadyPlayedPositions = new HashSet<(int x, int y)>();
-
-    public CharacterData characterTest;
-    public CharacterData characterTest2;
+    public HashSet<(int x, int y)> enemyAlreadyPlayedPositions = new HashSet<(int x, int y)>();
+    
     public EnemyData enemyTest;
+
+    public List<CandyPackData> candyPackData;
+    public List<CandyPackDataInstance> candyPack = new List<CandyPackDataInstance>();
+
+
+    [SerializeField] public SimpleCardSlider packDisplayer;
+    
+    private void InitPack()
+    {
+        foreach (var pack in candyPackData)
+        {
+            candyPack.Add(pack.Instance());
+        }
+        packDisplayer.packs = candyPack;
+    }
+
+    public void PlaceCharacterFromPack(CandyPackDataInstance pack, (int x, int y)position)
+    {
+        if (pack.currentStock <= 0) return;
+        if (playerGrid[position.x, position.y] != null) return;
+        PlaceEntityAtPosition(pack.candyData, position, TurnState.Player);
+        pack.currentStock--;
+        packDisplayer.UpdateDisplay();
+    }
 
     public static FightManager Instance;
     
@@ -52,19 +74,13 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
             Instance = this;
             DontDestroyOnLoad(this);
         }
+        InitPack();
     }
 
     private void Start()
     {
         InitDisplayedGrid(playerGrid);
         InitDisplayedGrid(enemyGrid);
-
-        PlaceEntityAtPosition(characterTest, (0, 0), TurnState.Player);
-        PlaceEntityAtPosition(characterTest, (0, 1), TurnState.Player);
-        PlaceEntityAtPosition(characterTest, (0, 2), TurnState.Player);
-        PlaceEntityAtPosition(characterTest2, (1, 0), TurnState.Player);
-        PlaceEntityAtPosition(characterTest2, (1, 1), TurnState.Player);
-        PlaceEntityAtPosition(characterTest2, (1, 2), TurnState.Player);
         
         PlaceEntityAtPosition(enemyTest, (0, 0), TurnState.Enemy);
         PlaceEntityAtPosition(enemyTest, (0, 1), TurnState.Enemy);
@@ -225,7 +241,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         TurnState entityTeam = entity is CharacterDataInstance ? TurnState.Player : TurnState.Enemy;
         entity.durability -= damages;
         
-        sendInformation.EntityTakeDamageAt(entityPosition, entityTeam);
+        sendInformation.EntityTakeDamageAt(entityPosition, damages, entityTeam);
         yield return WaitAnimationEvent();
 
         if (entity.durability <= 0)
@@ -321,13 +337,15 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
 
     private bool IsCharacterStockEmpty(TurnState teamToCheck)
     {
+        if (teamToCheck == TurnState.Enemy) return true;
+        
         // à changer par une verification de l'inventaire
-        return teamToCheck switch
+        foreach (var pack in candyPack)
         {
-            TurnState.Player => false,
-            TurnState.Enemy => true,
-            _ => throw new ArgumentOutOfRangeException(nameof(teamToCheck), teamToCheck, null)
-        };
+            if (pack.currentStock > 0) return false;
+        }
+
+        return true;
     }
 
     private bool canContinue = false;

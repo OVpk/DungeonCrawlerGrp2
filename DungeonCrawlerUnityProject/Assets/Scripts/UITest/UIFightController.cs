@@ -1,7 +1,8 @@
+// TransformSwitcherSquishy.cs
 using UnityEngine;
 using DG.Tweening;
 
-public class TransformSwitcherSquishy : MonoBehaviour
+public class UIFightController : MonoBehaviour
 {
     [Header("Transforms à switcher")]
     public Transform objA;
@@ -29,20 +30,20 @@ public class TransformSwitcherSquishy : MonoBehaviour
     // États
     private bool isAActive = true;
     private bool isAnimatingAB = false;
-    private bool isCVisible;
+    private bool isCVisible = true;
     private bool isAnimatingC = false;
 
     void Start()
     {
+        // Sauvegarde des positions locales initiales
         posA = objA.localPosition;
         posB = objB.localPosition;
         posC = objC.transform.localPosition;
 
-        // Initialisation des états
+        // États initiaux
         objA.gameObject.SetActive(true);
         objB.gameObject.SetActive(false);
-        // objC suit objA: actif seulement si A actif
-        objC.SetActive(true);
+        // objC reste dans l'état défini dans l'Inspector
         isCVisible = objC.activeSelf;
 
         objA.localScale = Vector3.one;
@@ -66,10 +67,7 @@ public class TransformSwitcherSquishy : MonoBehaviour
         inObj.localPosition = inPos - Vector3.up * verticalOffset;
         inObj.localScale = Vector3.one;
 
-        // Si on entre avec A, active objC
-        if (inObj == objA)
-            objC.SetActive(true);
-
+        // Animation d'entrée pour inObj
         Sequence seqIn = DOTween.Sequence();
         seqIn.Append(inObj.DOLocalMove(inPos, animationDuration).SetEase(entryEaseAB));
         seqIn.Join(inObj.DOScale(new Vector3(1.3f, 0.7f, 1f), animationDuration * 0.3f).SetEase(Ease.OutQuad));
@@ -77,6 +75,7 @@ public class TransformSwitcherSquishy : MonoBehaviour
         seqIn.Append(inObj.DOScale(Vector3.one, animationDuration * 0.4f).SetEase(Ease.OutQuad));
         seqIn.OnComplete(() => { isAnimatingAB = false; });
 
+        // Animation de sortie pour outObj
         Sequence seqOut = DOTween.Sequence();
         seqOut.Append(outObj.DOLocalMove(outPos - Vector3.up * verticalOffset, animationDuration).SetEase(exitEaseAB));
         seqOut.Join(outObj.DOScale(new Vector3(0.7f, 1.3f, 1f), animationDuration * 0.3f).SetEase(Ease.InQuad));
@@ -84,26 +83,16 @@ public class TransformSwitcherSquishy : MonoBehaviour
         seqOut.AppendCallback(() => {
             outObj.gameObject.SetActive(false);
             outObj.localScale = Vector3.one;
-
-            // Si on sort avec A, désactive objC
-            if (outObj == objA)
-                objC.SetActive(false);
         });
 
         isAActive = !isAActive;
     }
     
+    /// <summary>
+    /// Affiche ou cache C sans dépendance à A/B
+    /// </summary>
     public void ToggleC()
     {
-        // Si B actif, force C désactivé et bloque
-        if (!isAActive)
-        {
-            if (objC.activeSelf)
-                objC.SetActive(false);
-            isCVisible = false;
-            return;
-        }
-
         if (isAnimatingC) return;
         isAnimatingC = true;
 
@@ -117,7 +106,7 @@ public class TransformSwitcherSquishy : MonoBehaviour
         }
         else
         {
-            // Sortie vers la droite hors écran
+            // Sortie vers la droite
             objC.transform.DOLocalMoveX(posC.x + horizontalOffset, animationDuration).SetEase(exitEaseC)
                 .OnComplete(() => {
                     objC.SetActive(false);
@@ -125,14 +114,5 @@ public class TransformSwitcherSquishy : MonoBehaviour
                     isCVisible = false;
                 });
         }
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            SwitchAB();
-
-        if (Input.GetKeyDown(cToggleKey))
-            ToggleC();
     }
 }
