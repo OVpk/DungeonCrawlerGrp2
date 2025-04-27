@@ -21,5 +21,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1f6cc58f1d84c4946a1086dbe9a1afe7, type: 2}
   - {fileID: 11400000, guid: 7e6e10038c156fb44b203be7edc80148, type: 2}
   - {fileID: 11400000, guid: eef01fa85407dcb42acaa9658adb55b3, type: 2}
-  <gridToCheck>k__BackingField: 0
+  <gridToCheck>k__BackingField: 1
   <gridToApply>k__BackingField: 0
