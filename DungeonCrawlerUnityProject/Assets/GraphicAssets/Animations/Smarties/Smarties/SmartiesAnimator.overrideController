@@ -6,18 +6,18 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Carambar1Animator
+  m_Name: SmartiesAnimator
   m_Controller: {fileID: 9100000, guid: 09fe2c31d512a6c4a9a2b5becd6ee58d, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: fc20fbd430d1bcf4abbecdab25a58f12, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 705dd248d266d9a44923a7a964750c5f, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 69d88e57a15809e4c929c092de973c9e, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: d566929fe4d613248b6dbbac24474335, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 697d9c8b58c5ec6448b2071538b4f0bf, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 2988bf6c73becf541a1274f8fbf17e62, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: b853f72cb96af624d9b10a30acc0bc5e, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: fd4682e59d2a6ce4d8342788c5027aab, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: fc20fbd430d1bcf4abbecdab25a58f12, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2b0d95018b45f654bb96313b157d1f7d, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 9052a12fb1b9008499cf909495f6313d, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: b2ac8224fda501540a1a3e04ba96eead, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a4e27974ba7d32c46bfa8579bd532b86, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 4405fc3f807a1ed40bd741ec29353e3b, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 41c624d73ee565a48b1ad6c92798d2f9, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 97881b2c176c76849b721f6f66b6de9e, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: c8fa322f153ea1c4f97902925fc56866, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 4b2f1462e543ab54db9423c9bd67ccda, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6c0a7646c9652e940b581ca2ebcf1db3, type: 2}
