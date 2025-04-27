@@ -17,6 +17,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     public TurnState currentTurn { get; private set; }
     
     [field:SerializeField] public SimpleAi aiController { get; private set; }
+    
+    public bool canUseControlls = true;
 
     private void SwitchTurn()
     {
@@ -25,6 +27,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         currentTurn = currentTurn == TurnState.Player ? TurnState.Enemy : TurnState.Player;
         
         if (IsCleaningGridNecessary(currentTurn)) CleanAlreadyPlayedPositions(currentTurn);
+
+        if (currentTurn == TurnState.Player) canUseControlls = true;
         
         if (currentTurn == TurnState.Enemy) aiController.PlayTurn();
     }
@@ -35,13 +39,26 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     private HashSet<(int x, int y)> playerAlreadyPlayedPositions = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> enemyAlreadyPlayedPositions = new HashSet<(int x, int y)>();
     
-    public EnemyData enemyTest;
+    public EnemyGridData enemyGridData;
 
     public List<CandyPackData> candyPackData;
     public List<CandyPackDataInstance> candyPack = new List<CandyPackDataInstance>();
 
 
     [SerializeField] public SimpleCardSlider packDisplayer;
+
+    private void InitEnemyGrid()
+    {
+        EnemyData[,] enemyGridData2d = enemyGridData.Enemies2D;
+        for (int i = 0; i < enemyGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < enemyGrid.GetLength(1); j++)
+            {
+                if (enemyGridData2d[i,j] == null) continue;
+                PlaceEntityAtPosition(enemyGridData2d[i,j], (i,j), TurnState.Enemy);
+            }
+        }
+    }
     
     private void InitPack()
     {
@@ -82,15 +99,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         InitDisplayedGrid(playerGrid);
         InitDisplayedGrid(enemyGrid);
         
-        PlaceEntityAtPosition(enemyTest, (0, 0), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (0, 1), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (0, 2), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (1, 0), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (1, 1), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (1, 2), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (2, 0), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (2, 1), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (2, 2), TurnState.Enemy);
+        InitEnemyGrid();
     }
 
     #region Display
@@ -103,6 +112,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     {
         GameObject container;
         TurnState team;
+        float horizontalRapport = 2f;
+        float verticalRapport = 2f;
 
         switch (grid)
         {
@@ -113,6 +124,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
             case EnemyDataInstance[,] :
                 container = enemyGridContainer;
                 team = TurnState.Enemy;
+                verticalRapport = 1.5f;
                 break;
             default: throw new Exception("Invalid Type");
         }
@@ -122,7 +134,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
             for (int j = 0; j < grid.GetLength(1); j++)
             {
                 GameObject entityLocation = Instantiate(entityLocationPrefab, container.transform);
-                entityLocation.transform.localPosition = new Vector3(j, i) * 2f;
+                entityLocation.transform.localPosition = new Vector3(j * horizontalRapport, i * verticalRapport);
                 EntityDisplayController entityController = entityLocation.GetComponent<EntityDisplayController>();
                 entityController.team = team;
                 entityController.positionInGrid = (i, j);
@@ -198,19 +210,19 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         positionsToClean.Clear();
     }
 
-    public IEnumerator Attack((int x, int y) attackerPosition, (int x, int y) attackOriginPosition, TurnState attackerTeam)
+    public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int x, int y) attackOriginPosition, TurnState attackerTeam)
     {
         EntityDataInstance[,] attackerGrid;
         EntityDataInstance[,] gridToApplyAttack;
         attackerGrid = attackerTeam == TurnState.Player ? playerGrid : enemyGrid; 
         
         EntityDataInstance attacker = attackerGrid[attackerPosition.x, attackerPosition.y];
-        gridToApplyAttack = attacker.attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
-        AttackStageData attackToApply = FindBestUnlockedStage(attacker.attack);
-        
-        sendInformation.EntityAttackAt(attackerPosition, attackerTeam); // l'information va donc etre traité et l'entité concerné va executer son animation d'attaque
+        AttackData attack = attacker.attacks[attackIndex];
+        gridToApplyAttack = attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
+        AttackStageData attackToApply = FindBestUnlockedStage(attack);
+
+        sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
         yield return WaitAnimationEvent();
-        // ici le script se bloque et attend que l'event soit envoyer par une frame de l'animation lui indiquant q'il peut continuer
         
         yield return ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
         yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);

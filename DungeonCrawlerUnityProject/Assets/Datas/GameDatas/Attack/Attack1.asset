@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4a7c332fc5ac34bb71b082d04ea321, type: 3}
   m_Name: Attack1
   m_EditorClassIdentifier: 
+  <attackName>k__BackingField: Attaque 1
   <attackStages>k__BackingField:
   - {fileID: 11400000, guid: f3492f895f148314a99658d46ef255af, type: 2}
-  - {fileID: 11400000, guid: 0b56fdd75e8137044af96e12d6ecf9de, type: 2}
-  <gridToCheck>k__BackingField: 0
+  <gridToCheck>k__BackingField: 1
   <gridToApply>k__BackingField: 1

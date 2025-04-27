@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f4a7c332fc5ac34bb71b082d04ea321, type: 3}
+  m_Name: SmartiesSingleAttack1
+  m_EditorClassIdentifier: 
+  <attackName>k__BackingField: SmartiesSingleAttack1
+  <attackStages>k__BackingField:
+  - {fileID: 11400000, guid: 3fa89b11a26be4e45b4d80ad2d9b1321, type: 2}
+  - {fileID: 11400000, guid: 2def0f876fe6acd49959c5feab34c6ff, type: 2}
+  - {fileID: 11400000, guid: b558a55d56fa5f245a3d275bd7217fe5, type: 2}
+  - {fileID: 11400000, guid: cf0819407ca26e5449fd504da51bb296, type: 2}
+  - {fileID: 11400000, guid: 1f6cc58f1d84c4946a1086dbe9a1afe7, type: 2}
+  - {fileID: 11400000, guid: 7e6e10038c156fb44b203be7edc80148, type: 2}
+  - {fileID: 11400000, guid: eef01fa85407dcb42acaa9658adb55b3, type: 2}
+  <gridToCheck>k__BackingField: 0
+  <gridToApply>k__BackingField: 0
