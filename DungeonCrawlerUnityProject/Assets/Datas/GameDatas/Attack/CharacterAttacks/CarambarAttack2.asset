@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4a7c332fc5ac34bb71b082d04ea321, type: 3}
   m_Name: CarambarAttack2
   m_EditorClassIdentifier: 
-  <attackName>k__BackingField: Attack2
+  <attackName>k__BackingField: ATTAQUE 2
   <attackStages>k__BackingField:
   - {fileID: 11400000, guid: ce2a0cbd27df3364dbbcf934252723ba, type: 2}
   - {fileID: 11400000, guid: aa85220661c2a5d48930c677bc4cf8bb, type: 2}

@@ -16,4 +16,4 @@ MonoBehaviour:
   <attackStages>k__BackingField:
   - {fileID: 11400000, guid: f3492f895f148314a99658d46ef255af, type: 2}
   <gridToCheck>k__BackingField: 1
-  <gridToApply>k__BackingField: 1
+  <gridToApply>k__BackingField: 0
