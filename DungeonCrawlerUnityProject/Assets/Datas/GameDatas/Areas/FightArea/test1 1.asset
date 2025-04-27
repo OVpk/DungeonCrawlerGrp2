@@ -16,6 +16,10 @@ MonoBehaviour:
   <iconDistance1>k__BackingField: {fileID: 21300000, guid: 472bf4c705bef8f44975b91451de892a, type: 3}
   <iconDistance2>k__BackingField: {fileID: 0}
   <iconDistance3>k__BackingField: {fileID: 0}
+<<<<<<<< HEAD:DungeonCrawlerUnityProject/Assets/Datas/GameDatas/Areas/FightArea/test1 1.asset
   <description>k__BackingField: description test2
+========
+  <description>k__BackingField: description test1
+>>>>>>>> 1329b785fab3b206ef66d96e320b36e416b4e326:DungeonCrawlerUnityProject/Assets/Datas/GameDatas/Areas/FightArea/test1.asset
   <background>k__BackingField: {fileID: 0}
   <boss>k__BackingField: {fileID: 0}

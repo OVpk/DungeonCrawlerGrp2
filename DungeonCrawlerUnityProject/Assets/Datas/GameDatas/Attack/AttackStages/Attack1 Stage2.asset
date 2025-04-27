@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd3f947d771610746bdee2c5ba7715dc, type: 3}
   m_Name: Attack1 Stage2
   m_EditorClassIdentifier: 
+  <effectDescription>k__BackingField: 20dmg
   <pattern>k__BackingField: {fileID: 11400000, guid: ac5e5537254d6174cbe6e4291f68a935, type: 2}
   <damage>k__BackingField: 20
   <unlockCondition>k__BackingField: {fileID: 11400000, guid: 092ef7bdd125a8f489309950feb2a746, type: 2}

@@ -14,7 +14,7 @@ public class SimpleAi : MonoBehaviour
         {
             for (int j = 0; j < fightManager.enemyGrid.GetLength(1); j++)
             {
-                if (fightManager.IsPositionAlreadyPlayed((i, j))) continue;
+                if (IsPositionAlreadyPlayed((i, j))) continue;
                 if (fightManager.enemyGrid[i, j] == null) continue;
                 
                 positions.Add((i, j));
@@ -22,6 +22,11 @@ public class SimpleAi : MonoBehaviour
         }
 
         return positions;
+    }
+    
+    public bool IsPositionAlreadyPlayed((int x, int y) position)
+    {
+        return fightManager.enemyAlreadyPlayedPositions.Contains(position);
     }
 
     public void PlayTurn()
@@ -37,22 +42,12 @@ public class SimpleAi : MonoBehaviour
         (int x, int y) chosenPosition = GetRandomPosition(playablePositions);
 
         EnemyDataInstance chosenEnemy = fightManager.enemyGrid[chosenPosition.x, chosenPosition.y];
-        if (chosenEnemy == null || chosenEnemy.attack == null)
-        {
-            Debug.LogWarning("Enemy or enemy attack data missing at position " + chosenPosition);
-            return;
-        }
 
-        AttackStageData bestAttackStage = fightManager.FindBestUnlockedStage(chosenEnemy.attack);
-        if (bestAttackStage == null)
-        {
-            Debug.LogWarning("No unlocked attack stage found for enemy at position " + chosenPosition);
-            return;
-        }
+        AttackStageData bestAttackStage = fightManager.FindBestUnlockedStage(chosenEnemy.attacks[0]); // index toujours à 0. Pour l'instant l'ennemi n'a qu'une attaque
 
         (int x, int y) bestAttackPosition = FindBestOriginPosition(bestAttackStage);
 
-        StartCoroutine(fightManager.Attack(chosenPosition, bestAttackPosition, FightManager.TurnState.Enemy));
+        StartCoroutine(fightManager.Attack(chosenPosition, 0, bestAttackPosition, FightManager.TurnState.Enemy)); // index toujours à 0. Pour l'instant l'ennemi n'a qu'une attaque
     }
 
     private (int x, int y) FindBestOriginPosition(AttackStageData attackStage)

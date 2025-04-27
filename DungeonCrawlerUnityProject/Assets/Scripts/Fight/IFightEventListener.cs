@@ -18,5 +18,5 @@ public interface IFightEventListener
     void OnEntityLocationDisabled((int x, int y) position, FightManager.TurnState team);
     void OnEntityLocationEnabled((int x, int y) position, FightManager.TurnState team);
 
-    void OnEntityTakeDamage((int x, int y) position, FightManager.TurnState team);
+    void OnEntityTakeDamage((int x, int y) position, int nbDamages, FightManager.TurnState team);
 }
