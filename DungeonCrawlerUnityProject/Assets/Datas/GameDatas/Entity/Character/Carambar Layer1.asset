@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e31adf74c2c2a1c4988d49de6ad39f04, type: 3}
-  m_Name: Character1 Layer1
+  m_Name: Carambar Layer1
   m_EditorClassIdentifier: 
-  <entityName>k__BackingField: Carambar1 test
+  <entityName>k__BackingField: Carambar
   <durability>k__BackingField: 3
   <type>k__BackingField: 1
   <sprite>k__BackingField: {fileID: 21300000, guid: fc744db934c325841b5c8e0b9459d477, type: 3}
