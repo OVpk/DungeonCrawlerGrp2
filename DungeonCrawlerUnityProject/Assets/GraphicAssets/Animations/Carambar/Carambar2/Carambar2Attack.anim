@@ -1247,7 +1247,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 1.2166667
+  - time: 0.6666667
     functionName: CanContinueEvent
     data: 
     objectReferenceParameter: {fileID: 0}
