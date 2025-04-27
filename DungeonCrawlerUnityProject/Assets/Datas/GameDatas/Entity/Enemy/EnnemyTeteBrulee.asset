@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b46137b90bd6fb848866e99b07060e9d, type: 3}
-  m_Name: EnemySoucoupe
+  m_Name: EnnemyTeteBrulee
   m_EditorClassIdentifier: 
-  <entityName>k__BackingField: Soucoupe
-  <durability>k__BackingField: 3
+  <entityName>k__BackingField: EnnemyTeteBrulee
+  <durability>k__BackingField: 4
   <type>k__BackingField: 0
-  <sprite>k__BackingField: {fileID: 21300000, guid: 0e06dd846a78ec845949e89684ad0b40, type: 3}
+  <sprite>k__BackingField: {fileID: 21300000, guid: 5609d7c1f9cd7e44ab5c276e980c2539, type: 3}
   <animator>k__BackingField: {fileID: 22100000, guid: f8a6da521289d2c4c86b984646f87b9c, type: 2}
   <attacks>k__BackingField:
-  - {fileID: 11400000, guid: 87d0b6f4a61a3934c834f55f5107039e, type: 2}
+  - {fileID: 0}
