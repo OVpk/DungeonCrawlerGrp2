@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 271dfbe72f319354a99f12d6b7146472, type: 3}
   m_Name: 3xMou
   m_EditorClassIdentifier: 
+  <description>k__BackingField: 3a
   targetType: 0
   requiredCount: 3
