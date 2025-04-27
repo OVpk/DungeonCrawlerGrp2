@@ -39,13 +39,26 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     private HashSet<(int x, int y)> playerAlreadyPlayedPositions = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> enemyAlreadyPlayedPositions = new HashSet<(int x, int y)>();
     
-    public EnemyData enemyTest;
+    public EnemyGridData enemyGridData;
 
     public List<CandyPackData> candyPackData;
     public List<CandyPackDataInstance> candyPack = new List<CandyPackDataInstance>();
 
 
     [SerializeField] public SimpleCardSlider packDisplayer;
+
+    private void InitEnemyGrid()
+    {
+        EnemyData[,] enemyGridData2d = enemyGridData.Enemies2D;
+        for (int i = 0; i < enemyGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < enemyGrid.GetLength(1); j++)
+            {
+                if (enemyGridData2d[i,j] == null) continue;
+                PlaceEntityAtPosition(enemyGridData2d[i,j], (i,j), TurnState.Enemy);
+            }
+        }
+    }
     
     private void InitPack()
     {
@@ -86,15 +99,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         InitDisplayedGrid(playerGrid);
         InitDisplayedGrid(enemyGrid);
         
-        PlaceEntityAtPosition(enemyTest, (0, 0), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (0, 1), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (0, 2), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (1, 0), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (1, 1), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (1, 2), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (2, 0), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (2, 1), TurnState.Enemy);
-        PlaceEntityAtPosition(enemyTest, (2, 2), TurnState.Enemy);
+        InitEnemyGrid();
     }
 
     #region Display

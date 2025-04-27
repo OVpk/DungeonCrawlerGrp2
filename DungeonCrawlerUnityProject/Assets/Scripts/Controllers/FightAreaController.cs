@@ -163,8 +163,17 @@ public class FightAreaController : PlayerController
 
     private void CharacterLooseLayer()
     {
+        if (FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y] == null) return;
         FightManager.Instance.BreakLayerAt(playerGridSelectorPosition);
-        hoveredInfoController.UpdateInformations(FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y]);
+        if (FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y] ==
+            null)
+        {
+            hoveredInfoController.UpdateInformations(null);
+        }
+        else
+        {
+            hoveredInfoController.UpdateInformations((CharacterDataInstance)FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y].nextLayer.Instance());
+        }
     }
 
     private void CancelAttack()
