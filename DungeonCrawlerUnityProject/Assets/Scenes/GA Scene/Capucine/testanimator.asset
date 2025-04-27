@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8765ac12ca9d3a4b9f65a90e6c00068, type: 3}
-  m_Name: NewEnemyGrid
+  m_Name: testanimator
   m_EditorClassIdentifier: 
   enemies:
+  - {fileID: 11400000, guid: c47b9ad93d1332e41a9594077601a477, type: 2}
   - {fileID: 0}
+  - {fileID: 11400000, guid: 105b3d3e8e1e9d14a9e00af448eb93ee, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 11400000, guid: f4a6460428ef8b442aa79e512f8f6327, type: 2}
-  - {fileID: 11400000, guid: 114a9156ce5697f48ab213814aef8c2d, type: 2}
   - {fileID: 0}
-  - {fileID: 11400000, guid: 105b3d3e8e1e9d14a9e00af448eb93ee, type: 2}
-  - {fileID: 11400000, guid: c47b9ad93d1332e41a9594077601a477, type: 2}
+  - {fileID: 0}
