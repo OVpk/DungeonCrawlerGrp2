@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: NewEnemyGrid
   m_EditorClassIdentifier: 
   enemies:
-  - {fileID: 0}
-  - {fileID: 11400000, guid: fd79b808e4e1a6941a63311d1c04a128, type: 2}
-  - {fileID: 0}
   - {fileID: 11400000, guid: fd79b808e4e1a6941a63311d1c04a128, type: 2}
   - {fileID: 11400000, guid: fd79b808e4e1a6941a63311d1c04a128, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 11400000, guid: fd79b808e4e1a6941a63311d1c04a128, type: 2}
+  - {fileID: 11400000, guid: fd79b808e4e1a6941a63311d1c04a128, type: 2}
+  - {fileID: 11400000, guid: fd79b808e4e1a6941a63311d1c04a128, type: 2}
+  - {fileID: 11400000, guid: fd79b808e4e1a6941a63311d1c04a128, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
