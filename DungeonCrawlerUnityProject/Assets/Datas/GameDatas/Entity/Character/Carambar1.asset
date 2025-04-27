@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e31adf74c2c2a1c4988d49de6ad39f04, type: 3}
   m_Name: Carambar1
   m_EditorClassIdentifier: 
-  <entityName>k__BackingField: Carambar1
+  <entityName>k__BackingField: Carambar
   <durability>k__BackingField: 4
   <type>k__BackingField: 0
   <sprite>k__BackingField: {fileID: 21300000, guid: fc744db934c325841b5c8e0b9459d477, type: 3}
