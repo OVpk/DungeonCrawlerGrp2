@@ -16,10 +16,10 @@ MonoBehaviour:
   <durability>k__BackingField: 3
   <type>k__BackingField: 0
   <sprite>k__BackingField: {fileID: 21300000, guid: 707a12516615de843952364cf9611ae9, type: 3}
-  <animator>k__BackingField: {fileID: 22100000, guid: d730e342978052340af6768e715b80a9, type: 2}
+  <animator>k__BackingField: {fileID: 22100000, guid: 6854702e86eeece4a8d0951ecfc03d8a, type: 2}
   <attacks>k__BackingField:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 470f9823516f1804299c0b62a8ff8393, type: 2}
+  - {fileID: 11400000, guid: e666f33ef6201d34c90ade1f183ca554, type: 2}
   <nextLayer>k__BackingField: {fileID: 0}
-  <descriptionVisual>k__BackingField: {fileID: 0}
+  <descriptionVisual>k__BackingField: {fileID: 21300000, guid: 136a3b0611f8eda4f90521f8bb1d10ac, type: 3}
   <description>k__BackingField: 
