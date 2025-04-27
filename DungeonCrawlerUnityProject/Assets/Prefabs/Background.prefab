@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8769761004414119498}
   - component: {fileID: 6807676554467329516}
   m_Layer: 0
-  m_Name: IMG_6714
+  m_Name: Ilequiflotte
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 6283050504042286610}
   - component: {fileID: 6439830290137184316}
   m_Layer: 0
-  m_Name: IMG_6706
+  m_Name: Foreground2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 2493995446271353321}
   - component: {fileID: 7060855899777572044}
   m_Layer: 0
-  m_Name: IMG_6712
+  m_Name: Cailloucoulant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 5007153858905036780}
   - component: {fileID: 1942627928575381026}
   m_Layer: 0
-  m_Name: IMG_6705
+  m_Name: Foreground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -388,7 +388,7 @@ GameObject:
   - component: {fileID: 7865550463273814931}
   - component: {fileID: 6814164153261353024}
   m_Layer: 0
-  m_Name: IMG_6711
+  m_Name: Panneaux
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -510,7 +510,7 @@ GameObject:
   - component: {fileID: 1822851078965190242}
   - component: {fileID: 7749941159422180339}
   m_Layer: 0
-  m_Name: IMG_6707
+  m_Name: BackgroungBas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -633,7 +633,7 @@ GameObject:
   - component: {fileID: 7142887432954310563}
   - component: {fileID: 4668137723988186131}
   m_Layer: 0
-  m_Name: IMG_6708
+  m_Name: BackgroundHaut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -718,7 +718,7 @@ GameObject:
   - component: {fileID: 79140566780256523}
   - component: {fileID: 6468015417322354417}
   m_Layer: 0
-  m_Name: IMG_6710
+  m_Name: ChocolateRiver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -841,7 +841,7 @@ GameObject:
   - component: {fileID: 7261528439805428112}
   - component: {fileID: 8320101280912343771}
   m_Layer: 0
-  m_Name: IMG_6715
+  m_Name: Falaise
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
