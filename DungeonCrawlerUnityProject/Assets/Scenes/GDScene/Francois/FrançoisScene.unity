@@ -2887,6 +2887,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96144d12f0316154d8d6bc5494167114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nbTurnBeforeEntityGlueGone: 1
+  nbTurnBeforeEntityExplode: 3
   <sendInformation>k__BackingField: {fileID: 1485376351}
   <aiController>k__BackingField: {fileID: 1485376352}
   canUseControlls: 1
