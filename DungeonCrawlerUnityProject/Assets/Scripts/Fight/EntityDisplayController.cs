@@ -64,8 +64,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         durabilityText.text = durabilityNb.ToString();
         typeText.text = entityData.type switch
         {
-            EntityData.EntityTypes.Mou => "Mou",
-            EntityData.EntityTypes.Dur => "Dur",
+            EntityData.EntityTypes.Mou => "a",
+            EntityData.EntityTypes.Dur => "`",
             _ => throw new ArgumentOutOfRangeException()
         };
     }

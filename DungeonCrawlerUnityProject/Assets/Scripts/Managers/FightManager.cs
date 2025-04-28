@@ -258,7 +258,9 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         yield return WaitAnimationEvent();
         
         yield return ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
+        
         yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
+        
         
         AddPositionToAlreadyPlayed(attackerPosition, attackerTeam);
         
