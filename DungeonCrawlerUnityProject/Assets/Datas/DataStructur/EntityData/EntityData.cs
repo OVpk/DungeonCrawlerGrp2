@@ -13,7 +13,8 @@ public abstract class EntityData : ScriptableObject
     {
         Empty,
         Glue,
-        Protected,
+        ProtectedHorizontaly,
+        ProtectedVerticaly,
         Explosive
     }
     
@@ -59,12 +60,10 @@ public class EntityDataInstance
     }
 
     public int nbTurnBeforeGlueGone;
-    public int nbTurnBeforeExplode;
 
     public void UpdateEffects()
     {
         if (effects.Contains(EntityData.EntityEffects.Glue)) nbTurnBeforeGlueGone--;
-        if (effects.Contains(EntityData.EntityEffects.Explosive))nbTurnBeforeExplode--;
     }
 
     public void AddEffect(EntityData.EntityEffects effect)
@@ -72,15 +71,8 @@ public class EntityDataInstance
         effects.Add(effect);
         switch (effect)
         {
-            case EntityData.EntityEffects.Explosive : InitExplosiveEffect(); break;
             case EntityData.EntityEffects.Glue : InitGlueEffect(); break;
         }
-    }
-
-    private void InitExplosiveEffect()
-    {
-        nbTurnBeforeExplode = FightManager.Instance.nbTurnBeforeEntityExplode;
-        effects.Add(EntityData.EntityEffects.Explosive);
     }
     
     private void InitGlueEffect()

@@ -6,7 +6,6 @@ using UnityEngine;
 public class FightManager : MonoBehaviour, IFightDisplayerListener
 {
     public int nbTurnBeforeEntityGlueGone = 1;
-    public int nbTurnBeforeEntityExplode = 3;
     
     [field: SerializeField] public FightEventSpeaker sendInformation { get; private set; }
     
@@ -46,8 +45,6 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
             entity.UpdateEffects();
             if (entity.effects.Contains(EntityData.EntityEffects.Glue) && entity.nbTurnBeforeGlueGone == 0)
                 entity.effects.Remove(EntityData.EntityEffects.Glue);
-            if (entity.effects.Contains(EntityData.EntityEffects.Explosive) && entity.nbTurnBeforeExplode == 0)
-                EntityExplode(gridToUpdate);
         }
     }
 
@@ -253,14 +250,13 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         AttackData attack = attacker.attacks[attackIndex];
         gridToApplyAttack = attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
         AttackStageData attackToApply = FindBestUnlockedStage(attack);
-
+        
         sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
         yield return WaitAnimationEvent();
         
         yield return ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
         
         yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
-        
         
         AddPositionToAlreadyPlayed(attackerPosition, attackerTeam);
         
@@ -293,14 +289,43 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         if (effect == EntityData.EntityEffects.Empty) yield break;
         if (entity.effects.Contains(effect)) yield break;
         entity.AddEffect(effect);
+        
+        TurnState entityTeam = entity is CharacterDataInstance ? TurnState.Player : TurnState.Enemy;
+        switch (effect)
+        {
+            case EntityData.EntityEffects.ProtectedHorizontaly : 
+                sendInformation.EntityCreateProtectionAt(position, entityTeam, EntityDisplayController.BubbleDirections.Horizontal);
+                yield return WaitAnimationEvent();
+                break;
+            case EntityData.EntityEffects.ProtectedVerticaly :
+                sendInformation.EntityCreateProtectionAt(position, entityTeam, EntityDisplayController.BubbleDirections.Vertical);
+                yield return WaitAnimationEvent();
+                break;
+        }
     }
 
     private IEnumerator EntityTakeDamage(EntityDataInstance entity, (int x, int y) entityPosition, int damages)
     {
+        if (damages <= 0) yield break;
         TurnState entityTeam = entity is CharacterDataInstance ? TurnState.Player : TurnState.Enemy;
-        if (entity.effects.Contains(EntityData.EntityEffects.Protected))
+        EntityDataInstance[,] gridToApply = entityTeam == TurnState.Player ? playerGrid : enemyGrid;
+        if (entity.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
         {
-            entity.effects.Remove(EntityData.EntityEffects.Protected);
+            for (int i = 0; i < gridToApply.GetLength(1); i++)
+            {
+                if (gridToApply[entityPosition.x, i] == null) continue;
+                gridToApply[entityPosition.x, i].effects.Remove(EntityData.EntityEffects.ProtectedHorizontaly);
+            }
+            sendInformation.EntityLoseProtectionAt(entityPosition, entityTeam, EntityDisplayController.BubbleDirections.Horizontal);
+        }
+        else if (entity.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+        {
+            for (int i = 0; i < gridToApply.GetLength(0); i++)
+            {
+                if (gridToApply[i, entityPosition.y] == null) continue;
+                gridToApply[i, entityPosition.y].effects.Remove(EntityData.EntityEffects.ProtectedHorizontaly);
+            }
+            sendInformation.EntityLoseProtectionAt(entityPosition, entityTeam, EntityDisplayController.BubbleDirections.Vertical);
         }
         else
         {

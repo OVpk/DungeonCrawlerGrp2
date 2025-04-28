@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FightEventSpeaker : MonoBehaviour
@@ -137,6 +138,30 @@ public class FightEventSpeaker : MonoBehaviour
         foreach (var listener in listeners)
         {
             listener.OnEntityTakeDamage(position, nbDamages, team);
+        }
+    }
+
+    public void EntityDisplayBubbleAt((int x, int y) position, FightManager.TurnState team, bool state, EntityDisplayController.BubbleDirections direction)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityDisplayBubble(position, team, state, direction);
+        }
+    }
+
+    public void EntityCreateProtectionAt((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityCreateProtection(position, team, direction);
+        }
+    }
+
+    public void EntityLoseProtectionAt((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityLoseProtection(position, team, direction);
         }
     }
     

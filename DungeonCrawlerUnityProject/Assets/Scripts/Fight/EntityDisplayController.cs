@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -10,6 +9,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
 
     public EntityLocationDisplayer entityLocation;
     public EntityDisplayer entity;
+    public EffectDisplayer effectDisplayer;
 
     public TMP_Text durabilityText;
     public int durabilityNb;
@@ -142,5 +142,48 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
 
         durabilityNb = Math.Clamp(durabilityNb - nbDamages, 0, durabilityNb);
         durabilityText.text = durabilityNb.ToString();
+    }
+
+    public void OnEntityDisplayBubble((int x, int y) position, FightManager.TurnState team, bool state, BubbleDirections direction)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        switch (direction)
+        {
+            case BubbleDirections.Horizontal : effectDisplayer.anim.Play(state ? "BubbleHorizontalOn" : "BubbleHorizontalOff"); break;
+            case BubbleDirections.Vertical : effectDisplayer.anim.Play(state ? "BubbleVerticalOn" : "BubbleVerticalOff"); break;
+        }
+    }
+
+    public enum BubbleDirections
+    {
+        Horizontal,
+        Vertical
+    }
+
+    public void OnEntityCreateProtection((int x, int y) position, FightManager.TurnState team, BubbleDirections direction)
+    {
+        if (!IsConcerned(position, team)) return;
+
+        switch (direction)
+        {
+            case BubbleDirections.Horizontal : 
+                FightManager.Instance.sendInformation.EntityDisplayBubbleAt((positionInGrid.x, 1), team, true, direction); break;
+            case BubbleDirections.Vertical :
+                FightManager.Instance.sendInformation.EntityDisplayBubbleAt((0, positionInGrid.y), team, true, direction); break;
+        }
+    }
+
+    public void OnEntityLoseProtection((int x, int y) position, FightManager.TurnState team, BubbleDirections direction)
+    {
+        if (!IsConcerned(position, team)) return;
+
+        switch (direction)
+        {
+            case BubbleDirections.Horizontal : 
+                FightManager.Instance.sendInformation.EntityDisplayBubbleAt((positionInGrid.x, 1), team, false, direction); break;
+            case BubbleDirections.Vertical :
+                FightManager.Instance.sendInformation.EntityDisplayBubbleAt((0, positionInGrid.y), team, false, direction); break;
+        }
     }
 }

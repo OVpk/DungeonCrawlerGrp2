@@ -19,4 +19,10 @@ public interface IFightEventListener
     void OnEntityLocationEnabled((int x, int y) position, FightManager.TurnState team);
 
     void OnEntityTakeDamage((int x, int y) position, int nbDamages, FightManager.TurnState team);
+
+    void OnEntityDisplayBubble((int x, int y) position, FightManager.TurnState team, bool state, EntityDisplayController.BubbleDirections direction);
+
+    void OnEntityCreateProtection((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction);
+
+    void OnEntityLoseProtection((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction);
 }

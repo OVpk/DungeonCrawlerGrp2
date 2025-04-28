@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Protection Stage 1
   m_EditorClassIdentifier: 
   <effectDescription>k__BackingField: proteger bonbon
-  <pattern>k__BackingField: {fileID: 11400000, guid: c68d06f8a6e89dc4ab7b00322a1b465b, type: 2}
+  <pattern>k__BackingField: {fileID: 11400000, guid: a25e3b67010b24743a84f0d1d206a3c2, type: 2}
   <damage>k__BackingField: 0
-  <effect>k__BackingField: 2
+  <effect>k__BackingField: 3
   <unlockCondition>k__BackingField: {fileID: 0}
   <selfDamage>k__BackingField: 0
