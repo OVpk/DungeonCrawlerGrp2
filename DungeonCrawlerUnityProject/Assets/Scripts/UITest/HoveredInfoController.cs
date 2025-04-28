@@ -17,16 +17,16 @@ public class HoveredInfoController : MonoBehaviour
         if (character == null) {UpdateInformationWithEmpty(); return;}
         
         characterName.text = character.name;
-        string currentType = character.type == EntityData.EntityTypes.Mou ? "Mou" : "Dur";
-        currentLayerInfo.text = character.durability + "pv / " + currentType;
+        string currentType = character.type == EntityData.EntityTypes.Mou ? "MOU" : "DUR";
+        currentLayerInfo.text = character.durability + "PV / " + currentType;
         if (character.nextLayer != null)
         {
-            string nextType = character.nextLayer.type == EntityData.EntityTypes.Mou ? "Mou" : "Dur";
-            nextLayerInfo.text = character.nextLayer.durability + "pv / " + nextType;
+            string nextType = character.nextLayer.type == EntityData.EntityTypes.Mou ? "MOU" : "DUR";
+            nextLayerInfo.text = character.nextLayer.durability + "PV / " + nextType;
         }
         else
         {
-            nextLayerInfo.text = "mort";
+            nextLayerInfo.text = "MORT";
         }
         
         characterSprite.gameObject.SetActive(true);
@@ -36,10 +36,10 @@ public class HoveredInfoController : MonoBehaviour
 
     public void UpdateInformationWithEmpty()
     {
-        characterName.text = "Vide";
+        characterName.text = "VIDE";
         currentLayerInfo.text = "???";
         nextLayerInfo.text = "???";
         characterSprite.gameObject.SetActive(false);
-        description.text = "Emplacement vide";
+        description.text = "EMPLACEMENT VIDE";
     }
 }

@@ -11,4 +11,5 @@ public class AttackData : ScriptableObject
     
     [field: Header("Grid side where attack must be apply"), SerializeField] 
     public FightManager.TurnState gridToApply { get; private set; }
+    
 }
