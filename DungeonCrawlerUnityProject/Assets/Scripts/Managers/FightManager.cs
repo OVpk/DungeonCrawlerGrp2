@@ -295,11 +295,9 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         {
             case EntityData.EntityEffects.ProtectedHorizontaly : 
                 sendInformation.EntityCreateProtectionAt(position, entityTeam, EntityDisplayController.BubbleDirections.Horizontal);
-                yield return WaitAnimationEvent();
                 break;
             case EntityData.EntityEffects.ProtectedVerticaly :
                 sendInformation.EntityCreateProtectionAt(position, entityTeam, EntityDisplayController.BubbleDirections.Vertical);
-                yield return WaitAnimationEvent();
                 break;
         }
     }
