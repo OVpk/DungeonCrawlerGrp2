@@ -135,6 +135,7 @@ public class FightAreaController : PlayerController
         if (FightManager.Instance.IsPositionAlreadyPlayed(playerGridSelectorPosition)) return;
         selectedCharacter = FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y];
         if (selectedCharacter == null) return;
+        if (selectedCharacter.effects.Contains(EntityData.EntityEffects.Glue)) return;
         
         FightManager.Instance.sendInformation.EntityNoLongerHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
         FightManager.Instance.sendInformation.EntitySelectedAt(playerGridSelectorPosition, FightManager.TurnState.Player);

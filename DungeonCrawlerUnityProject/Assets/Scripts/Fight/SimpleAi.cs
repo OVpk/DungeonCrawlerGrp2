@@ -16,6 +16,7 @@ public class SimpleAi : MonoBehaviour
             {
                 if (IsPositionAlreadyPlayed((i, j))) continue;
                 if (fightManager.enemyGrid[i, j] == null) continue;
+                if (fightManager.enemyGrid[i, j].effects.Contains(EntityData.EntityEffects.Glue)) continue;
                 
                 positions.Add((i, j));
             }

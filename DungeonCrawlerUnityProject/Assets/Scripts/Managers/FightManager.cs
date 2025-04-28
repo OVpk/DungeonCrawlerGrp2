@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class FightManager : MonoBehaviour, IFightDisplayerListener
 {
+    public int nbTurnBeforeEntityGlueGone = 1;
+    public int nbTurnBeforeEntityExplode = 3;
     
     [field: SerializeField] public FightEventSpeaker sendInformation { get; private set; }
     
@@ -23,6 +25,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     private void SwitchTurn()
     {
         if (IsCleaningGridNecessary(currentTurn)) CleanAlreadyPlayedPositions(currentTurn);
+        EndTurn(currentTurn);
+        
         
         currentTurn = currentTurn == TurnState.Player ? TurnState.Enemy : TurnState.Player;
         
@@ -31,6 +35,35 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         if (currentTurn == TurnState.Player) canUseControlls = true;
         
         if (currentTurn == TurnState.Enemy) aiController.PlayTurn();
+    }
+
+    private void EndTurn(TurnState endedTurn)
+    {
+        EntityDataInstance[,] gridToUpdate = endedTurn == TurnState.Player ? playerGrid : enemyGrid;
+        foreach (var entity in gridToUpdate)
+        {
+            if(entity == null) continue;
+            entity.UpdateEffects();
+            if (entity.effects.Contains(EntityData.EntityEffects.Glue) && entity.nbTurnBeforeGlueGone == 0)
+                entity.effects.Remove(EntityData.EntityEffects.Glue);
+            if (entity.effects.Contains(EntityData.EntityEffects.Explosive) && entity.nbTurnBeforeExplode == 0)
+                EntityExplode(gridToUpdate);
+        }
+    }
+
+    public void EntityExplode(EntityDataInstance[,] gridToExplode)
+    {
+        for (int i = 0; i < gridToExplode.GetLength(0); i++)
+        {
+            for (int j = 0; j < gridToExplode.GetLength(1); j++)
+            {
+                switch (gridToExplode)
+                {
+                    case CharacterDataInstance[,] : CharacterDeathAt((i, j)); break;
+                    case EnemyDataInstance[,] : EnemyDeathAt((i, j)); break;
+                }
+            }
+        }
     }
 
     public CharacterDataInstance[,] playerGrid { get; private set; } = new CharacterDataInstance[2, 3];
@@ -237,7 +270,9 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         foreach (var position in attackToApply.pattern.positions)
         {
             (int x, int y) positionInGrid = (originPosition.x + position.x, originPosition.y + position.y);
+
             yield return ApplyDamageAtPosition(gridToApply, positionInGrid, attackToApply.damage);
+            yield return ApplyEffectAtPosition(gridToApply, positionInGrid, attackToApply.effect);
         }
     }
 
@@ -245,16 +280,32 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     {
         EntityDataInstance entity = gridToApply[position.x, position.y];
         if (entity == null) yield break;
+        if (damages <= 0) yield break;
         yield return EntityTakeDamage(entity, position, damages);
+    }
+
+    private IEnumerator ApplyEffectAtPosition(EntityDataInstance[,] gridToApply, (int x, int y) position, EntityData.EntityEffects effect)
+    {
+        EntityDataInstance entity = gridToApply[position.x, position.y];
+        if (entity == null) yield break;
+        if (effect == EntityData.EntityEffects.Empty) yield break;
+        if (entity.effects.Contains(effect)) yield break;
+        entity.AddEffect(effect);
     }
 
     private IEnumerator EntityTakeDamage(EntityDataInstance entity, (int x, int y) entityPosition, int damages)
     {
         TurnState entityTeam = entity is CharacterDataInstance ? TurnState.Player : TurnState.Enemy;
-        entity.durability -= damages;
-        
-        sendInformation.EntityTakeDamageAt(entityPosition, damages, entityTeam);
-        yield return WaitAnimationEvent();
+        if (entity.effects.Contains(EntityData.EntityEffects.Protected))
+        {
+            entity.effects.Remove(EntityData.EntityEffects.Protected);
+        }
+        else
+        {
+            entity.durability -= damages;
+            sendInformation.EntityTakeDamageAt(entityPosition, damages, entityTeam);
+            yield return WaitAnimationEvent();
+        }
 
         if (entity.durability <= 0)
         {
@@ -351,7 +402,6 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     {
         if (teamToCheck == TurnState.Enemy) return true;
         
-        // à changer par une verification de l'inventaire
         foreach (var pack in candyPack)
         {
             if (pack.currentStock > 0) return false;
