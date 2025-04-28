@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4a7c332fc5ac34bb71b082d04ea321, type: 3}
   m_Name: MalabarAttack1bis
   m_EditorClassIdentifier: 
-  <attackName>k__BackingField: ATTAQUE 1
+  <attackName>k__BackingField: BULLE PROTECTRICE
   <attackStages>k__BackingField:
   - {fileID: 11400000, guid: 48d9b3146b1f7c54abf8cb3001fc4ad7, type: 2}
   <gridToCheck>k__BackingField: 0

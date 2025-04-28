@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd3f947d771610746bdee2c5ba7715dc, type: 3}
   m_Name: MalabarAttack1Stage2
   m_EditorClassIdentifier: 
-  <pattern>k__BackingField: {fileID: 11400000, guid: d34fef9da801179488671df6651358f0, type: 2}
+  <effectDescription>k__BackingField: 
+  <pattern>k__BackingField: {fileID: 11400000, guid: ac5e5537254d6174cbe6e4291f68a935, type: 2}
   <damage>k__BackingField: 0
+  <effect>k__BackingField: 2
   <unlockCondition>k__BackingField: {fileID: 0}
   <selfDamage>k__BackingField: 1
