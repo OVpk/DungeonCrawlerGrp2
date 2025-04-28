@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MalabarAttack1Stage2
   m_EditorClassIdentifier: 
   <effectDescription>k__BackingField: 
-  <pattern>k__BackingField: {fileID: 11400000, guid: ac5e5537254d6174cbe6e4291f68a935, type: 2}
+  <pattern>k__BackingField: {fileID: 11400000, guid: 3328026268ddc8946b4a8cf1143a55bf, type: 2}
   <damage>k__BackingField: 0
   <effect>k__BackingField: 2
   <unlockCondition>k__BackingField: {fileID: 0}
