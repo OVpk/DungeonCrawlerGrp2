@@ -416,6 +416,12 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
             for (int i = 0; i < gridToApply.GetLength(1); i++)
             {
                 if (gridToApply[position.x, i] == null) continue;
+                if (gridToApply[position.x, i].effects.Contains(EntityData.EntityEffects.Explosive))
+                {
+                    gridToApply[position.x, i].effects.Remove(EntityData.EntityEffects.Explosive);
+                    sendInformation.EntityLoseExplosiveEffectAt((position.x, i), team);
+                    sendInformation.EntityExplodeAt((position.x, i), team);
+                }
                 switch (team)
                 {
                     case TurnState.Player : yield return CharacterDeathAt((position.x, i)); break;
@@ -428,6 +434,12 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
             for (int i = 0; i < gridToApply.GetLength(0); i++)
             {
                 if (gridToApply[i, position.y] == null) continue;
+                if (gridToApply[i, position.y].effects.Contains(EntityData.EntityEffects.Explosive))
+                {
+                    gridToApply[i, position.y].effects.Remove(EntityData.EntityEffects.Explosive);
+                    sendInformation.EntityLoseExplosiveEffectAt((i, position.y), team);
+                    sendInformation.EntityExplodeAt((i, position.y), team);
+                }
                 switch (team)
                 {
                     case TurnState.Player : yield return CharacterDeathAt((i, position.y)); break;
@@ -442,6 +454,20 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
                 for (int j = 0; j < gridToApply.GetLength(1); j++)
                 {
                     if (gridToApply[i, j] == null) continue;
+                    if (gridToApply[i, j].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly) ||
+                        gridToApply[i, j].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+                    {
+                        RemoveBubbleAt((i,j), team);
+                        continue;
+                    }
+                    
+                    if (gridToApply[i, j].effects.Contains(EntityData.EntityEffects.Explosive))
+                    {
+                        gridToApply[i, j].effects.Remove(EntityData.EntityEffects.Explosive);
+                        sendInformation.EntityLoseExplosiveEffectAt((i, j), team);
+                        sendInformation.EntityExplodeAt((i, j), team);
+                    }
+                    
                     switch (team)
                     {
                         case TurnState.Player : yield return CharacterDeathAt((i, j)); break;
