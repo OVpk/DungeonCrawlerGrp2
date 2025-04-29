@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class EffectDisplayer : MonoBehaviour
 {
-    public EntityDisplayer controller;
     public Animation anim;
-    
-    public void CanContinueEvent()
-    {
-        controller.CanContinueEvent();
-    }
+    public SpriteRenderer explosivePowder;
 }

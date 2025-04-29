@@ -186,4 +186,25 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
                 FightManager.Instance.sendInformation.EntityDisplayBubbleAt((0, positionInGrid.y), team, false, direction); break;
         }
     }
+
+    public void OnEntityExplode((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.anim.Play("Explosion");
+    }
+
+    public void OnEntityGetExplosiveEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.explosivePowder.gameObject.SetActive(true);
+    }
+    
+    public void OnEntityLoseExplosiveEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.explosivePowder.gameObject.SetActive(false);
+    }
 }

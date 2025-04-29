@@ -25,4 +25,12 @@ public interface IFightEventListener
     void OnEntityCreateProtection((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction);
 
     void OnEntityLoseProtection((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction);
+
+    void OnEntityExplode((int x, int y) position, FightManager.TurnState team);
+    
+    void OnEntityGetExplosiveEffect((int x, int y) position, FightManager.TurnState team);
+    
+    void OnEntityLoseExplosiveEffect((int x, int y) position, FightManager.TurnState team);
+
+
 }

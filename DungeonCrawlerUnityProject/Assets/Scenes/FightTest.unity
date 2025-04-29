@@ -3285,10 +3285,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nbTurnBeforeEntityGlueGone: 1
+  percentOfChanceTakeExplosivePowder: 100
   <sendInformation>k__BackingField: {fileID: 1704880386}
   <aiController>k__BackingField: {fileID: 1704880385}
   canUseControlls: 1
-  enemyGridData: {fileID: 11400000, guid: 7ab19ee88a4cfde48b36d6431314e28b, type: 2}
+  enemyGridData: {fileID: 11400000, guid: 3d014a9ce17b15d429708070951d4448, type: 2}
   candyPackData:
   - {fileID: 11400000, guid: 5dabfc31e419a754fa825a88ffed2712, type: 2}
   - {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}

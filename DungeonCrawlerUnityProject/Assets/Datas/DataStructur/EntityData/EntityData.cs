@@ -15,7 +15,8 @@ public abstract class EntityData : ScriptableObject
         Glue,
         ProtectedHorizontaly,
         ProtectedVerticaly,
-        Explosive
+        Explosive,
+        Protector
     }
     
     [field: Header("Common Entity values"), SerializeField]
@@ -25,6 +26,8 @@ public abstract class EntityData : ScriptableObject
     [field: SerializeField] public EntityTypes type{ get; private set; }
     
     [field: SerializeField] public EntityEffects[] effects{ get; private set; }
+    
+    [field: SerializeField] public bool isImmuneToExplosions{ get; private set; }
     
     [field: SerializeField] public Sprite sprite{ get; private set; }
     [field: SerializeField] public AnimatorOverrideController animator{ get; private set; }
@@ -44,6 +47,7 @@ public class EntityDataInstance
     public HashSet<EntityData.EntityEffects> effects = new HashSet<EntityData.EntityEffects>();
     public AnimatorOverrideController animator;
     public AttackData[] attacks;
+    public bool isImmuneToExplosions;
 
     public EntityDataInstance(EntityData data)
     {
@@ -53,6 +57,7 @@ public class EntityDataInstance
         sprite = data.sprite;
         animator = data.animator;
         attacks = data.attacks;
+        isImmuneToExplosions = data.isImmuneToExplosions;
         foreach (var effect in data.effects)
         {
             AddEffect(effect);

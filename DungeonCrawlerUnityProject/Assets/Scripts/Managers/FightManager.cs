@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class FightManager : MonoBehaviour, IFightDisplayerListener
 {
     public int nbTurnBeforeEntityGlueGone = 1;
+
+    public int percentOfChanceTakeExplosivePowder;
     
     [field: SerializeField] public FightEventSpeaker sendInformation { get; private set; }
     
@@ -48,20 +51,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         }
     }
 
-    public void EntityExplode(EntityDataInstance[,] gridToExplode)
-    {
-        for (int i = 0; i < gridToExplode.GetLength(0); i++)
-        {
-            for (int j = 0; j < gridToExplode.GetLength(1); j++)
-            {
-                switch (gridToExplode)
-                {
-                    case CharacterDataInstance[,] : CharacterDeathAt((i, j)); break;
-                    case EnemyDataInstance[,] : EnemyDeathAt((i, j)); break;
-                }
-            }
-        }
-    }
+
 
     public CharacterDataInstance[,] playerGrid { get; private set; } = new CharacterDataInstance[2, 3];
     public EnemyDataInstance[,] enemyGrid {get ; private set;} = new EnemyDataInstance[3, 3];
@@ -251,16 +241,48 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         gridToApplyAttack = attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
         AttackStageData attackToApply = FindBestUnlockedStage(attack);
         
+        if (attackToApply.effect is EntityData.EntityEffects.ProtectedHorizontaly or EntityData.EntityEffects.ProtectedVerticaly)
+            attacker.AddEffect(EntityData.EntityEffects.Protector);
+        
         sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
         yield return WaitAnimationEvent();
         
         yield return ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
+
+        if (attacker.effects.Contains(EntityData.EntityEffects.Explosive))
+        {
+            int rnd = Random.Range(0, 100);
+            if (rnd < percentOfChanceTakeExplosivePowder)
+            {
+                if (ApplyExplosiveEffect(gridToApplyAttack, attackOriginPosition, attackToApply))
+                {
+                    attacker.effects.Remove(EntityData.EntityEffects.Explosive);
+                    sendInformation.EntityLoseExplosiveEffectAt(attackerPosition, attackerTeam);
+                }
+                    
+            }
+        }
         
         yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
         
         AddPositionToAlreadyPlayed(attackerPosition, attackerTeam);
         
         SwitchTurn();
+    }
+
+    public bool ApplyExplosiveEffect(EntityDataInstance[,] gridToApply, (int x, int y) originPosition, AttackStageData attackToApply)
+    {
+        TurnState teamToApply = gridToApply is CharacterDataInstance[,] ? TurnState.Player : TurnState.Enemy;
+        foreach (var position in attackToApply.pattern.positions)
+        {
+            (int x, int y) positionInGrid = (originPosition.x + position.x, originPosition.y + position.y);
+            if (gridToApply[positionInGrid.x, positionInGrid.y] == null) continue;
+            if (gridToApply[positionInGrid.x, positionInGrid.y].effects.Contains(EntityData.EntityEffects.Explosive)) continue;
+            gridToApply[positionInGrid.x, positionInGrid.y].AddEffect(EntityData.EntityEffects.Explosive);
+            sendInformation.EntityGetExplosiveEffectAt(positionInGrid, teamToApply);
+            return true;
+        }
+        return false;
     }
 
     private IEnumerator ApplyAttackPattern(EntityDataInstance[,] gridToApply, (int x, int y) originPosition, AttackStageData attackToApply)
@@ -307,23 +329,10 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         if (damages <= 0) yield break;
         TurnState entityTeam = entity is CharacterDataInstance ? TurnState.Player : TurnState.Enemy;
         EntityDataInstance[,] gridToApply = entityTeam == TurnState.Player ? playerGrid : enemyGrid;
-        if (entity.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
+        if (entity.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly) ||
+            entity.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
         {
-            for (int i = 0; i < gridToApply.GetLength(1); i++)
-            {
-                if (gridToApply[entityPosition.x, i] == null) continue;
-                gridToApply[entityPosition.x, i].effects.Remove(EntityData.EntityEffects.ProtectedHorizontaly);
-            }
-            sendInformation.EntityLoseProtectionAt(entityPosition, entityTeam, EntityDisplayController.BubbleDirections.Horizontal);
-        }
-        else if (entity.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
-        {
-            for (int i = 0; i < gridToApply.GetLength(0); i++)
-            {
-                if (gridToApply[i, entityPosition.y] == null) continue;
-                gridToApply[i, entityPosition.y].effects.Remove(EntityData.EntityEffects.ProtectedHorizontaly);
-            }
-            sendInformation.EntityLoseProtectionAt(entityPosition, entityTeam, EntityDisplayController.BubbleDirections.Vertical);
+            RemoveBubbleAt(entityPosition, entityTeam);
         }
         else
         {
@@ -344,37 +353,145 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
 
     private IEnumerator CharacterDeathAt((int x, int y) position)
     {
-        if (playerGrid[position.x, position.y].nextLayer == null)
-        {
-            playerGrid[position.x, position.y] = null;
-            sendInformation.EntityDeathAt(position, TurnState.Player);
-            yield return WaitAnimationEvent();
-        }
+        if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Explosive)&&
+            !playerGrid[position.x, position.y].isImmuneToExplosions)
+            yield return EntityExplodeAt(position, TurnState.Player);
         else
         {
-            sendInformation.EntityDeathAt(position, TurnState.Player);
-            yield return WaitAnimationEvent();
-            PlaceEntityAtPosition(playerGrid[position.x, position.y].nextLayer, position, TurnState.Player);
+        
+            if (playerGrid[position.x, position.y].nextLayer == null)
+            {
+                playerGrid[position.x, position.y] = null;
+                sendInformation.EntityDeathAt(position, TurnState.Player);
+                yield return WaitAnimationEvent();
+            }
+            else
+            {
+                if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Protector))
+                    RemoveBubbleAt(position, TurnState.Player);
+            
+                sendInformation.EntityDeathAt(position, TurnState.Player);
+                yield return WaitAnimationEvent();
+            
+                List<EntityData.EntityEffects> effectsToPass = new List<EntityData.EntityEffects>();
+                if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
+                    effectsToPass.Add(EntityData.EntityEffects.ProtectedHorizontaly);
+                if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+                    effectsToPass.Add(EntityData.EntityEffects.ProtectedVerticaly);
+                EntityDataInstance newLayer = PlaceEntityAtPosition(playerGrid[position.x, position.y].nextLayer, position, TurnState.Player);
+                foreach (var effect in effectsToPass)
+                {
+                    newLayer.AddEffect(effect);
+                }
+            }
+        
         }
     }
     
     private IEnumerator EnemyDeathAt((int x, int y) position)
     {
-        enemyGrid[position.x, position.y] = null;
-        sendInformation.EntityDeathAt(position, TurnState.Enemy);
-        yield return WaitAnimationEvent();
+        if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Explosive)&&
+            !enemyGrid[position.x, position.y].isImmuneToExplosions)
+            yield return EntityExplodeAt(position, TurnState.Enemy);
+        else
+        {
+            enemyGrid[position.x, position.y] = null;
+            sendInformation.EntityDeathAt(position, TurnState.Enemy);
+            yield return WaitAnimationEvent();
+        }
+    }
+    
+    public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
+    {
+        sendInformation.EntityLoseExplosiveEffectAt(position, team);
+        sendInformation.EntityExplodeAt(position, team);
+        EntityDataInstance[,] gridToApply = team == TurnState.Player ? playerGrid : enemyGrid;
+        EntityDataInstance entity = gridToApply[position.x, position.y];
+
+        entity.effects.Remove(EntityData.EntityEffects.Explosive);
+        sendInformation.EntityLoseExplosiveEffectAt(position, team);
+        
+        if (entity.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
+        {
+            for (int i = 0; i < gridToApply.GetLength(1); i++)
+            {
+                if (gridToApply[position.x, i] == null) continue;
+                switch (team)
+                {
+                    case TurnState.Player : yield return CharacterDeathAt((position.x, i)); break;
+                    case TurnState.Enemy : yield return EnemyDeathAt((position.x, i)); break;
+                }
+            }
+        }
+        else if (entity.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+        {
+            for (int i = 0; i < gridToApply.GetLength(0); i++)
+            {
+                if (gridToApply[i, position.y] == null) continue;
+                switch (team)
+                {
+                    case TurnState.Player : yield return CharacterDeathAt((i, position.y)); break;
+                    case TurnState.Enemy : yield return EnemyDeathAt((i, position.y)); break;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < gridToApply.GetLength(0); i++)
+            {
+                for (int j = 0; j < gridToApply.GetLength(1); j++)
+                {
+                    if (gridToApply[i, j] == null) continue;
+                    switch (team)
+                    {
+                        case TurnState.Player : yield return CharacterDeathAt((i, j)); break;
+                        case TurnState.Enemy : yield return EnemyDeathAt((i, j)); break;
+                    }
+                }
+            }
+        }
     }
 
-    private void PlaceEntityAtPosition(EntityData entity, (int x, int y) position, TurnState team)
+    private EntityDataInstance PlaceEntityAtPosition(EntityData entity, (int x, int y) position, TurnState team)
     {
         EntityDataInstance[,] gridToPlace = team == TurnState.Player ? playerGrid : enemyGrid;
         gridToPlace[position.x, position.y] = entity.Instance();
         sendInformation.EntitySpawnAt(position, team, gridToPlace[position.x, position.y]);
+        return gridToPlace[position.x, position.y];
     }
 
     public void BreakLayerAt((int x, int y) position)
     {
         StartCoroutine(CharacterDeathAt(position));
+    }
+
+    public void RemoveBubbleAt((int x, int y) position, TurnState team)
+    {
+        EntityDataInstance[,] gridToApply = team == TurnState.Player ? playerGrid : enemyGrid;
+        EntityDataInstance entity = gridToApply[position.x, position.y];
+        
+        if (entity.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
+        {
+            for (int i = 0; i < gridToApply.GetLength(1); i++)
+            {
+                if (gridToApply[position.x, i] == null) continue;
+                gridToApply[position.x, i].effects.Remove(EntityData.EntityEffects.ProtectedHorizontaly);
+                if (gridToApply[position.x, i].effects.Contains(EntityData.EntityEffects.Protector))
+                    gridToApply[position.x, i].effects.Remove(EntityData.EntityEffects.Protector);
+            }
+            sendInformation.EntityLoseProtectionAt(position, team, EntityDisplayController.BubbleDirections.Horizontal);
+        }
+        else if (entity.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+        {
+            for (int i = 0; i < gridToApply.GetLength(0); i++)
+            {
+                if (gridToApply[i, position.y] == null) continue;
+                gridToApply[i, position.y].effects.Remove(EntityData.EntityEffects.ProtectedVerticaly);
+                if (gridToApply[i, position.y].effects.Contains(EntityData.EntityEffects.Protector))
+                    gridToApply[i, position.y].effects.Remove(EntityData.EntityEffects.Protector);
+            }
+            sendInformation.EntityLoseProtectionAt(position, team, EntityDisplayController.BubbleDirections.Vertical);
+        }
     }
 
     public bool IsPositionAlreadyPlayed((int x, int y) position)

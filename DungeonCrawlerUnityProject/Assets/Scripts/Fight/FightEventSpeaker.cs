@@ -164,5 +164,28 @@ public class FightEventSpeaker : MonoBehaviour
             listener.OnEntityLoseProtection(position, team, direction);
         }
     }
+
+    public void EntityExplodeAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityExplode(position, team);
+        }
+    }
     
+    public void EntityGetExplosiveEffectAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityGetExplosiveEffect(position, team);
+        }
+    }
+    
+    public void EntityLoseExplosiveEffectAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityLoseExplosiveEffect(position, team);
+        }
+    }
 }
