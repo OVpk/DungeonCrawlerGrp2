@@ -15,5 +15,5 @@ MonoBehaviour:
   <attackName>k__BackingField: SoucoupeAttack1
   <attackStages>k__BackingField:
   - {fileID: 11400000, guid: 58790faf51aca2b4aa76db65f0a1fba5, type: 2}
-  <gridToCheck>k__BackingField: 0
+  <gridToCheck>k__BackingField: 1
   <gridToApply>k__BackingField: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyTeteBrulee
   m_EditorClassIdentifier: 
   <entityName>k__BackingField: EnemyTeteBrulee
-  <durability>k__BackingField: 4
+  <durability>k__BackingField: 5
   <type>k__BackingField: 0
   <effects>k__BackingField: 04000000
   <isImmuneToExplosions>k__BackingField: 1
