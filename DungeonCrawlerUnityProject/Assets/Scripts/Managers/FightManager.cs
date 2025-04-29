@@ -109,7 +109,6 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         else
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
         InitPack();
     }
