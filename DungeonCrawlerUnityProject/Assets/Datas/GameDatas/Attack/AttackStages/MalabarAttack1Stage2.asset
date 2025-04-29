@@ -17,4 +17,4 @@ MonoBehaviour:
   <damage>k__BackingField: 0
   <effect>k__BackingField: 2
   <unlockCondition>k__BackingField: {fileID: 0}
-  <selfDamage>k__BackingField: 1
+  <selfDamage>k__BackingField: 0
