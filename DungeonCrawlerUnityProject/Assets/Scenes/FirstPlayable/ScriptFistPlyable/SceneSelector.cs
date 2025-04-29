@@ -1,22 +1,35 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SceneSelector : MonoBehaviour
 {
-    public Button selectButton;        // Le bouton du Canvas
-    public string sceneNameToSelect;   // Le nom de la scène à stocker
-    public static string selectedScene; // Variable statique pour stocker la scène choisie
+    public Button selectButton;         // Bouton du Canvas
+    public string sceneNameToSelect;    // Nom de la scène à charger et stocker
+    public static string selectedScene; // Variable statique pour garder la scène sélectionnée
 
     private void Start()
     {
-        // Quand on clique sur le bouton, on appelle la fonction SelectScene
-        selectButton.onClick.AddListener(SelectScene);
+        // Quand on clique, on appelle SelectAndLoadScene
+        selectButton.onClick.AddListener(SelectAndLoadScene);
     }
 
-    private void SelectScene()
+    private void SelectAndLoadScene()
     {
-        // Stocker la scène choisie dans la variable statique
+        // Stocker la scène
         selectedScene = sceneNameToSelect;
+
+        // Afficher pour debug
         Debug.Log("Scène sélectionnée : " + selectedScene);
+
+        // Charger la scène
+        if (!string.IsNullOrEmpty(selectedScene))
+        {
+            SceneManager.LoadScene(selectedScene);
+        }
+        else
+        {
+            Debug.LogWarning("Nom de scène invalide !");
+        }
     }
 }

@@ -12,6 +12,27 @@ EditorBuildSettings:
     path: Assets/Scenes/FirstPlayable/MainScene.unity
     guid: b8ac596047488ad4abc6c9e6d95343b2
   - enabled: 1
-    path: Assets/Scenes/FirstPlayable/Scene1.unity
+    path: Assets/Scenes/FirstPlayable/Salle1.unity
     guid: 6dfcd9eb8e5249d4ba23ebcfdbdfbf01
+  - enabled: 1
+    path: Assets/Scenes/FirstPlayable/Salle2.unity
+    guid: f73060b01a574774d962accad751aea2
+  - enabled: 1
+    path: Assets/Scenes/FirstPlayable/Salle3.unity
+    guid: d94e1a9e1a5e6274da9a0d184a7af7a0
+  - enabled: 1
+    path: Assets/Scenes/FirstPlayable/Salle4.unity
+    guid: cc3acc1db4aafb8498f56e15aff18395
+  - enabled: 1
+    path: Assets/Scenes/FirstPlayable/Salle5.unity
+    guid: 449de3b3b2aaaf94f9db4bcbc3db301b
+  - enabled: 1
+    path: Assets/Scenes/FirstPlayable/Salle6.unity
+    guid: 24dbcfa25e5721f4bbadb9676981d235
+  - enabled: 1
+    path: Assets/Scenes/FirstPlayable/Salle7.unity
+    guid: 6c895ddf36f97e24b9a49dee0da75522
+  - enabled: 1
+    path: Assets/Scenes/FirstPlayable/Salle8.unity
+    guid: 58418592656b53e43ad5042af82ac5a6
   m_configObjects: {}
