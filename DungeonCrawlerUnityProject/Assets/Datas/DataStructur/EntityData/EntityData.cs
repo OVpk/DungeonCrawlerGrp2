@@ -13,8 +13,10 @@ public abstract class EntityData : ScriptableObject
     {
         Empty,
         Glue,
-        Protected,
-        Explosive
+        ProtectedHorizontaly,
+        ProtectedVerticaly,
+        Explosive,
+        Protector
     }
     
     [field: Header("Common Entity values"), SerializeField]
@@ -24,6 +26,8 @@ public abstract class EntityData : ScriptableObject
     [field: SerializeField] public EntityTypes type{ get; private set; }
     
     [field: SerializeField] public EntityEffects[] effects{ get; private set; }
+    
+    [field: SerializeField] public bool isImmuneToExplosions{ get; private set; }
     
     [field: SerializeField] public Sprite sprite{ get; private set; }
     [field: SerializeField] public AnimatorOverrideController animator{ get; private set; }
@@ -43,6 +47,7 @@ public class EntityDataInstance
     public HashSet<EntityData.EntityEffects> effects = new HashSet<EntityData.EntityEffects>();
     public AnimatorOverrideController animator;
     public AttackData[] attacks;
+    public bool isImmuneToExplosions;
 
     public EntityDataInstance(EntityData data)
     {
@@ -52,6 +57,7 @@ public class EntityDataInstance
         sprite = data.sprite;
         animator = data.animator;
         attacks = data.attacks;
+        isImmuneToExplosions = data.isImmuneToExplosions;
         foreach (var effect in data.effects)
         {
             AddEffect(effect);
@@ -59,12 +65,10 @@ public class EntityDataInstance
     }
 
     public int nbTurnBeforeGlueGone;
-    public int nbTurnBeforeExplode;
 
     public void UpdateEffects()
     {
         if (effects.Contains(EntityData.EntityEffects.Glue)) nbTurnBeforeGlueGone--;
-        if (effects.Contains(EntityData.EntityEffects.Explosive))nbTurnBeforeExplode--;
     }
 
     public void AddEffect(EntityData.EntityEffects effect)
@@ -72,15 +76,8 @@ public class EntityDataInstance
         effects.Add(effect);
         switch (effect)
         {
-            case EntityData.EntityEffects.Explosive : InitExplosiveEffect(); break;
             case EntityData.EntityEffects.Glue : InitGlueEffect(); break;
         }
-    }
-
-    private void InitExplosiveEffect()
-    {
-        nbTurnBeforeExplode = FightManager.Instance.nbTurnBeforeEntityExplode;
-        effects.Add(EntityData.EntityEffects.Explosive);
     }
     
     private void InitGlueEffect()

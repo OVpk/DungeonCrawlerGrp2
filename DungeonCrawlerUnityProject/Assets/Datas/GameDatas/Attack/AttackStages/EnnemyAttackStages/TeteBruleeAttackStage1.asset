@@ -15,5 +15,6 @@ MonoBehaviour:
   <effectDescription>k__BackingField: TeteBruleeAttackStage1
   <pattern>k__BackingField: {fileID: 11400000, guid: 83a54d5b7a64b1244a09803e807390d7, type: 2}
   <damage>k__BackingField: 1
+  <effect>k__BackingField: 0
   <unlockCondition>k__BackingField: {fileID: 0}
   <selfDamage>k__BackingField: 1

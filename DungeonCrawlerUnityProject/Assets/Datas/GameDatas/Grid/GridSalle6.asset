@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: GridSalle6
   m_EditorClassIdentifier: 
   enemies:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: f4a6460428ef8b442aa79e512f8f6327, type: 2}
   - {fileID: 11400000, guid: 105b3d3e8e1e9d14a9e00af448eb93ee, type: 2}
   - {fileID: 11400000, guid: f4a6460428ef8b442aa79e512f8f6327, type: 2}
   - {fileID: 0}
-  - {fileID: 11400000, guid: f4a6460428ef8b442aa79e512f8f6327, type: 2}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 105b3d3e8e1e9d14a9e00af448eb93ee, type: 2}
   - {fileID: 11400000, guid: 105b3d3e8e1e9d14a9e00af448eb93ee, type: 2}
   - {fileID: 11400000, guid: f4a6460428ef8b442aa79e512f8f6327, type: 2}
