@@ -1167,6 +1167,7 @@ GameObject:
   - component: {fileID: 1334366373}
   - component: {fileID: 1334366372}
   - component: {fileID: 1334366371}
+  - component: {fileID: 1334366374}
   m_Layer: 5
   m_Name: Salle4
   m_TagString: Untagged
@@ -1276,6 +1277,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1334366369}
   m_CullTransparentMesh: 1
+--- !u!114 &1334366374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1334366369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf4827f32d9e2a043a7e48413cc5d3d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectButton: {fileID: 1334366371}
+  sceneNameToSelect: Salle4
 --- !u!1 &1371283125
 GameObject:
   m_ObjectHideFlags: 0
@@ -1288,6 +1303,7 @@ GameObject:
   - component: {fileID: 1371283129}
   - component: {fileID: 1371283128}
   - component: {fileID: 1371283127}
+  - component: {fileID: 1371283130}
   m_Layer: 5
   m_Name: Salle2
   m_TagString: Untagged
@@ -1397,6 +1413,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1371283125}
   m_CullTransparentMesh: 1
+--- !u!114 &1371283130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1371283125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf4827f32d9e2a043a7e48413cc5d3d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectButton: {fileID: 1371283127}
+  sceneNameToSelect: Salle2
 --- !u!1 &1438504369
 GameObject:
   m_ObjectHideFlags: 0
@@ -1945,6 +1975,7 @@ GameObject:
   - component: {fileID: 1596009159}
   - component: {fileID: 1596009158}
   - component: {fileID: 1596009157}
+  - component: {fileID: 1596009160}
   m_Layer: 5
   m_Name: Salle1
   m_TagString: Untagged
@@ -2054,6 +2085,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1596009155}
   m_CullTransparentMesh: 1
+--- !u!114 &1596009160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596009155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf4827f32d9e2a043a7e48413cc5d3d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectButton: {fileID: 1596009157}
+  sceneNameToSelect: Salle1
 --- !u!1 &1628972331
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,6 +2248,7 @@ GameObject:
   - component: {fileID: 1670615385}
   - component: {fileID: 1670615384}
   - component: {fileID: 1670615383}
+  - component: {fileID: 1670615386}
   m_Layer: 5
   m_Name: Salle3
   m_TagString: Untagged
@@ -2312,6 +2358,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1670615381}
   m_CullTransparentMesh: 1
+--- !u!114 &1670615386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670615381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf4827f32d9e2a043a7e48413cc5d3d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectButton: {fileID: 1670615383}
+  sceneNameToSelect: Salle3
 --- !u!1 &1681438563
 GameObject:
   m_ObjectHideFlags: 0
@@ -2392,6 +2452,7 @@ GameObject:
   - component: {fileID: 1718589451}
   - component: {fileID: 1718589450}
   - component: {fileID: 1718589449}
+  - component: {fileID: 1718589452}
   m_Layer: 5
   m_Name: Salle5
   m_TagString: Untagged
@@ -2501,6 +2562,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1718589447}
   m_CullTransparentMesh: 1
+--- !u!114 &1718589452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718589447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf4827f32d9e2a043a7e48413cc5d3d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectButton: {fileID: 1718589449}
+  sceneNameToSelect: Salle5
 --- !u!1 &1732968379
 GameObject:
   m_ObjectHideFlags: 0
