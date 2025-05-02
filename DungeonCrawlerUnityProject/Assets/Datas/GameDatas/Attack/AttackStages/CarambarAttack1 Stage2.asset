@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd3f947d771610746bdee2c5ba7715dc, type: 3}
   m_Name: CarambarAttack1 Stage2
   m_EditorClassIdentifier: 
+  <effectDescription>k__BackingField: 2 DGT
   <pattern>k__BackingField: {fileID: 11400000, guid: 599d154e0586f4e49b3f0b1628811ee1, type: 2}
   <damage>k__BackingField: 2
+  <effect>k__BackingField: 0
   <unlockCondition>k__BackingField: {fileID: 11400000, guid: 2823447eb06940545a032210825cdc3c, type: 2}
   <selfDamage>k__BackingField: 1

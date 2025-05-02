@@ -61,7 +61,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         typeText.gameObject.SetActive(true);
 
         durabilityNb = entityData.durability;
-        durabilityText.text = durabilityNb.ToString();
+        durabilityText.text = durabilityNb + "b";
         typeText.text = entityData.type switch
         {
             EntityData.EntityTypes.Mou => "a",

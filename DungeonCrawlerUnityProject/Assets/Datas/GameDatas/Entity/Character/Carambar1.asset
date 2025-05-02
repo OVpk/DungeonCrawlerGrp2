@@ -15,10 +15,11 @@ MonoBehaviour:
   <entityName>k__BackingField: CARAMBAR
   <durability>k__BackingField: 4
   <type>k__BackingField: 0
+  <effects>k__BackingField: 00000000
+  <isImmuneToExplosions>k__BackingField: 0
   <sprite>k__BackingField: {fileID: 21300000, guid: fc744db934c325841b5c8e0b9459d477, type: 3}
   <animator>k__BackingField: {fileID: 22100000, guid: 10ffa4f3c60acbf44953f3392ad189bc, type: 2}
   <attacks>k__BackingField:
-  - {fileID: 11400000, guid: 183a5067a0ecde842aa1d7a45b8f4a24, type: 2}
   - {fileID: 11400000, guid: 7b97f2e5507af81468ac26564f0a2e85, type: 2}
   <nextLayer>k__BackingField: {fileID: 11400000, guid: d6ea27b7e280ef945a0ce51f4fd2b729, type: 2}
   <descriptionVisual>k__BackingField: {fileID: 21300000, guid: a804fb46a8937e54aab5f941f30c0366, type: 3}
