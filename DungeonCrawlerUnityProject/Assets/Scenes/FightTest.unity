@@ -3369,7 +3369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nbTurnBeforeEntityGlueGone: 1
-  percentOfChanceTakeExplosivePowder: 50
+  percentOfChanceTakeExplosivePowder: 100
   <sendInformation>k__BackingField: {fileID: 1704880386}
   <aiController>k__BackingField: {fileID: 1704880385}
   canUseControlls: 1

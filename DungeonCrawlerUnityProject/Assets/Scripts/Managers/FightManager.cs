@@ -246,21 +246,19 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
         yield return WaitAnimationEvent();
         
+        // 3.3) Snapshot des cases protégées
+        var initialProtected = GetProtectedPositions(gridToApplyAttack);
+        
         yield return ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
 
-        if (attacker.effects.Contains(EntityData.EntityEffects.Explosive))
-        {
-            int rnd = Random.Range(0, 100);
-            if (rnd < percentOfChanceTakeExplosivePowder)
-            {
-                if (ApplyExplosiveEffect(gridToApplyAttack, attackOriginPosition, attackToApply))
-                {
-                    attacker.effects.Remove(EntityData.EntityEffects.Explosive);
-                    sendInformation.EntityLoseExplosiveEffectAt(attackerPosition, attackerTeam);
-                }
-                    
-            }
-        }
+        if (attacker.effects.Contains(EntityData.EntityEffects.Explosive)) 
+            TryApplyExplosivePowder(attacker,
+                gridToApplyAttack,
+                attackOriginPosition,
+                attackToApply,
+                attackerPosition,
+                attackerTeam,
+                initialProtected);
         
         yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
         
@@ -268,32 +266,144 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         
         SwitchTurn();
     }
-
-    public bool ApplyExplosiveEffect(EntityDataInstance[,] gridToApply, (int x, int y) originPosition, AttackStageData attackToApply)
-    {
-        TurnState teamToApply = gridToApply is CharacterDataInstance[,] ? TurnState.Player : TurnState.Enemy;
-        foreach (var position in attackToApply.pattern.positions)
+    
+// 1) Capture des bulles protégées avant application de l'attaque
+private HashSet<(int x, int y)> GetProtectedPositions(EntityDataInstance[,] grid)
+{
+    var set = new HashSet<(int x, int y)>();
+    int rows = grid.GetLength(0), cols = grid.GetLength(1);
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
         {
-            (int x, int y) positionInGrid = (originPosition.x + position.x, originPosition.y + position.y);
-            if (gridToApply[positionInGrid.x, positionInGrid.y] == null) continue;
-            if (gridToApply[positionInGrid.x, positionInGrid.y].effects.Contains(EntityData.EntityEffects.Explosive)) continue;
-            gridToApply[positionInGrid.x, positionInGrid.y].AddEffect(EntityData.EntityEffects.Explosive);
-            sendInformation.EntityGetExplosiveEffectAt(positionInGrid, teamToApply);
-            return true;
+            var e = grid[i, j];
+            if (e == null) continue;
+            if (e.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly)
+             || e.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+                set.Add((i, j));
         }
-        return false;
-    }
+    return set;
+}
 
-    private IEnumerator ApplyAttackPattern(EntityDataInstance[,] gridToApply, (int x, int y) originPosition, AttackStageData attackToApply)
+// 2) Tentative d'application de poudre explosive basée sur l'état initial des bulles
+private void TryApplyExplosivePowder(
+    EntityDataInstance attacker,
+    EntityDataInstance[,] grid,
+    (int x, int y) origin,
+    AttackStageData stage,
+    (int x, int y) attackerPosition,
+    TurnState attackerTeam,
+    HashSet<(int x, int y)> initialProtected)
+{
+
+    // 2.2) Test de probabilité
+    int roll = Random.Range(0, 100);
+    if (roll >= percentOfChanceTakeExplosivePowder)
+        return;
+
+    // 2.3) On parcourt le pattern et on cherche la première cible non protégée initialement
+    foreach (var off in stage.pattern.positions)
     {
-        foreach (var position in attackToApply.pattern.positions)
-        {
-            (int x, int y) positionInGrid = (originPosition.x + position.x, originPosition.y + position.y);
+        var pos = (x: origin.x + off.x, y: origin.y + off.y);
+        if (IsOutsideLimit(grid, pos)) continue;
+        if (initialProtected.Contains(pos)) continue;
 
-            yield return ApplyDamageAtPosition(gridToApply, positionInGrid, attackToApply.damage);
-            yield return ApplyEffectAtPosition(gridToApply, positionInGrid, attackToApply.effect);
-        }
+        var target = grid[pos.x, pos.y];
+        if (target == null) continue;
+
+        // 2.4) On pose l'effet explosif et on notifie
+        target.AddEffect(EntityData.EntityEffects.Explosive);
+        var targetTeam = attackerTeam == TurnState.Player ? TurnState.Enemy : TurnState.Player;
+        sendInformation.EntityGetExplosiveEffectAt(pos, targetTeam);
+
+        // 2.5) On retire l'effet de l'attaquant et on notifie
+        attacker.effects.Remove(EntityData.EntityEffects.Explosive);
+        sendInformation.EntityLoseExplosiveEffectAt(attackerPosition, attackerTeam);
+        break;
     }
+}
+
+
+// ApplyAttackPattern orchestrates the whole hit process
+public IEnumerator ApplyAttackPattern(EntityDataInstance[,] gridToApply, (int x, int y) origin, AttackStageData attack)
+{
+    // 1) Récupérer les positions impactées
+    var impactedPositions = GetImpactedPositions(gridToApply, origin, attack.pattern.positions);
+
+    // 2) Séparer en entités protégées et non protégées
+    PartitionPositions(gridToApply, impactedPositions,
+        out List<(int x, int y)> protectedHits,
+        out List<(int x, int y)> regularHits);
+
+    // 3) Gérer les protections (suppression de bulles)
+    yield return ProcessProtectedHits(gridToApply, protectedHits);
+
+    // 4) Appliquer les dégâts et effets aux cibles non protégées
+    yield return ProcessRegularHits(gridToApply, regularHits, attack);
+}
+
+// 1) Calcule les positions valides impactées par le pattern
+private List<(int x, int y)> GetImpactedPositions(EntityDataInstance[,] grid, (int x, int y) origin, List<Vector2Int> pattern)
+{
+    var list = new List<(int x, int y)>();
+    foreach (var offset in pattern)
+    {
+        int x = origin.x + offset.x;
+        int y = origin.y + offset.y;
+        if (!IsOutsideLimit(grid, (x, y)))
+            list.Add((x, y));
+    }
+    return list;
+}
+
+// 2) Sépare les positions en hits protégés et non protégés
+private void PartitionPositions(
+    EntityDataInstance[,] grid,
+    List<(int x, int y)> positions,
+    out List<(int x, int y)> protectedHits,
+    out List<(int x, int y)> regularHits)
+{
+    protectedHits = new List<(int x, int y)>();
+    regularHits = new List<(int x, int y)>();
+    foreach (var pos in positions)
+    {
+        var e = grid[pos.x, pos.y];
+        if (e == null) continue;
+        bool isProtected = e.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly)
+                         || e.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly);
+        if (isProtected) protectedHits.Add(pos);
+        else regularHits.Add(pos);
+    }
+}
+
+// 3) Supprime toutes les bulles pour les protections touchées
+private IEnumerator ProcessProtectedHits(
+    EntityDataInstance[,] grid,
+    List<(int x, int y)> protectedHits)
+{
+    foreach (var pos in protectedHits)
+    {
+        // Détermine l'équipe en fonction du type d'entité
+        TurnState team = grid[pos.x, pos.y] is CharacterDataInstance
+            ? TurnState.Player : TurnState.Enemy;
+        RemoveBubbleAt(pos, team);
+        // Optionnel: attendre une animation si souhaité
+        yield return null;
+    }
+}
+
+// 4) Applique dégâts et effets aux entités non protégées
+private IEnumerator ProcessRegularHits(
+    EntityDataInstance[,] grid,
+    List<(int x, int y)> regularHits,
+    AttackStageData attack)
+{
+    foreach (var pos in regularHits)
+    {
+        yield return ApplyDamageAtPosition(grid, pos, attack.damage);
+        yield return ApplyEffectAtPosition(grid, pos, attack.effect);
+    }
+}
+
 
     private IEnumerator ApplyDamageAtPosition(EntityDataInstance[,] gridToApply, (int x, int y) position, int damages)
     {
@@ -366,9 +476,6 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
             }
             else
             {
-                if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Protector))
-                    RemoveBubbleAt(position, TurnState.Player);
-            
                 sendInformation.EntityDeathAt(position, TurnState.Player);
                 yield return WaitAnimationEvent();
             
@@ -400,82 +507,92 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         }
     }
     
-    public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
-    {
-        sendInformation.EntityLoseExplosiveEffectAt(position, team);
-        sendInformation.EntityExplodeAt(position, team);
-        EntityDataInstance[,] gridToApply = team == TurnState.Player ? playerGrid : enemyGrid;
-        EntityDataInstance entity = gridToApply[position.x, position.y];
+public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
+{
+    // 1) Préparation et animation de l'explosion initiale
+    sendInformation.EntityLoseExplosiveEffectAt(position, team);
+    sendInformation.EntityExplodeAt(position, team);
 
-        entity.effects.Remove(EntityData.EntityEffects.Explosive);
-        sendInformation.EntityLoseExplosiveEffectAt(position, team);
-        
-        if (entity.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
+    EntityDataInstance[,] gridToApply = team == TurnState.Player ? playerGrid : enemyGrid;
+    var originEntity = gridToApply[position.x, position.y];
+    originEntity.effects.Remove(EntityData.EntityEffects.Explosive);
+    sendInformation.EntityLoseExplosiveEffectAt(position, team);
+
+    // 2) Détection du contexte d'explosion (dans ou hors bulle)
+    bool insideBubbleH = originEntity.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly);
+    bool insideBubbleV = originEntity.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly);
+    bool originInsideBubble = insideBubbleH || insideBubbleV;
+
+    // 3) Capture de l'état de protection initial des entités
+    var protectedPositions = new HashSet<(int x, int y)>();
+    for (int i = 0; i < gridToApply.GetLength(0); i++)
+    {
+        for (int j = 0; j < gridToApply.GetLength(1); j++)
         {
-            for (int i = 0; i < gridToApply.GetLength(1); i++)
-            {
-                if (gridToApply[position.x, i] == null) continue;
-                if (gridToApply[position.x, i].effects.Contains(EntityData.EntityEffects.Explosive))
-                {
-                    gridToApply[position.x, i].effects.Remove(EntityData.EntityEffects.Explosive);
-                    sendInformation.EntityLoseExplosiveEffectAt((position.x, i), team);
-                    sendInformation.EntityExplodeAt((position.x, i), team);
-                }
-                switch (team)
-                {
-                    case TurnState.Player : yield return CharacterDeathAt((position.x, i)); break;
-                    case TurnState.Enemy : yield return EnemyDeathAt((position.x, i)); break;
-                }
-            }
-        }
-        else if (entity.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
-        {
-            for (int i = 0; i < gridToApply.GetLength(0); i++)
-            {
-                if (gridToApply[i, position.y] == null) continue;
-                if (gridToApply[i, position.y].effects.Contains(EntityData.EntityEffects.Explosive))
-                {
-                    gridToApply[i, position.y].effects.Remove(EntityData.EntityEffects.Explosive);
-                    sendInformation.EntityLoseExplosiveEffectAt((i, position.y), team);
-                    sendInformation.EntityExplodeAt((i, position.y), team);
-                }
-                switch (team)
-                {
-                    case TurnState.Player : yield return CharacterDeathAt((i, position.y)); break;
-                    case TurnState.Enemy : yield return EnemyDeathAt((i, position.y)); break;
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < gridToApply.GetLength(0); i++)
-            {
-                for (int j = 0; j < gridToApply.GetLength(1); j++)
-                {
-                    if (gridToApply[i, j] == null) continue;
-                    if (gridToApply[i, j].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly) ||
-                        gridToApply[i, j].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
-                    {
-                        RemoveBubbleAt((i,j), team);
-                        continue;
-                    }
-                    
-                    if (gridToApply[i, j].effects.Contains(EntityData.EntityEffects.Explosive))
-                    {
-                        gridToApply[i, j].effects.Remove(EntityData.EntityEffects.Explosive);
-                        sendInformation.EntityLoseExplosiveEffectAt((i, j), team);
-                        sendInformation.EntityExplodeAt((i, j), team);
-                    }
-                    
-                    switch (team)
-                    {
-                        case TurnState.Player : yield return CharacterDeathAt((i, j)); break;
-                        case TurnState.Enemy : yield return EnemyDeathAt((i, j)); break;
-                    }
-                }
-            }
+            var e = gridToApply[i, j];
+            if (e == null) continue;
+            if (e.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly) ||
+                e.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+                protectedPositions.Add((i, j));
         }
     }
+
+    // 4) Détermination des cibles basées sur l'état initial
+    var targets = new List<(int x, int y)>();
+    var visuals = new List<(int x, int y)>();
+    for (int i = 0; i < gridToApply.GetLength(0); i++)
+    {
+        for (int j = 0; j < gridToApply.GetLength(1); j++)
+        {
+            var e = gridToApply[i, j];
+            if (e == null) continue;
+
+            bool wasProtected = protectedPositions.Contains((i, j));
+            bool shouldBeTarget = originInsideBubble ? wasProtected : !wasProtected;
+            if (!shouldBeTarget) continue;
+
+            targets.Add((i, j));
+            if (e.effects.Contains(EntityData.EntityEffects.Explosive))
+                visuals.Add((i, j)); // on note pour animation visuelle
+        }
+    }
+
+    // 5) Suppression des bulles si explosion hors bulle (les protégés survivent)
+    if (!originInsideBubble)
+    {
+        foreach (var pos in protectedPositions)
+            RemoveBubbleAt(pos, team);
+    }
+
+    // 6) Application des animations visuelles d'explosion pour chaîne, sans dégâts
+    foreach (var (i, j) in visuals)
+    {
+        // perte visuelle de l'effet explosif
+        sendInformation.EntityLoseExplosiveEffectAt((i, j), team);
+        // animation visuelle d'explosion
+        sendInformation.EntityExplodeAt((i, j), team);
+    }
+
+    // 7) Application de la destruction sans nouvelle explosion
+    foreach (var (i, j) in targets)
+    {
+        var e = gridToApply[i, j];
+        if (e == null) continue;
+
+        // on retire l'effet explosif pour éviter toute relance mécanique
+        e.effects.Remove(EntityData.EntityEffects.Explosive);
+
+        // mort de l'entité
+        if (team == TurnState.Player)
+            yield return CharacterDeathAt((i, j));
+        else
+            yield return EnemyDeathAt((i, j));
+    }
+}
+
+
+
+
 
     private EntityDataInstance PlaceEntityAtPosition(EntityData entity, (int x, int y) position, TurnState team)
     {
@@ -487,6 +604,9 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
 
     public void BreakLayerAt((int x, int y) position)
     {
+        if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Protector))
+            RemoveBubbleAt(position, TurnState.Player);
+        
         StartCoroutine(CharacterDeathAt(position));
     }
 
