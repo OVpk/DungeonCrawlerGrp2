@@ -239,9 +239,22 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         AttackData attack = attacker.attacks[attackIndex];
         gridToApplyAttack = attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
         AttackStageData attackToApply = FindBestUnlockedStage(attack);
-        
-        if (attackToApply.effect is EntityData.EntityEffects.ProtectedHorizontaly or EntityData.EntityEffects.ProtectedVerticaly)
+
+        if (attackToApply.effect is EntityData.EntityEffects.ProtectedHorizontaly
+            or EntityData.EntityEffects.ProtectedVerticaly)
+        {
             attacker.AddEffect(EntityData.EntityEffects.Protector);
+            switch (attackToApply.effect)
+            {
+                case EntityData.EntityEffects.ProtectedHorizontaly : 
+                    sendInformation.EntityCreateProtectionAt(attackerPosition, attackerTeam, EntityDisplayController.BubbleDirections.Horizontal);
+                    break;
+                case EntityData.EntityEffects.ProtectedVerticaly :
+                    sendInformation.EntityCreateProtectionAt(attackerPosition, attackerTeam, EntityDisplayController.BubbleDirections.Vertical);
+                    break;
+            }
+        }
+            
         
         sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
         yield return WaitAnimationEvent();
@@ -420,17 +433,6 @@ private IEnumerator ProcessRegularHits(
         if (effect == EntityData.EntityEffects.Empty) yield break;
         if (entity.effects.Contains(effect)) yield break;
         entity.AddEffect(effect);
-        
-        TurnState entityTeam = entity is CharacterDataInstance ? TurnState.Player : TurnState.Enemy;
-        switch (effect)
-        {
-            case EntityData.EntityEffects.ProtectedHorizontaly : 
-                sendInformation.EntityCreateProtectionAt(position, entityTeam, EntityDisplayController.BubbleDirections.Horizontal);
-                break;
-            case EntityData.EntityEffects.ProtectedVerticaly :
-                sendInformation.EntityCreateProtectionAt(position, entityTeam, EntityDisplayController.BubbleDirections.Vertical);
-                break;
-        }
     }
 
     private IEnumerator EntityTakeDamage(EntityDataInstance entity, (int x, int y) entityPosition, int damages)
@@ -462,6 +464,9 @@ private IEnumerator ProcessRegularHits(
 
     private IEnumerator CharacterDeathAt((int x, int y) position)
     {
+        if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Protector))
+            RemoveBubbleAt(position, TurnState.Player);
+        
         if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Explosive)&&
             !playerGrid[position.x, position.y].isImmuneToExplosions)
             yield return EntityExplodeAt(position, TurnState.Player);
@@ -604,8 +609,6 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
 
     public void BreakLayerAt((int x, int y) position)
     {
-        if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Protector))
-            RemoveBubbleAt(position, TurnState.Player);
         
         StartCoroutine(CharacterDeathAt(position));
     }
@@ -620,22 +623,24 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
             for (int i = 0; i < gridToApply.GetLength(1); i++)
             {
                 if (gridToApply[position.x, i] == null) continue;
+                if (!gridToApply[position.x, i].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly)) continue;
                 gridToApply[position.x, i].effects.Remove(EntityData.EntityEffects.ProtectedHorizontaly);
                 if (gridToApply[position.x, i].effects.Contains(EntityData.EntityEffects.Protector))
                     gridToApply[position.x, i].effects.Remove(EntityData.EntityEffects.Protector);
+                sendInformation.EntityLoseProtectionAt((position.x, i), team, EntityDisplayController.BubbleDirections.Horizontal);
             }
-            sendInformation.EntityLoseProtectionAt(position, team, EntityDisplayController.BubbleDirections.Horizontal);
         }
         else if (entity.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
         {
             for (int i = 0; i < gridToApply.GetLength(0); i++)
             {
                 if (gridToApply[i, position.y] == null) continue;
+                if(!gridToApply[i, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly)) continue;
                 gridToApply[i, position.y].effects.Remove(EntityData.EntityEffects.ProtectedVerticaly);
                 if (gridToApply[i, position.y].effects.Contains(EntityData.EntityEffects.Protector))
                     gridToApply[i, position.y].effects.Remove(EntityData.EntityEffects.Protector);
+                sendInformation.EntityLoseProtectionAt((i, position.y), team, EntityDisplayController.BubbleDirections.Vertical);
             }
-            sendInformation.EntityLoseProtectionAt(position, team, EntityDisplayController.BubbleDirections.Vertical);
         }
     }
 
