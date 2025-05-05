@@ -27,6 +27,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     private bool isBubbleHMiddleActive = false;
     private bool isBubbleHRightActive = false;
     private bool isBubbleVActive = false;
+    private bool isEntityActived = false;
 
     public void Init()
     {
@@ -43,6 +44,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
 
+        isEntityActived = false;
         entity.PlayDeathAnim();
         durabilityText.gameObject.SetActive(false);
         typeText.gameObject.SetActive(false);
@@ -59,6 +61,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
 
+        isEntityActived = true;
         entity.gameObject.SetActive(true);
         entity.InitVisual(entityData);
         entity.PlaySpawnAnim();
@@ -128,7 +131,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetGrayscale(true);
-        entity.PlaySleepAnim();
+        if (isEntityActived) 
+            entity.PlaySleepAnim();
     }
 
     public void OnEntityLocationEnabled((int x, int y) position, FightManager.TurnState team)
@@ -136,7 +140,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetGrayscale(false);
-        entity.PlayIdleAnim();
+        if (isEntityActived)
+            entity.PlayIdleAnim();
     }
 
     public void OnEntityTakeDamage((int x, int y) position, int nbDamages, FightManager.TurnState team)
