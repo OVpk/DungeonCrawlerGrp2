@@ -18,14 +18,18 @@ public abstract class EntityData : ScriptableObject
         Explosive,
         Protector
     }
-    
-    [field: Header("Common Entity values"), SerializeField]
-    public string entityName { get; private set; }
+
+    [field: SerializeField] public string entityName { get; private set; }
     [field: SerializeField] public int durability { get; private set; }
     
     [field: SerializeField] public EntityTypes type{ get; private set; }
     
     [field: SerializeField] public EntityEffects[] effects{ get; private set; }
+
+    [ShowIfEffect(nameof(effects), EntityEffects.Explosive), SerializeField]
+    private int percentOfChangeToGiveExplosive;
+
+    public int PercentOfChangeToGiveExplosive => percentOfChangeToGiveExplosive;
     
     [field: SerializeField] public bool isImmuneToExplosions{ get; private set; }
     
@@ -48,6 +52,8 @@ public class EntityDataInstance
     public AnimatorOverrideController animator;
     public AttackData[] attacks;
     public bool isImmuneToExplosions;
+    
+    public int percentOfChangeToGiveExplosive;
 
     public EntityDataInstance(EntityData data)
     {
@@ -62,6 +68,8 @@ public class EntityDataInstance
         {
             AddEffect(effect);
         }
+
+        percentOfChangeToGiveExplosive = data.PercentOfChangeToGiveExplosive;
     }
 
     public int nbTurnBeforeGlueGone;
