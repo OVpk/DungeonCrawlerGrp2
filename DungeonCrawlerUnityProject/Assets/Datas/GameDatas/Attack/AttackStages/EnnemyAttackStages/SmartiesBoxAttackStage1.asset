@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: SmartiesBoxAttackStage1
   m_EditorClassIdentifier: 
   <effectDescription>k__BackingField: 
-  <pattern>k__BackingField: {fileID: 0}
-  <damage>k__BackingField: 0
+  <pattern>k__BackingField: {fileID: 11400000, guid: fffdbed816d73134aab84bfcb66a9db0, type: 2}
+  <damage>k__BackingField: 3
+  <effect>k__BackingField: 0
   <unlockCondition>k__BackingField: {fileID: 0}
   <selfDamage>k__BackingField: 1

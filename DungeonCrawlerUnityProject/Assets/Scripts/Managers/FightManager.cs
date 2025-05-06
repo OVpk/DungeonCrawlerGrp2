@@ -24,7 +24,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     
     public bool canUseControlls = true;
 
-    private void SwitchTurn()
+    public void SwitchTurn()
     {
         if (IsCleaningGridNecessary(currentTurn)) CleanAlreadyPlayedPositions(currentTurn);
         EndTurn(currentTurn);
@@ -204,7 +204,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
                position.y >= gridToCheck.GetLength(1);
     }
 
-    private void AddPositionToAlreadyPlayed((int x, int y) position, TurnState positionTeam)
+    public void AddPositionToAlreadyPlayed((int x, int y) position, TurnState positionTeam)
     {
         sendInformation.EntityLocationDisabledAt(position, positionTeam);
         
@@ -599,7 +599,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
 
 
 
-    private EntityDataInstance PlaceEntityAtPosition(EntityData entity, (int x, int y) position, TurnState team)
+    public EntityDataInstance PlaceEntityAtPosition(EntityData entity, (int x, int y) position, TurnState team)
     {
         EntityDataInstance[,] gridToPlace = team == TurnState.Player ? playerGrid : enemyGrid;
         gridToPlace[position.x, position.y] = entity.Instance();

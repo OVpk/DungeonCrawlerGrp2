@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b46137b90bd6fb848866e99b07060e9d, type: 3}
-  m_Name: Enemy3
+  m_Script: {fileID: 11500000, guid: f5c1aebfcde940c4da2cfb1a1e9a68bf, type: 3}
+  m_Name: SmartiesBoxAttackTest
   m_EditorClassIdentifier: 
-  <entityName>k__BackingField: 
-  <durability>k__BackingField: 0
-  <type>k__BackingField: 0
-  <sprite>k__BackingField: {fileID: 0}
-  <attack>k__BackingField: {fileID: 0}
+  <positions>k__BackingField:
+  - {x: 0, y: 0}
