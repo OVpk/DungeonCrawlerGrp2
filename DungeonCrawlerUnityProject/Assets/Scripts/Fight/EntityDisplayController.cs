@@ -23,6 +23,12 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     
     #endregion
 
+    private bool isBubbleHLeftActive = false;
+    private bool isBubbleHMiddleActive = false;
+    private bool isBubbleHRightActive = false;
+    private bool isBubbleVActive = false;
+    private bool isEntityActived = false;
+
     public void Init()
     {
         entityLocation.SetTeam(team);
@@ -38,6 +44,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
 
+        isEntityActived = false;
         entity.PlayDeathAnim();
         durabilityText.gameObject.SetActive(false);
         typeText.gameObject.SetActive(false);
@@ -54,6 +61,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
 
+        isEntityActived = true;
         entity.gameObject.SetActive(true);
         entity.InitVisual(entityData);
         entity.PlaySpawnAnim();
@@ -123,7 +131,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetGrayscale(true);
-        entity.PlaySleepAnim();
+        if (isEntityActived) 
+            entity.PlaySleepAnim();
     }
 
     public void OnEntityLocationEnabled((int x, int y) position, FightManager.TurnState team)
@@ -131,7 +140,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetGrayscale(false);
-        entity.PlayIdleAnim();
+        if (isEntityActived)
+            entity.PlayIdleAnim();
     }
 
     public void OnEntityTakeDamage((int x, int y) position, int nbDamages, FightManager.TurnState team)
@@ -150,8 +160,71 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         
         switch (direction)
         {
-            case BubbleDirections.Horizontal : effectDisplayer.anim.Play(state ? "BubbleHorizontalOn" : "BubbleHorizontalOff"); break;
-            case BubbleDirections.Vertical : effectDisplayer.anim.Play(state ? "BubbleVerticalOn" : "BubbleVerticalOff"); break;
+            case BubbleDirections.Horizontal :
+                switch (position.y)
+                {
+                    case 0 :
+                        if (state)
+                        {
+                            effectDisplayer.anim.Play("BubbleHorizontalLeftOn");
+                            isBubbleHLeftActive = true;
+                        }
+                        else
+                        {
+                            if (isBubbleHLeftActive == true)
+                            {
+                                effectDisplayer.anim.Play("BubbleHorizontalLeftOff");
+                                isBubbleHLeftActive = false;
+                            }
+                        }
+                        break;
+                    case 1 :
+                        if (state)
+                        {
+                            effectDisplayer.anim.Play("BubbleHorizontalMiddleOn");
+                            isBubbleHMiddleActive = true;
+                        }
+                        else
+                        {
+                            if (isBubbleHMiddleActive == true)
+                            {
+                                effectDisplayer.anim.Play("BubbleHorizontalMiddleOff");
+                                isBubbleHMiddleActive = false;
+                            }
+                        }
+                        break;
+                    case 2 :
+                        if (state)
+                        {
+                            effectDisplayer.anim.Play("BubbleHorizontalRightOn");
+                            isBubbleHRightActive = true;
+                        }
+                        else
+                        {
+                            if (isBubbleHRightActive == true)
+                            {
+                                effectDisplayer.anim.Play("BubbleHorizontalRightOff");
+                                isBubbleHRightActive = false;
+                            }
+                        }
+                        break;
+                };
+                break;
+            case BubbleDirections.Vertical :
+                if (state)
+                {
+                    effectDisplayer.anim.Play("BubbleVerticalOn");
+                    isBubbleVActive = true;
+                }
+                else
+                {
+                    if (isBubbleVActive == true)
+                    {
+                        effectDisplayer.anim.Play("BubbleVerticalOff");
+                        isBubbleVActive = false;
+                    }
+                }
+                break;
         }
     }
 
@@ -167,8 +240,9 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
 
         switch (direction)
         {
-            case BubbleDirections.Horizontal : 
-                FightManager.Instance.sendInformation.EntityDisplayBubbleAt((positionInGrid.x, 1), team, true, direction); break;
+            case BubbleDirections.Horizontal :
+                FightManager.Instance.sendInformation.EntityDisplayBubbleAt(position, team, true, direction); break;
+                
             case BubbleDirections.Vertical :
                 FightManager.Instance.sendInformation.EntityDisplayBubbleAt((0, positionInGrid.y), team, true, direction); break;
         }
@@ -181,7 +255,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         switch (direction)
         {
             case BubbleDirections.Horizontal : 
-                FightManager.Instance.sendInformation.EntityDisplayBubbleAt((positionInGrid.x, 1), team, false, direction); break;
+                FightManager.Instance.sendInformation.EntityDisplayBubbleAt(position, team, false, direction); break;
             case BubbleDirections.Vertical :
                 FightManager.Instance.sendInformation.EntityDisplayBubbleAt((0, positionInGrid.y), team, false, direction); break;
         }

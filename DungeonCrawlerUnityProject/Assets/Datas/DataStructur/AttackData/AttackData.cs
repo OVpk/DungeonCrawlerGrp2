@@ -12,4 +12,6 @@ public class AttackData : ScriptableObject
     [field: Header("Grid side where attack must be apply"), SerializeField] 
     public FightManager.TurnState gridToApply { get; private set; }
     
+    [field: SerializeField] public bool isPositionLocked { get; private set; }
+    
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -24,6 +25,55 @@ public class SimpleAi : MonoBehaviour
 
         return positions;
     }
+
+    private bool FindSpawner(out (int x, int y) spawnerPosition)
+    {
+        List<(int x, int y)> playablePositions = GetPlayablePositions();
+
+        foreach (var position in playablePositions)
+        {
+            if (fightManager.enemyGrid[position.x, position.y] is SpawnerDataInstance)
+            {
+                spawnerPosition = position;
+                return true;
+            }
+        }
+        spawnerPosition = (-1, -1);
+        return false;
+    }
+    
+    private List<(int x, int y)> GetEmptyPositions()
+    {
+        List<(int x, int y)> positions = new List<(int x, int y)>();
+
+        for (int i = 0; i < fightManager.enemyGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < fightManager.enemyGrid.GetLength(1); j++)
+            {
+                if (fightManager.enemyGrid[i, j] == null) 
+                    positions.Add((i, j));
+            }
+        }
+
+        return positions;
+    }
+
+    private IEnumerator DoSpawn((int x, int y) spawnerPosition)
+    {
+        fightManager.sendInformation.EntityAttackAt(spawnerPosition, FightManager.TurnState.Enemy);
+        yield return fightManager.WaitAnimationEvent();
+        
+        SpawnerDataInstance spawner = (SpawnerDataInstance)fightManager.enemyGrid[spawnerPosition.x, spawnerPosition.y];
+        List<(int x, int y)> emptyPositions = GetEmptyPositions();
+        foreach (var position in emptyPositions)
+        {
+            fightManager.PlaceEntityAtPosition(spawner.enemyToSpawn, position, FightManager.TurnState.Enemy);
+        }
+        
+        fightManager.AddPositionToAlreadyPlayed(spawnerPosition, FightManager.TurnState.Enemy);
+        
+        fightManager.SwitchTurn();
+    }
     
     public bool IsPositionAlreadyPlayed((int x, int y) position)
     {
@@ -32,6 +82,12 @@ public class SimpleAi : MonoBehaviour
 
     public void PlayTurn()
     {
+        if (FindSpawner(out (int x, int y) spawnerPosition))
+        {
+            StartCoroutine(DoSpawn(spawnerPosition));
+            return;
+        }
+        
         List<(int x, int y)> playablePositions = GetPlayablePositions();
 
         if (playablePositions.Count == 0)
