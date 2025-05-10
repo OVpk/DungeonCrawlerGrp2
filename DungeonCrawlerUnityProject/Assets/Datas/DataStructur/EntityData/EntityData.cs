@@ -17,7 +17,8 @@ public abstract class EntityData : ScriptableObject
         ProtectedVerticaly,
         Explosive,
         Protector,
-        Spawner
+        Spawner,
+        Fog
     }
 
     [field: SerializeField] public string entityName { get; private set; }
@@ -82,6 +83,9 @@ public class EntityDataInstance
     }
 
     public int nbTurnBeforeGlueGone;
+    
+    public int percentOfChanceOfAvoidingAttackThanksToFog;
+    public int nbOfTurnBeforeFogGone;
 
     public void AddEffect(EntityData.EntityEffects effect)
     {

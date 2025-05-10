@@ -204,5 +204,21 @@ public class FightEventSpeaker : MonoBehaviour
             listener.OnEntityLoseGlueEffect(position, team);
         }
     }
+
+    public void EntityGetFogEffectAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityGetFogEffect(position, team);
+        }
+    }
+    
+    public void EntityLoseFogEffectAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityLoseFogEffect(position, team);
+        }
+    }
     
 }

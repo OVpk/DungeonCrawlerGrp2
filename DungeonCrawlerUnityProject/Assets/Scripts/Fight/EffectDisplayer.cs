@@ -12,4 +12,9 @@ public class EffectDisplayer : MonoBehaviour
     private static readonly int Glue = Animator.StringToHash("Glue");
 
     public void PlayGlueAnim() => glueAnim.SetTrigger(Glue);
+
+    public Animator fogAnim;
+    private static readonly int Fog = Animator.StringToHash("Fog");
+    
+    public void PlayFogAnim() => fogAnim.SetTrigger(Fog);
 }
