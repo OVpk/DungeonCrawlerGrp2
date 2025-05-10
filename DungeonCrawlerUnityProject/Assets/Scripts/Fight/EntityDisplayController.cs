@@ -281,4 +281,19 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         
         effectDisplayer.explosivePowder.gameObject.SetActive(false);
     }
+
+    public void OnEntityGetGlueEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+
+        effectDisplayer.glueAnim.gameObject.SetActive(true);
+        effectDisplayer.PlayGlueAnim();
+    }
+
+    public void OnEntityLoseGlueEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+
+        effectDisplayer.glueAnim.gameObject.SetActive(false);
+    }
 }

@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ShowIfEffectAttribute))]
+[CustomPropertyDrawer(typeof(ShowIfEffectAttribute), true)]
 public class ShowIfEffectDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -13,6 +13,7 @@ public class ShowIfEffectDrawer : PropertyDrawer
         if (srcProp == null)
         {
             EditorGUI.PropertyField(position, property, label, true);
+            Debug.Log("null");
             return;
         }
 

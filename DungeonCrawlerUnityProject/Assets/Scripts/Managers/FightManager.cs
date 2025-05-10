@@ -6,9 +6,6 @@ using Random = UnityEngine.Random;
 
 public class FightManager : MonoBehaviour, IFightDisplayerListener
 {
-    public int nbTurnBeforeEntityGlueGone = 1;
-
-    public int percentOfChanceTakeExplosivePowder;
     
     [field: SerializeField] public FightEventSpeaker sendInformation { get; private set; }
     
@@ -42,12 +39,26 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     private void EndTurn(TurnState endedTurn)
     {
         EntityDataInstance[,] gridToUpdate = endedTurn == TurnState.Player ? playerGrid : enemyGrid;
-        foreach (var entity in gridToUpdate)
+        UpdateGlue(gridToUpdate, endedTurn);
+    }
+
+    private void UpdateGlue(EntityDataInstance[,] gridToUpdate, TurnState teamToUpdate)
+    {
+        for (int i = 0; i < gridToUpdate.GetLength(0); i++)
         {
-            if(entity == null) continue;
-            entity.UpdateEffects();
-            if (entity.effects.Contains(EntityData.EntityEffects.Glue) && entity.nbTurnBeforeGlueGone == 0)
-                entity.effects.Remove(EntityData.EntityEffects.Glue);
+            for (int j = 0; j < gridToUpdate.GetLength(1); j++)
+            {
+                EntityDataInstance entity = gridToUpdate[i, j];
+                if(entity == null) continue;
+                if (!entity.effects.Contains(EntityData.EntityEffects.Glue)) continue;
+            
+                entity.nbTurnBeforeGlueGone--;
+                if (entity.nbTurnBeforeGlueGone == 0)
+                {
+                    entity.effects.Remove(EntityData.EntityEffects.Glue);
+                    sendInformation.EntityLoseGlueEffectAt((i,j), teamToUpdate);
+                }
+            }
         }
     }
 
@@ -240,44 +251,83 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         gridToApplyAttack = attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
         AttackStageData attackToApply = FindBestUnlockedStage(attack);
 
-        if (attackToApply.effect is EntityData.EntityEffects.ProtectedHorizontaly
+
+        if (attackToApply.Effect is EntityData.EntityEffects.ProtectedHorizontaly
             or EntityData.EntityEffects.ProtectedVerticaly)
         {
-            attacker.AddEffect(EntityData.EntityEffects.Protector);
-            switch (attackToApply.effect)
-            {
-                case EntityData.EntityEffects.ProtectedHorizontaly : 
-                    sendInformation.EntityCreateProtectionAt(attackerPosition, attackerTeam, EntityDisplayController.BubbleDirections.Horizontal);
-                    break;
-                case EntityData.EntityEffects.ProtectedVerticaly :
-                    sendInformation.EntityCreateProtectionAt(attackerPosition, attackerTeam, EntityDisplayController.BubbleDirections.Vertical);
-                    break;
-            }
+            ApplyBubbleEffect(attacker, attackerPosition, attackerTeam, attackToApply.Effect, attackOriginPosition, gridToApplyAttack, attackToApply.pattern.positions);
         }
-            
         
         sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
         yield return WaitAnimationEvent();
-        
-        // 3.3) Snapshot des cases protégées
-        var initialProtected = GetProtectedPositions(gridToApplyAttack);
-        
-        yield return ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
 
-        if (attacker.effects.Contains(EntityData.EntityEffects.Explosive)) 
-            TryApplyExplosivePowder(attacker,
-                gridToApplyAttack,
-                attackOriginPosition,
-                attackToApply,
-                attackerPosition,
-                attackerTeam,
-                initialProtected);
-        
-        yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
-        
+        if (attackToApply.Effect is EntityData.EntityEffects.Spawner)
+        {
+            DoSpawn(attackToApply.EntityToSpawn, gridToApplyAttack);
+        }
+        else
+        {
+            // 3.3) Snapshot des cases protégées
+            var initialProtected = GetProtectedPositions(gridToApplyAttack);
+
+            yield return ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
+
+            if (attacker.effects.Contains(EntityData.EntityEffects.Explosive))
+                TryApplyExplosivePowder(attacker,
+                    gridToApplyAttack,
+                    attackOriginPosition,
+                    attack,
+                    attackToApply,
+                    attackerPosition,
+                    attackerTeam,
+                    initialProtected);
+
+            if (attackToApply.Effect == EntityData.EntityEffects.Glue)
+                TryApplyGlue(gridToApplyAttack,
+                    attackOriginPosition,
+                    attack,
+                    attackToApply,
+                    initialProtected);
+
+            yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
+        }
+
         AddPositionToAlreadyPlayed(attackerPosition, attackerTeam);
         
         SwitchTurn();
+    }
+
+    private void ApplyBubbleEffect(EntityDataInstance protector,
+        (int x, int y) protectorPosition,
+        TurnState protectorTeam,
+        EntityData.EntityEffects effectToApply,
+        (int x, int y) originPosition,
+        EntityDataInstance[,] gridToApply,
+        List<Vector2Int> pattern)
+    {
+        
+        protector.AddEffect(EntityData.EntityEffects.Protector);
+        switch (effectToApply)
+        {
+            case EntityData.EntityEffects.ProtectedHorizontaly : 
+                sendInformation.EntityCreateProtectionAt(protectorPosition, protectorTeam, EntityDisplayController.BubbleDirections.Horizontal);
+                break;
+            case EntityData.EntityEffects.ProtectedVerticaly :
+                sendInformation.EntityCreateProtectionAt(protectorPosition, protectorTeam, EntityDisplayController.BubbleDirections.Vertical);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(effectToApply), effectToApply, null);
+        }
+       
+
+        List<(int x, int y)> impactedPositions = GetImpactedPositions(gridToApply, originPosition, pattern);
+        foreach (var position in impactedPositions)
+        {
+            EntityDataInstance entity = gridToApply[position.x, position.y];
+            if (entity == null) return;
+            entity.AddEffect(effectToApply);
+        }
+
     }
     
 // 1) Capture des bulles protégées avant application de l'attaque
@@ -297,20 +347,20 @@ private HashSet<(int x, int y)> GetProtectedPositions(EntityDataInstance[,] grid
     return set;
 }
 
+
 // 2) Tentative d'application de poudre explosive basée sur l'état initial des bulles
 private void TryApplyExplosivePowder(
     EntityDataInstance attacker,
     EntityDataInstance[,] grid,
     (int x, int y) origin,
+    AttackData attack,
     AttackStageData stage,
     (int x, int y) attackerPosition,
     TurnState attackerTeam,
     HashSet<(int x, int y)> initialProtected)
 {
-
-    // 2.2) Test de probabilité
     int roll = Random.Range(0, 100);
-    if (roll >= percentOfChanceTakeExplosivePowder)
+    if (roll >= attacker.percentOfChanceToGiveExplosive)
         return;
 
     // 2.3) On parcourt le pattern et on cherche la première cible non protégée initialement
@@ -325,13 +375,43 @@ private void TryApplyExplosivePowder(
 
         // 2.4) On pose l'effet explosif et on notifie
         target.AddEffect(EntityData.EntityEffects.Explosive);
-        var targetTeam = attackerTeam == TurnState.Player ? TurnState.Enemy : TurnState.Player;
+        target.percentOfChanceToGiveExplosive = attacker.percentOfChanceToGiveExplosive;
+        var targetTeam = attack.gridToApply == TurnState.Player ? TurnState.Player : TurnState.Enemy;
         sendInformation.EntityGetExplosiveEffectAt(pos, targetTeam);
 
         // 2.5) On retire l'effet de l'attaquant et on notifie
         attacker.effects.Remove(EntityData.EntityEffects.Explosive);
         sendInformation.EntityLoseExplosiveEffectAt(attackerPosition, attackerTeam);
         break;
+    }
+}
+
+private void TryApplyGlue(
+    EntityDataInstance[,] grid,
+    (int x, int y) origin,
+    AttackData attack,
+    AttackStageData stage,
+    HashSet<(int x, int y)> initialProtected)
+{
+    int roll = Random.Range(0, 100);
+    if (roll >= stage.PercentOfChanceOfGlue)
+        return;
+    
+    foreach (var off in stage.pattern.positions)
+    {
+        var pos = (x: origin.x + off.x, y: origin.y + off.y);
+        if (IsOutsideLimit(grid, pos)) continue;
+        if (initialProtected.Contains(pos)) continue;
+
+        var target = grid[pos.x, pos.y];
+        if (target == null) continue;
+
+        // 2.4) On pose l'effet glue et on notifie
+        target.AddEffect(EntityData.EntityEffects.Glue);
+        target.nbTurnBeforeGlueGone = stage.NbOfTurnBeforeGlueGone;
+        var targetTeam = attack.gridToApply == TurnState.Player ? TurnState.Player : TurnState.Enemy;
+        sendInformation.EntityGetGlueEffectAt(pos, targetTeam);
+
     }
 }
 
@@ -413,7 +493,6 @@ private IEnumerator ProcessRegularHits(
     foreach (var pos in regularHits)
     {
         yield return ApplyDamageAtPosition(grid, pos, attack.damage);
-        yield return ApplyEffectAtPosition(grid, pos, attack.effect);
     }
 }
 
@@ -426,14 +505,7 @@ private IEnumerator ProcessRegularHits(
         yield return EntityTakeDamage(entity, position, damages);
     }
 
-    private IEnumerator ApplyEffectAtPosition(EntityDataInstance[,] gridToApply, (int x, int y) position, EntityData.EntityEffects effect)
-    {
-        EntityDataInstance entity = gridToApply[position.x, position.y];
-        if (entity == null) yield break;
-        if (effect == EntityData.EntityEffects.Empty) yield break;
-        if (entity.effects.Contains(effect)) yield break;
-        entity.AddEffect(effect);
-    }
+
 
     private IEnumerator EntityTakeDamage(EntityDataInstance entity, (int x, int y) entityPosition, int damages)
     {
@@ -712,5 +784,33 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         Debug.Log("attend une réponse");
         yield return new WaitUntil(() => canContinue);
         Debug.Log("reponse recu");
+    }
+    
+    
+    
+    
+    private void DoSpawn(EntityData entityToSpawn, EntityDataInstance[,] gridToApply)
+    {
+        TurnState targetTeam = gridToApply is CharacterDataInstance[,] ? TurnState.Player : TurnState.Enemy;
+        List<(int x, int y)> emptyPositions = GetEmptyPositions(gridToApply);
+        foreach (var position in emptyPositions)
+        {
+            PlaceEntityAtPosition(entityToSpawn, position, FightManager.TurnState.Enemy);
+        }
+    }
+    
+    private List<(int x, int y)> GetEmptyPositions(EntityDataInstance[,] targetedGrid)
+    {
+        List<(int x, int y)> positions = new List<(int x, int y)>();
+
+        for (int i = 0; i < targetedGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < targetedGrid.GetLength(1); j++)
+            {
+                if (targetedGrid[i, j] == null) 
+                    positions.Add((i, j));
+            }
+        }
+        return positions;
     }
 }

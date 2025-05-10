@@ -15,6 +15,7 @@ MonoBehaviour:
   <effectDescription>k__BackingField: 0 DGT
   <pattern>k__BackingField: {fileID: 11400000, guid: 3328026268ddc8946b4a8cf1143a55bf, type: 2}
   <damage>k__BackingField: 0
-  <effect>k__BackingField: 2
+  effect: 2
+  entityToSpawn: {fileID: 0}
   <unlockCondition>k__BackingField: {fileID: 0}
   <selfDamage>k__BackingField: 0
