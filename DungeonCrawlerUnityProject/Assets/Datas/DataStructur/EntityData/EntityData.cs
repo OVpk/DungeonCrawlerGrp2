@@ -33,6 +33,9 @@ public abstract class EntityData : ScriptableObject
     private int percentOfChanceToGiveExplosive;
     public int PercentOfChanceToGiveExplosive => percentOfChanceToGiveExplosive;
     
+    [ShowIfEffect(nameof(effects), EntityEffects.Explosive), SerializeField]
+    private int explosionDamages;
+    public int ExplosionDamages => explosionDamages;
     
     [field: SerializeField] public bool isImmuneToExplosions{ get; private set; }
     
@@ -57,6 +60,7 @@ public class EntityDataInstance
     public bool isImmuneToExplosions;
     
     public int percentOfChanceToGiveExplosive;
+    public int explosionDamages;
 
     public EntityDataInstance(EntityData data)
     {
@@ -74,6 +78,7 @@ public class EntityDataInstance
         
 
         percentOfChanceToGiveExplosive = data.PercentOfChanceToGiveExplosive;
+        explosionDamages = data.ExplosionDamages;
     }
 
     public int nbTurnBeforeGlueGone;
