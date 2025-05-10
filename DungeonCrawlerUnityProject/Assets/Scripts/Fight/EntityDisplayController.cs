@@ -296,4 +296,19 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
 
         effectDisplayer.glueAnim.gameObject.SetActive(false);
     }
+
+    public void OnEntityGetFogEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.fogAnim.gameObject.SetActive(true);
+        effectDisplayer.PlayFogAnim();
+    }
+
+    public void OnEntityLoseFogEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.fogAnim.gameObject.SetActive(false);
+    }
 }

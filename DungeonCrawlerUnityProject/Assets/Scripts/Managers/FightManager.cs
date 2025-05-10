@@ -40,6 +40,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     {
         EntityDataInstance[,] gridToUpdate = endedTurn == TurnState.Player ? playerGrid : enemyGrid;
         UpdateGlue(gridToUpdate, endedTurn);
+        UpdateFog(gridToUpdate, endedTurn);
     }
 
     private void UpdateGlue(EntityDataInstance[,] gridToUpdate, TurnState teamToUpdate)
@@ -57,6 +58,26 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
                 {
                     entity.effects.Remove(EntityData.EntityEffects.Glue);
                     sendInformation.EntityLoseGlueEffectAt((i,j), teamToUpdate);
+                }
+            }
+        }
+    }
+    
+    private void UpdateFog(EntityDataInstance[,] gridToUpdate, TurnState teamToUpdate)
+    {
+        for (int i = 0; i < gridToUpdate.GetLength(0); i++)
+        {
+            for (int j = 0; j < gridToUpdate.GetLength(1); j++)
+            {
+                EntityDataInstance entity = gridToUpdate[i, j];
+                if(entity == null) continue;
+                if (!entity.effects.Contains(EntityData.EntityEffects.Fog)) continue;
+            
+                entity.nbOfTurnBeforeFogGone--;
+                if (entity.nbOfTurnBeforeFogGone == 0)
+                {
+                    entity.effects.Remove(EntityData.EntityEffects.Fog);
+                    sendInformation.EntityLoseFogEffectAt((i,j), teamToUpdate);
                 }
             }
         }
@@ -260,6 +281,11 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         
         sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
         yield return WaitAnimationEvent();
+        
+        if (attackToApply.Effect is EntityData.EntityEffects.Fog)
+        {
+            ApplyFogEffect(attackerTeam, attackToApply, attackOriginPosition, gridToApplyAttack, attackToApply.pattern.positions);
+        }
 
         if (attackToApply.Effect is EntityData.EntityEffects.Spawner)
         {
@@ -324,11 +350,33 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         foreach (var position in impactedPositions)
         {
             EntityDataInstance entity = gridToApply[position.x, position.y];
-            if (entity == null) return;
+            if (entity == null) continue;
             entity.AddEffect(effectToApply);
         }
 
     }
+    
+    private void ApplyFogEffect(TurnState attackerTeam,
+        AttackStageData fogAttackStage,
+        (int x, int y) originPosition,
+        EntityDataInstance[,] gridToApply,
+        List<Vector2Int> pattern)
+    {
+        List<(int x, int y)> impactedPositions = GetImpactedPositions(gridToApply, originPosition, pattern);
+        foreach (var position in impactedPositions)
+        {
+            EntityDataInstance entity = gridToApply[position.x, position.y];
+            if (entity == null) continue;
+            entity.AddEffect(EntityData.EntityEffects.Fog);
+            entity.percentOfChanceOfAvoidingAttackThanksToFog =
+                fogAttackStage.PercentOfChanceOfAvoidingAttackThanksToFog;
+            entity.nbOfTurnBeforeFogGone = fogAttackStage.NbOfTurnBeforeFogGone;
+            
+            sendInformation.EntityGetFogEffectAt(position, attackerTeam);
+        }
+    }
+    
+    
     
 // 1) Capture des bulles protégées avant application de l'attaque
 private HashSet<(int x, int y)> GetProtectedPositions(EntityDataInstance[,] grid)
@@ -420,6 +468,8 @@ private void TryApplyGlue(
 // ApplyAttackPattern orchestrates the whole hit process
 public IEnumerator ApplyAttackPattern(EntityDataInstance[,] gridToApply, (int x, int y) origin, AttackStageData attack)
 {
+    if (attack.damage <= 0) yield break;
+    
     // 1) Récupérer les positions impactées
     var impactedPositions = GetImpactedPositions(gridToApply, origin, attack.pattern.positions);
 
@@ -444,7 +494,9 @@ private List<(int x, int y)> GetImpactedPositions(EntityDataInstance[,] grid, (i
         int x = origin.x + offset.x;
         int y = origin.y + offset.y;
         if (!IsOutsideLimit(grid, (x, y)))
+        {
             list.Add((x, y));
+        }
     }
     return list;
 }
@@ -493,6 +545,8 @@ private IEnumerator ProcessRegularHits(
 {
     foreach (var pos in regularHits)
     {
+        if (grid[pos.x, pos.y].effects.Contains(EntityData.EntityEffects.Fog) &&
+            Random.Range(0, 100) <= grid[pos.x, pos.y].percentOfChanceOfAvoidingAttackThanksToFog) continue;
         yield return ApplyDamageAtPosition(grid, pos, attack.damage);
     }
 }
@@ -545,9 +599,17 @@ private IEnumerator ProcessRegularHits(
             yield return EntityExplodeAt(position, TurnState.Player);
         else
         {
+            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Fog))
+            {
+                sendInformation.EntityLoseFogEffectAt(position, TurnState.Player);
+            }
         
             if (playerGrid[position.x, position.y].nextLayer == null)
             {
+                if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
+                {
+                    sendInformation.EntityLoseGlueEffectAt(position, TurnState.Player);
+                }
                 playerGrid[position.x, position.y] = null;
                 sendInformation.EntityDeathAt(position, TurnState.Player);
                 yield return WaitAnimationEvent();
@@ -562,6 +624,10 @@ private IEnumerator ProcessRegularHits(
                     effectsToPass.Add(EntityData.EntityEffects.ProtectedHorizontaly);
                 if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
                     effectsToPass.Add(EntityData.EntityEffects.ProtectedVerticaly);
+                if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
+                {
+                    effectsToPass.Add(EntityData.EntityEffects.Glue);
+                }
                 EntityDataInstance newLayer = PlaceEntityAtPosition(playerGrid[position.x, position.y].nextLayer, position, TurnState.Player);
                 foreach (var effect in effectsToPass)
                 {
@@ -579,6 +645,14 @@ private IEnumerator ProcessRegularHits(
             yield return EntityExplodeAt(position, TurnState.Enemy);
         else
         {
+            if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
+            {
+                sendInformation.EntityLoseGlueEffectAt(position, TurnState.Enemy);
+            }
+            if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Fog))
+            {
+                sendInformation.EntityLoseFogEffectAt(position, TurnState.Enemy);
+            }
             enemyGrid[position.x, position.y] = null;
             sendInformation.EntityDeathAt(position, TurnState.Enemy);
             yield return WaitAnimationEvent();

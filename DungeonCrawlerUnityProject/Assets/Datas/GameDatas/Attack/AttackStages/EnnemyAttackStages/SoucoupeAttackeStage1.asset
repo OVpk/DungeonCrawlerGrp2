@@ -13,8 +13,13 @@ MonoBehaviour:
   m_Name: SoucoupeAttackeStage1
   m_EditorClassIdentifier: 
   <effectDescription>k__BackingField: SoucoupeAttackStage1
-  <pattern>k__BackingField: {fileID: 11400000, guid: b63627e0d5d62fb479dc62ef0fcfaab8, type: 2}
-  <damage>k__BackingField: 3
-  <effect>k__BackingField: 0
+  <pattern>k__BackingField: {fileID: 11400000, guid: 14160491d58625146bba83c1b06b655d, type: 2}
+  <damage>k__BackingField: 0
+  effect: 7
+  entityToSpawn: {fileID: 0}
+  percentOfChanceOfGlue: 0
+  nbOfTurnBeforeGlueGone: 0
+  percentOfChanceOfAvoidingAttackThanksToFog: 100
+  nbOfTurnBeforeFogGone: 2
   <unlockCondition>k__BackingField: {fileID: 0}
-  <selfDamage>k__BackingField: 1
+  <selfDamage>k__BackingField: 0
