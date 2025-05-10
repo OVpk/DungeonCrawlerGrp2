@@ -376,6 +376,7 @@ private void TryApplyExplosivePowder(
         // 2.4) On pose l'effet explosif et on notifie
         target.AddEffect(EntityData.EntityEffects.Explosive);
         target.percentOfChanceToGiveExplosive = attacker.percentOfChanceToGiveExplosive;
+        target.explosionDamages = attacker.explosionDamages;
         var targetTeam = attack.gridToApply == TurnState.Player ? TurnState.Player : TurnState.Enemy;
         sendInformation.EntityGetExplosiveEffectAt(pos, targetTeam);
 
@@ -659,11 +660,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         // on retire l'effet explosif pour éviter toute relance mécanique
         e.effects.Remove(EntityData.EntityEffects.Explosive);
 
-        // mort de l'entité
-        if (team == TurnState.Player)
-            yield return CharacterDeathAt((i, j));
-        else
-            yield return EnemyDeathAt((i, j));
+        yield return EntityTakeDamage(e, (i, j), originEntity.explosionDamages);
     }
 }
 
