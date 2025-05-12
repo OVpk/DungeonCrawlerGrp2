@@ -15,5 +15,6 @@ MonoBehaviour:
   <attackName>k__BackingField: SmartiesBoxAttack1
   <attackStages>k__BackingField:
   - {fileID: 11400000, guid: 964b933c96f1a7d45ac7811180f34a96, type: 2}
-  <gridToCheck>k__BackingField: 0
-  <gridToApply>k__BackingField: 0
+  <gridToCheck>k__BackingField: 1
+  <gridToApply>k__BackingField: 1
+  <isPositionLocked>k__BackingField: 0

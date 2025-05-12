@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -10,6 +9,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
 
     public EntityLocationDisplayer entityLocation;
     public EntityDisplayer entity;
+    public EffectDisplayer effectDisplayer;
 
     public TMP_Text durabilityText;
     public int durabilityNb;
@@ -22,6 +22,12 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     private Color hibiscus = new Color(0.772f, 0.192f, 0.412f);
     
     #endregion
+
+    private bool isBubbleHLeftActive = false;
+    private bool isBubbleHMiddleActive = false;
+    private bool isBubbleHRightActive = false;
+    private bool isBubbleVActive = false;
+    private bool isEntityActived = false;
 
     public void Init()
     {
@@ -38,6 +44,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
 
+        isEntityActived = false;
         entity.PlayDeathAnim();
         durabilityText.gameObject.SetActive(false);
         typeText.gameObject.SetActive(false);
@@ -54,6 +61,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
 
+        isEntityActived = true;
         entity.gameObject.SetActive(true);
         entity.InitVisual(entityData);
         entity.PlaySpawnAnim();
@@ -61,7 +69,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         typeText.gameObject.SetActive(true);
 
         durabilityNb = entityData.durability;
-        durabilityText.text = durabilityNb.ToString();
+        durabilityText.text = durabilityNb + "b";
         typeText.text = entityData.type switch
         {
             EntityData.EntityTypes.Mou => "a",
@@ -123,7 +131,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetGrayscale(true);
-        entity.PlaySleepAnim();
+        if (isEntityActived) 
+            entity.PlaySleepAnim();
     }
 
     public void OnEntityLocationEnabled((int x, int y) position, FightManager.TurnState team)
@@ -131,7 +140,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetGrayscale(false);
-        entity.PlayIdleAnim();
+        if (isEntityActived)
+            entity.PlayIdleAnim();
     }
 
     public void OnEntityTakeDamage((int x, int y) position, int nbDamages, FightManager.TurnState team)
@@ -142,5 +152,163 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
 
         durabilityNb = Math.Clamp(durabilityNb - nbDamages, 0, durabilityNb);
         durabilityText.text = durabilityNb.ToString();
+    }
+
+    public void OnEntityDisplayBubble((int x, int y) position, FightManager.TurnState team, bool state, BubbleDirections direction)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        switch (direction)
+        {
+            case BubbleDirections.Horizontal :
+                switch (position.y)
+                {
+                    case 0 :
+                        if (state)
+                        {
+                            effectDisplayer.anim.Play("BubbleHorizontalLeftOn");
+                            isBubbleHLeftActive = true;
+                        }
+                        else
+                        {
+                            if (isBubbleHLeftActive == true)
+                            {
+                                effectDisplayer.anim.Play("BubbleHorizontalLeftOff");
+                                isBubbleHLeftActive = false;
+                            }
+                        }
+                        break;
+                    case 1 :
+                        if (state)
+                        {
+                            effectDisplayer.anim.Play("BubbleHorizontalMiddleOn");
+                            isBubbleHMiddleActive = true;
+                        }
+                        else
+                        {
+                            if (isBubbleHMiddleActive == true)
+                            {
+                                effectDisplayer.anim.Play("BubbleHorizontalMiddleOff");
+                                isBubbleHMiddleActive = false;
+                            }
+                        }
+                        break;
+                    case 2 :
+                        if (state)
+                        {
+                            effectDisplayer.anim.Play("BubbleHorizontalRightOn");
+                            isBubbleHRightActive = true;
+                        }
+                        else
+                        {
+                            if (isBubbleHRightActive == true)
+                            {
+                                effectDisplayer.anim.Play("BubbleHorizontalRightOff");
+                                isBubbleHRightActive = false;
+                            }
+                        }
+                        break;
+                };
+                break;
+            case BubbleDirections.Vertical :
+                if (state)
+                {
+                    effectDisplayer.anim.Play("BubbleVerticalOn");
+                    isBubbleVActive = true;
+                }
+                else
+                {
+                    if (isBubbleVActive == true)
+                    {
+                        effectDisplayer.anim.Play("BubbleVerticalOff");
+                        isBubbleVActive = false;
+                    }
+                }
+                break;
+        }
+    }
+
+    public enum BubbleDirections
+    {
+        Horizontal,
+        Vertical
+    }
+
+    public void OnEntityCreateProtection((int x, int y) position, FightManager.TurnState team, BubbleDirections direction)
+    {
+        if (!IsConcerned(position, team)) return;
+
+        switch (direction)
+        {
+            case BubbleDirections.Horizontal :
+                FightManager.Instance.sendInformation.EntityDisplayBubbleAt(position, team, true, direction); break;
+                
+            case BubbleDirections.Vertical :
+                FightManager.Instance.sendInformation.EntityDisplayBubbleAt((0, positionInGrid.y), team, true, direction); break;
+        }
+    }
+
+    public void OnEntityLoseProtection((int x, int y) position, FightManager.TurnState team, BubbleDirections direction)
+    {
+        if (!IsConcerned(position, team)) return;
+
+        switch (direction)
+        {
+            case BubbleDirections.Horizontal : 
+                FightManager.Instance.sendInformation.EntityDisplayBubbleAt(position, team, false, direction); break;
+            case BubbleDirections.Vertical :
+                FightManager.Instance.sendInformation.EntityDisplayBubbleAt((0, positionInGrid.y), team, false, direction); break;
+        }
+    }
+
+    public void OnEntityExplode((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.anim.Play("Explosion");
+    }
+
+    public void OnEntityGetExplosiveEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.explosivePowder.gameObject.SetActive(true);
+    }
+    
+    public void OnEntityLoseExplosiveEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.explosivePowder.gameObject.SetActive(false);
+    }
+
+    public void OnEntityGetGlueEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+
+        effectDisplayer.glueAnim.gameObject.SetActive(true);
+        effectDisplayer.PlayGlueAnim();
+    }
+
+    public void OnEntityLoseGlueEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+
+        effectDisplayer.glueAnim.gameObject.SetActive(false);
+    }
+
+    public void OnEntityGetFogEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.fogAnim.gameObject.SetActive(true);
+        effectDisplayer.PlayFogAnim();
+    }
+
+    public void OnEntityLoseFogEffect((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.fogAnim.gameObject.SetActive(false);
     }
 }

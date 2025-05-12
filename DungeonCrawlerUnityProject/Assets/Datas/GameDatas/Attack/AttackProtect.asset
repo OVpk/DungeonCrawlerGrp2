@@ -17,3 +17,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8e362d7c13650ef478d35832170dbc88, type: 2}
   <gridToCheck>k__BackingField: 0
   <gridToApply>k__BackingField: 0
+  <isPositionLocked>k__BackingField: 1

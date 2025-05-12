@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FightEventSpeaker : MonoBehaviour
@@ -137,6 +138,86 @@ public class FightEventSpeaker : MonoBehaviour
         foreach (var listener in listeners)
         {
             listener.OnEntityTakeDamage(position, nbDamages, team);
+        }
+    }
+
+    public void EntityDisplayBubbleAt((int x, int y) position, FightManager.TurnState team, bool state, EntityDisplayController.BubbleDirections direction)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityDisplayBubble(position, team, state, direction);
+        }
+    }
+
+    public void EntityCreateProtectionAt((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityCreateProtection(position, team, direction);
+        }
+    }
+
+    public void EntityLoseProtectionAt((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityLoseProtection(position, team, direction);
+        }
+    }
+
+    public void EntityExplodeAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityExplode(position, team);
+        }
+    }
+    
+    public void EntityGetExplosiveEffectAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityGetExplosiveEffect(position, team);
+        }
+    }
+    
+    public void EntityLoseExplosiveEffectAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityLoseExplosiveEffect(position, team);
+        }
+    }
+    
+    public void EntityGetGlueEffectAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityGetGlueEffect(position, team);
+        }
+    }
+    
+    public void EntityLoseGlueEffectAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityLoseGlueEffect(position, team);
+        }
+    }
+
+    public void EntityGetFogEffectAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityGetFogEffect(position, team);
+        }
+    }
+    
+    public void EntityLoseFogEffectAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnEntityLoseFogEffect(position, team);
         }
     }
     

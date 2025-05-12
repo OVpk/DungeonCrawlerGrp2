@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -24,6 +25,8 @@ public class SimpleAi : MonoBehaviour
 
         return positions;
     }
+
+
     
     public bool IsPositionAlreadyPlayed((int x, int y) position)
     {
@@ -37,6 +40,7 @@ public class SimpleAi : MonoBehaviour
         if (playablePositions.Count == 0)
         {
             Debug.Log("No playable positions for the enemy.");
+            fightManager.SwitchTurn();
             return;
         }
         
@@ -46,9 +50,17 @@ public class SimpleAi : MonoBehaviour
 
         AttackStageData bestAttackStage = fightManager.FindBestUnlockedStage(chosenEnemy.attacks[0]); // index toujours à 0. Pour l'instant l'ennemi n'a qu'une attaque
 
-        (int x, int y) bestAttackPosition = FindBestOriginPosition(bestAttackStage);
+        
+        (int x, int y) bestAttackPosition = ChooseAttackPosition(chosenEnemy.attacks[0], bestAttackStage, chosenPosition);
 
         StartCoroutine(fightManager.Attack(chosenPosition, 0, bestAttackPosition, FightManager.TurnState.Enemy)); // index toujours à 0. Pour l'instant l'ennemi n'a qu'une attaque
+    }
+
+    private (int x, int y) ChooseAttackPosition(AttackData attack, AttackStageData chosenStage, (int x, int y) attackerPosition)
+    {
+        if (chosenStage.Effect == EntityData.EntityEffects.Spawner) return (0, 0);
+        if (attack.isPositionLocked) return attackerPosition;
+        return FindBestOriginPosition(chosenStage);
     }
 
     private (int x, int y) FindBestOriginPosition(AttackStageData attackStage)
