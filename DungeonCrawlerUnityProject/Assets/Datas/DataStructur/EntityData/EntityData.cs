@@ -16,7 +16,9 @@ public abstract class EntityData : ScriptableObject
         ProtectedHorizontaly,
         ProtectedVerticaly,
         Explosive,
-        Protector
+        Protector,
+        Spawner,
+        Fog
     }
 
     [field: SerializeField] public string entityName { get; private set; }
@@ -24,12 +26,17 @@ public abstract class EntityData : ScriptableObject
     
     [field: SerializeField] public EntityTypes type{ get; private set; }
     
-    [field: SerializeField] public EntityEffects[] effects{ get; private set; }
+    [SerializeField] 
+    private EntityEffects[] effects;
+    public EntityEffects[] Effects => effects;
 
     [ShowIfEffect(nameof(effects), EntityEffects.Explosive), SerializeField]
-    private int percentOfChangeToGiveExplosive;
-
-    public int PercentOfChangeToGiveExplosive => percentOfChangeToGiveExplosive;
+    private int percentOfChanceToGiveExplosive;
+    public int PercentOfChanceToGiveExplosive => percentOfChanceToGiveExplosive;
+    
+    [ShowIfEffect(nameof(effects), EntityEffects.Explosive), SerializeField]
+    private int explosionDamages;
+    public int ExplosionDamages => explosionDamages;
     
     [field: SerializeField] public bool isImmuneToExplosions{ get; private set; }
     
@@ -53,7 +60,8 @@ public class EntityDataInstance
     public AttackData[] attacks;
     public bool isImmuneToExplosions;
     
-    public int percentOfChangeToGiveExplosive;
+    public int percentOfChanceToGiveExplosive;
+    public int explosionDamages;
 
     public EntityDataInstance(EntityData data)
     {
@@ -64,33 +72,25 @@ public class EntityDataInstance
         animator = data.animator;
         attacks = data.attacks;
         isImmuneToExplosions = data.isImmuneToExplosions;
-        foreach (var effect in data.effects)
-        {
-            AddEffect(effect);
-        }
+        
+        if (data.Effects != null)
+            foreach (var effect in data.Effects)
+                AddEffect(effect);
+        
 
-        percentOfChangeToGiveExplosive = data.PercentOfChangeToGiveExplosive;
+        percentOfChanceToGiveExplosive = data.PercentOfChanceToGiveExplosive;
+        explosionDamages = data.ExplosionDamages;
     }
 
     public int nbTurnBeforeGlueGone;
-
-    public void UpdateEffects()
-    {
-        if (effects.Contains(EntityData.EntityEffects.Glue)) nbTurnBeforeGlueGone--;
-    }
+    
+    public int percentOfChanceOfAvoidingAttackThanksToFog;
+    public int nbOfTurnBeforeFogGone;
 
     public void AddEffect(EntityData.EntityEffects effect)
     {
         effects.Add(effect);
-        switch (effect)
-        {
-            case EntityData.EntityEffects.Glue : InitGlueEffect(); break;
-        }
     }
     
-    private void InitGlueEffect()
-    {
-        nbTurnBeforeGlueGone = FightManager.Instance.nbTurnBeforeEntityGlueGone;
-        effects.Add(EntityData.EntityEffects.Glue);
-    }
+
 }
