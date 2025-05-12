@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ChenilleAttackStage1
   m_EditorClassIdentifier: 
   <effectDescription>k__BackingField: 2 DGT
-  <pattern>k__BackingField: {fileID: 11400000, guid: ac5e5537254d6174cbe6e4291f68a935, type: 2}
+  <pattern>k__BackingField: {fileID: 11400000, guid: aff96b8f72fd0334a867fda03deaf97b, type: 2}
   <damage>k__BackingField: 2
   <effect>k__BackingField: 0
   <unlockCondition>k__BackingField: {fileID: 0}
