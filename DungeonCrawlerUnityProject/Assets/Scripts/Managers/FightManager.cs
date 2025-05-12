@@ -39,29 +39,23 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     private void EndTurn(TurnState endedTurn)
     {
         EntityDataInstance[,] gridToUpdate = endedTurn == TurnState.Player ? playerGrid : enemyGrid;
-        UpdateGlue(gridToUpdate, endedTurn);
         UpdateFog(gridToUpdate, endedTurn);
     }
 
-    private void UpdateGlue(EntityDataInstance[,] gridToUpdate, TurnState teamToUpdate)
+    private void UpdateGlue(EntityDataInstance entity, (int x, int y) entityPosition, TurnState teamToUpdate)
     {
-        for (int i = 0; i < gridToUpdate.GetLength(0); i++)
-        {
-            for (int j = 0; j < gridToUpdate.GetLength(1); j++)
-            {
-                EntityDataInstance entity = gridToUpdate[i, j];
-                if(entity == null) continue;
-                if (!entity.effects.Contains(EntityData.EntityEffects.Glue)) continue;
+        if(entity == null) return;
+        if (!entity.effects.Contains(EntityData.EntityEffects.Glue)) return;
             
-                entity.nbTurnBeforeGlueGone--;
-                if (entity.nbTurnBeforeGlueGone == 0)
-                {
-                    entity.effects.Remove(EntityData.EntityEffects.Glue);
-                    sendInformation.EntityLoseGlueEffectAt((i,j), teamToUpdate);
-                }
-            }
+        entity.glueDurability--;
+        if (entity.glueDurability == 0)
+        {
+            entity.effects.Remove(EntityData.EntityEffects.Glue);
+            sendInformation.EntityLoseGlueEffectAt((entityPosition.x,entityPosition.y), teamToUpdate);
         }
+            
     }
+    
     
     private void UpdateFog(EntityDataInstance[,] gridToUpdate, TurnState teamToUpdate)
     {
@@ -272,54 +266,71 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         gridToApplyAttack = attack.gridToApply == TurnState.Player ? playerGrid : enemyGrid;
         AttackStageData attackToApply = FindBestUnlockedStage(attack);
 
+        if (attacker.effects.Contains(EntityData.EntityEffects.Glue))
+        {
+            yield return new WaitForSeconds(2f);
+            yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
+            UpdateGlue(attacker, attackerPosition, attackerTeam);
+            yield return new WaitForSeconds(2f);
+            
+            AddPositionToAlreadyPlayed(attackerPosition, attackerTeam);
+            SwitchTurn();
+            yield break;
+        }
+
 
         if (attackToApply.Effect is EntityData.EntityEffects.ProtectedHorizontaly
             or EntityData.EntityEffects.ProtectedVerticaly)
         {
             ApplyBubbleEffect(attacker, attackerPosition, attackerTeam, attackToApply.Effect, attackOriginPosition, gridToApplyAttack, attackToApply.pattern.positions);
         }
-        
-        sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
-        yield return WaitAnimationEvent();
-        
-        if (attackToApply.Effect is EntityData.EntityEffects.Fog)
+        else if (attackToApply.Effect is EntityData.EntityEffects.Fog)
         {
+            sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
+            yield return WaitAnimationEvent();
+            
             ApplyFogEffect(attackerTeam, attackToApply, attackOriginPosition, gridToApplyAttack, attackToApply.pattern.positions);
         }
-
-        if (attackToApply.Effect is EntityData.EntityEffects.Spawner)
+        else if (attackToApply.Effect is EntityData.EntityEffects.Spawner)
         {
+            sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
+            yield return WaitAnimationEvent();
+            
             DoSpawn(attackToApply.EntityToSpawn, gridToApplyAttack);
         }
         else
         {
-            // 3.3) Snapshot des cases protégées
-            var initialProtected = GetProtectedPositions(gridToApplyAttack);
+            sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
+            yield return WaitAnimationEvent();
+            
+            var impacted = GetImpactedPositions(gridToApplyAttack, attackOriginPosition, attackToApply.pattern.positions);
+            PartitionPositions(gridToApplyAttack, impacted, out var protectedHits, out var regularHits);
 
-            yield return ApplyAttackPattern(gridToApplyAttack, attackOriginPosition, attackToApply);
+            yield return ProcessProtectedHits(gridToApplyAttack, protectedHits);
+            
+            var damagedPositions = new List<(int x, int y)>();
+            yield return ProcessRegularHits(gridToApplyAttack, regularHits, attackToApply, damagedPositions);
 
             if (attacker.effects.Contains(EntityData.EntityEffects.Explosive))
-                TryApplyExplosivePowder(attacker,
+                TryApplyExplosivePowder(
+                    attacker,
                     gridToApplyAttack,
                     attackOriginPosition,
-                    attack,
                     attackToApply,
                     attackerPosition,
                     attackerTeam,
-                    initialProtected);
+                    protectedHits,
+                    damagedPositions, 
+                    attack.gridToApply
+                );
 
             if (attackToApply.Effect == EntityData.EntityEffects.Glue)
-                TryApplyGlue(gridToApplyAttack,
-                    attackOriginPosition,
-                    attack,
-                    attackToApply,
-                    initialProtected);
+                TryApplyGlue(gridToApplyAttack, damagedPositions, attackOriginPosition, attackToApply, protectedHits, attack.gridToApply);
 
             yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
         }
 
         AddPositionToAlreadyPlayed(attackerPosition, attackerTeam);
-        
         SwitchTurn();
     }
 
@@ -396,94 +407,68 @@ private HashSet<(int x, int y)> GetProtectedPositions(EntityDataInstance[,] grid
 }
 
 
-// 2) Tentative d'application de poudre explosive basée sur l'état initial des bulles
 private void TryApplyExplosivePowder(
     EntityDataInstance attacker,
     EntityDataInstance[,] grid,
     (int x, int y) origin,
-    AttackData attack,
     AttackStageData stage,
     (int x, int y) attackerPosition,
     TurnState attackerTeam,
-    HashSet<(int x, int y)> initialProtected)
+    List<(int x, int y)> protectedHits,
+    List<(int x, int y)> damagedPositions,
+    TurnState targetTeam)
 {
     int roll = Random.Range(0, 100);
     if (roll >= attacker.percentOfChanceToGiveExplosive)
         return;
 
-    // 2.3) On parcourt le pattern et on cherche la première cible non protégée initialement
-    foreach (var off in stage.pattern.positions)
+    // Parcourt uniquement les positions qui ont pris des dégâts
+    foreach (var pos in damagedPositions)
     {
-        var pos = (x: origin.x + off.x, y: origin.y + off.y);
-        if (IsOutsideLimit(grid, pos)) continue;
-        if (initialProtected.Contains(pos)) continue;
+        // Ignore si protégée initialement
+        if (protectedHits.Contains(pos)) 
+            continue;
 
         var target = grid[pos.x, pos.y];
-        if (target == null) continue;
+        if (target == null) 
+            continue;
 
-        // 2.4) On pose l'effet explosif et on notifie
+        // On pose l’effet explosif et on notifie
         target.AddEffect(EntityData.EntityEffects.Explosive);
         target.percentOfChanceToGiveExplosive = attacker.percentOfChanceToGiveExplosive;
         target.explosionDamages = attacker.explosionDamages;
-        var targetTeam = attack.gridToApply == TurnState.Player ? TurnState.Player : TurnState.Enemy;
         sendInformation.EntityGetExplosiveEffectAt(pos, targetTeam);
 
-        // 2.5) On retire l'effet de l'attaquant et on notifie
+        // On retire l’effet de l’attaquant et on notifie
         attacker.effects.Remove(EntityData.EntityEffects.Explosive);
         sendInformation.EntityLoseExplosiveEffectAt(attackerPosition, attackerTeam);
-        break;
+        break;  // un seul spawn, comme avant
     }
 }
+
 
 private void TryApplyGlue(
     EntityDataInstance[,] grid,
+    List<(int x, int y)> damaged,
     (int x, int y) origin,
-    AttackData attack,
     AttackStageData stage,
-    HashSet<(int x, int y)> initialProtected)
+    List<(int x, int y)> protectedHits,
+    TurnState targetTeam)
 {
-    int roll = Random.Range(0, 100);
-    if (roll >= stage.PercentOfChanceOfGlue)
-        return;
-    
-    foreach (var off in stage.pattern.positions)
+    foreach (var pos in damaged)
     {
-        var pos = (x: origin.x + off.x, y: origin.y + off.y);
-        if (IsOutsideLimit(grid, pos)) continue;
-        if (initialProtected.Contains(pos)) continue;
-
-        var target = grid[pos.x, pos.y];
-        if (target == null) continue;
-
-        // 2.4) On pose l'effet glue et on notifie
-        target.AddEffect(EntityData.EntityEffects.Glue);
-        target.nbTurnBeforeGlueGone = stage.NbOfTurnBeforeGlueGone;
-        var targetTeam = attack.gridToApply == TurnState.Player ? TurnState.Player : TurnState.Enemy;
+        if (protectedHits.Contains(pos)) continue;
+        if (Random.Range(0, 100) >= stage.PercentOfChanceOfGlue) continue;
+        var e = grid[pos.x, pos.y];
+        if (e == null) continue;
+        e.AddEffect(EntityData.EntityEffects.Glue);
+        e.glueDurability = stage.GlueDurability;
         sendInformation.EntityGetGlueEffectAt(pos, targetTeam);
-
     }
 }
 
 
-// ApplyAttackPattern orchestrates the whole hit process
-public IEnumerator ApplyAttackPattern(EntityDataInstance[,] gridToApply, (int x, int y) origin, AttackStageData attack)
-{
-    if (attack.damage <= 0) yield break;
-    
-    // 1) Récupérer les positions impactées
-    var impactedPositions = GetImpactedPositions(gridToApply, origin, attack.pattern.positions);
 
-    // 2) Séparer en entités protégées et non protégées
-    PartitionPositions(gridToApply, impactedPositions,
-        out List<(int x, int y)> protectedHits,
-        out List<(int x, int y)> regularHits);
-
-    // 3) Gérer les protections (suppression de bulles)
-    yield return ProcessProtectedHits(gridToApply, protectedHits);
-
-    // 4) Appliquer les dégâts et effets aux cibles non protégées
-    yield return ProcessRegularHits(gridToApply, regularHits, attack);
-}
 
 // 1) Calcule les positions valides impactées par le pattern
 private List<(int x, int y)> GetImpactedPositions(EntityDataInstance[,] grid, (int x, int y) origin, List<Vector2Int> pattern)
@@ -537,19 +522,25 @@ private IEnumerator ProcessProtectedHits(
     }
 }
 
-// 4) Applique dégâts et effets aux entités non protégées
 private IEnumerator ProcessRegularHits(
     EntityDataInstance[,] grid,
-    List<(int x, int y)> regularHits,
-    AttackStageData attack)
+    List<(int x, int y)> hits,
+    AttackStageData stage,
+    List<(int x, int y)> damagedPositions)
 {
-    foreach (var pos in regularHits)
+    foreach (var pos in hits)
     {
-        if (grid[pos.x, pos.y].effects.Contains(EntityData.EntityEffects.Fog) &&
-            Random.Range(0, 100) <= grid[pos.x, pos.y].percentOfChanceOfAvoidingAttackThanksToFog) continue;
-        yield return ApplyDamageAtPosition(grid, pos, attack.damage);
+        var e = grid[pos.x, pos.y];
+        if (e == null) continue;
+        if (e.effects.Contains(EntityData.EntityEffects.Fog) &&
+            Random.Range(0, 100) <= e.percentOfChanceOfAvoidingAttackThanksToFog)
+            continue;
+
+        yield return ApplyDamageAtPosition(grid, pos, stage.damage);
+        damagedPositions.Add(pos);
     }
 }
+
 
 
     private IEnumerator ApplyDamageAtPosition(EntityDataInstance[,] gridToApply, (int x, int y) position, int damages)
@@ -591,51 +582,50 @@ private IEnumerator ProcessRegularHits(
 
     private IEnumerator CharacterDeathAt((int x, int y) position)
     {
+        if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Explosive) &&
+            !playerGrid[position.x, position.y].isImmuneToExplosions)
+            yield return EntityExplodeAt(position, TurnState.Player);
+        
         if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Protector))
             RemoveBubbleAt(position, TurnState.Player);
         
-        if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Explosive)&&
-            !playerGrid[position.x, position.y].isImmuneToExplosions)
-            yield return EntityExplodeAt(position, TurnState.Player);
+
+        if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Fog))
+        {
+            sendInformation.EntityLoseFogEffectAt(position, TurnState.Player);
+        }
+        
+        if (playerGrid[position.x, position.y].nextLayer == null)
+        {
+            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
+            {
+                sendInformation.EntityLoseGlueEffectAt(position, TurnState.Player);
+            }
+            playerGrid[position.x, position.y] = null;
+            sendInformation.EntityDeathAt(position, TurnState.Player);
+            yield return WaitAnimationEvent();
+        }
         else
         {
-            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Fog))
-            {
-                sendInformation.EntityLoseFogEffectAt(position, TurnState.Player);
-            }
-        
-            if (playerGrid[position.x, position.y].nextLayer == null)
-            {
-                if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
-                {
-                    sendInformation.EntityLoseGlueEffectAt(position, TurnState.Player);
-                }
-                playerGrid[position.x, position.y] = null;
-                sendInformation.EntityDeathAt(position, TurnState.Player);
-                yield return WaitAnimationEvent();
-            }
-            else
-            {
-                sendInformation.EntityDeathAt(position, TurnState.Player);
-                yield return WaitAnimationEvent();
+            sendInformation.EntityDeathAt(position, TurnState.Player);
+            yield return WaitAnimationEvent();
             
-                List<EntityData.EntityEffects> effectsToPass = new List<EntityData.EntityEffects>();
-                if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
+            List<EntityData.EntityEffects> effectsToPass = new List<EntityData.EntityEffects>();
+            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
                     effectsToPass.Add(EntityData.EntityEffects.ProtectedHorizontaly);
-                if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
                     effectsToPass.Add(EntityData.EntityEffects.ProtectedVerticaly);
-                if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
-                {
-                    effectsToPass.Add(EntityData.EntityEffects.Glue);
-                }
-                EntityDataInstance newLayer = PlaceEntityAtPosition(playerGrid[position.x, position.y].nextLayer, position, TurnState.Player);
-                foreach (var effect in effectsToPass)
-                {
-                    newLayer.AddEffect(effect);
-                }
+            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
+            {
+                effectsToPass.Add(EntityData.EntityEffects.Glue);
             }
-        
+            EntityDataInstance newLayer = PlaceEntityAtPosition(playerGrid[position.x, position.y].nextLayer, position, TurnState.Player);
+            foreach (var effect in effectsToPass)
+            {
+                newLayer.AddEffect(effect);
+            }
         }
+            
     }
     
     private IEnumerator EnemyDeathAt((int x, int y) position)
@@ -643,21 +633,19 @@ private IEnumerator ProcessRegularHits(
         if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Explosive)&&
             !enemyGrid[position.x, position.y].isImmuneToExplosions)
             yield return EntityExplodeAt(position, TurnState.Enemy);
-        else
+        if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
         {
-            if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
-            {
-                sendInformation.EntityLoseGlueEffectAt(position, TurnState.Enemy);
-            }
-            if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Fog))
-            {
-                sendInformation.EntityLoseFogEffectAt(position, TurnState.Enemy);
-            }
-            enemyGrid[position.x, position.y] = null;
-            sendInformation.EntityDeathAt(position, TurnState.Enemy);
-            yield return WaitAnimationEvent();
+            sendInformation.EntityLoseGlueEffectAt(position, TurnState.Enemy);
         }
+        if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Fog))
+        {
+            sendInformation.EntityLoseFogEffectAt(position, TurnState.Enemy);
+        }
+        enemyGrid[position.x, position.y] = null;
+        sendInformation.EntityDeathAt(position, TurnState.Enemy);
+        yield return WaitAnimationEvent();
     }
+    
     
 public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
 {

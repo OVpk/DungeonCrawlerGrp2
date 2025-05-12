@@ -82,7 +82,7 @@ public class EntityDataInstance
         explosionDamages = data.ExplosionDamages;
     }
 
-    public int nbTurnBeforeGlueGone;
+    public int glueDurability;
     
     public int percentOfChanceOfAvoidingAttackThanksToFog;
     public int nbOfTurnBeforeFogGone;
