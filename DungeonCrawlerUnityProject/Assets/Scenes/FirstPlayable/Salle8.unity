@@ -1752,7 +1752,7 @@ MonoBehaviour:
   <sendInformation>k__BackingField: {fileID: 623254399}
   <aiController>k__BackingField: {fileID: 623254400}
   canUseControlls: 1
-  enemyGridData: {fileID: 0}
+  enemyGridData: {fileID: 11400000, guid: f9af8452d74585548b29e782f89c90d2, type: 2}
   candyPackData:
   - {fileID: 11400000, guid: 5dabfc31e419a754fa825a88ffed2712, type: 2}
   - {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}
