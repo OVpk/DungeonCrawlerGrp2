@@ -308,14 +308,31 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
                 TryApplyExplosivePowder(
                     attacker,
                     gridToApplyAttack,
-                    attackOriginPosition,
-                    attackToApply,
                     attackerPosition,
                     attackerTeam,
                     protectedHits,
                     damagedPositions, 
                     attack.gridToApply
                 );
+            else
+            {
+                foreach (var position in damagedPositions)
+                {
+                    var target = gridToApplyAttack[position.x, position.y];
+                    if (target == null) continue;
+                    
+                    if (target.effects.Contains(EntityData.EntityEffects.Explosive))
+                        TryApplyExplosivePowder(
+                            target,
+                            attackerGrid,
+                            position,
+                            attack.gridToApply,
+                            new List<(int x, int y)> {},
+                            new List<(int x, int y)> { attackerPosition },
+                            attackerTeam
+                        );
+                }
+            }
 
             if (attackToApply.Effect == EntityData.EntityEffects.Glue)
                 TryApplyGlue(gridToApplyAttack, damagedPositions, attackOriginPosition, attackToApply, protectedHits, attack.gridToApply);
@@ -403,8 +420,6 @@ private HashSet<(int x, int y)> GetProtectedPositions(EntityDataInstance[,] grid
 private void TryApplyExplosivePowder(
     EntityDataInstance attacker,
     EntityDataInstance[,] grid,
-    (int x, int y) origin,
-    AttackStageData stage,
     (int x, int y) attackerPosition,
     TurnState attackerTeam,
     List<(int x, int y)> protectedHits,
@@ -425,6 +440,8 @@ private void TryApplyExplosivePowder(
         var target = grid[pos.x, pos.y];
         if (target == null) 
             continue;
+        
+        if (target.effects.Contains(EntityData.EntityEffects.Explosive)) continue;
 
         // On pose l’effet explosif et on notifie
         target.AddEffect(EntityData.EntityEffects.Explosive);
