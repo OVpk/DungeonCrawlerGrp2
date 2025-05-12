@@ -449,9 +449,12 @@ private void TryApplyExplosivePowder(
         target.explosionDamages = attacker.explosionDamages;
         sendInformation.EntityGetExplosiveEffectAt(pos, targetTeam);
 
-        // On retire l’effet de l’attaquant et on notifie
-        attacker.effects.Remove(EntityData.EntityEffects.Explosive);
-        sendInformation.EntityLoseExplosiveEffectAt(attackerPosition, attackerTeam);
+        if (!attacker.isImmuneToExplosions)
+        {
+            // On retire l’effet de l’attaquant et on notifie
+            attacker.effects.Remove(EntityData.EntityEffects.Explosive);
+            sendInformation.EntityLoseExplosiveEffectAt(attackerPosition, attackerTeam);
+        }
         break;  // un seul spawn, comme avant
     }
 }

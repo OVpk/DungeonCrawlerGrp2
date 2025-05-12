@@ -24,6 +24,10 @@ public class AttackStageData : ScriptableObject
     private int glueDurability;
     public int GlueDurability => glueDurability;
     
+    [ShowIfEffect(nameof(effect), EntityData.EntityEffects.ProtectedHorizontaly, EntityData.EntityEffects.ProtectedVerticaly), SerializeField]
+    private int bubbleDurability;
+    public int BubbleDurability => bubbleDurability;
+    
     [field: SerializeField] public Condition unlockCondition { get; private set; }
     
     [field: SerializeField] public int selfDamage { get; private set; }
