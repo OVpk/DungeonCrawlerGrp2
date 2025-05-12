@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4a7c332fc5ac34bb71b082d04ea321, type: 3}
   m_Name: ChenilleAttack
   m_EditorClassIdentifier: 
-  <attackName>k__BackingField: ChenilleAttack1
+  <attackName>k__BackingField: WormAttack1
   <attackStages>k__BackingField:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 6c235a2deef398b48ab8fb0f0b716cb9, type: 2}
   <gridToCheck>k__BackingField: 1
   <gridToApply>k__BackingField: 0
   <isPositionLocked>k__BackingField: 0
