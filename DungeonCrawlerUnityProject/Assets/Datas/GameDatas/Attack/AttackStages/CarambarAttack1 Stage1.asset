@@ -15,9 +15,11 @@ MonoBehaviour:
   <effectDescription>k__BackingField: 1 DGT
   <pattern>k__BackingField: {fileID: 11400000, guid: 599d154e0586f4e49b3f0b1628811ee1, type: 2}
   <damage>k__BackingField: 1
-  effect: 1
+  effect: 0
   entityToSpawn: {fileID: 0}
   percentOfChanceOfGlue: 100
   nbOfTurnBeforeGlueGone: 1
+  percentOfChanceOfAvoidingAttackThanksToFog: 0
+  nbOfTurnBeforeFogGone: 0
   <unlockCondition>k__BackingField: {fileID: 0}
   <selfDamage>k__BackingField: 1

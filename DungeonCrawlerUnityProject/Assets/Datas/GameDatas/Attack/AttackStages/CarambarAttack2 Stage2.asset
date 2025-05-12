@@ -15,6 +15,11 @@ MonoBehaviour:
   <effectDescription>k__BackingField: COLLE
   <pattern>k__BackingField: {fileID: 11400000, guid: 02b7272d90114574093c3a8b415c0ecb, type: 2}
   <damage>k__BackingField: 0
-  <effect>k__BackingField: 1
+  effect: 1
+  entityToSpawn: {fileID: 0}
+  percentOfChanceOfGlue: 50
+  nbOfTurnBeforeGlueGone: 3
+  percentOfChanceOfAvoidingAttackThanksToFog: 0
+  nbOfTurnBeforeFogGone: 0
   <unlockCondition>k__BackingField: {fileID: 11400000, guid: 3b2dbd8f6fd183f408713f7184ff67e1, type: 2}
   <selfDamage>k__BackingField: 1
