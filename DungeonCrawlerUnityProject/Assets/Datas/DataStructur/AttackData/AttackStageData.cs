@@ -24,14 +24,6 @@ public class AttackStageData : ScriptableObject
     private int glueDurability;
     public int GlueDurability => glueDurability;
     
-    [ShowIfEffect(nameof(effect), EntityData.EntityEffects.Fog), SerializeField]
-    private int percentOfChanceOfAvoidingAttackThanksToFog;
-    public int PercentOfChanceOfAvoidingAttackThanksToFog => percentOfChanceOfAvoidingAttackThanksToFog;
-    
-    [ShowIfEffect(nameof(effect), EntityData.EntityEffects.Fog), SerializeField]
-    private int nbOfTurnBeforeFogGone;
-    public int NbOfTurnBeforeFogGone => nbOfTurnBeforeFogGone;
-    
     [field: SerializeField] public Condition unlockCondition { get; private set; }
     
     [field: SerializeField] public int selfDamage { get; private set; }

@@ -18,7 +18,8 @@ public abstract class EntityData : ScriptableObject
         Explosive,
         Protector,
         Spawner,
-        Fog
+        Fog,
+        Fogger
     }
 
     [field: SerializeField] public string entityName { get; private set; }
@@ -37,6 +38,18 @@ public abstract class EntityData : ScriptableObject
     [ShowIfEffect(nameof(effects), EntityEffects.Explosive), SerializeField]
     private int explosionDamages;
     public int ExplosionDamages => explosionDamages;
+    
+    [ShowIfEffect(nameof(effects), EntityEffects.Fogger), SerializeField]
+    private PatternData patternWhereFogGone;
+    public PatternData PatternWhereFogGone => patternWhereFogGone;
+    
+    [ShowIfEffect(nameof(effects), EntityData.EntityEffects.Fogger), SerializeField]
+    private int percentOfChanceOfAvoidingAttackThanksToFog;
+    public int PercentOfChanceOfAvoidingAttackThanksToFog => percentOfChanceOfAvoidingAttackThanksToFog;
+    
+    [ShowIfEffect(nameof(effects), EntityData.EntityEffects.Fogger), SerializeField]
+    private int nbOfTurnBeforeFogGone;
+    public int NbOfTurnBeforeFogGone => nbOfTurnBeforeFogGone;
     
     [field: SerializeField] public bool isImmuneToExplosions{ get; private set; }
     
@@ -63,6 +76,10 @@ public class EntityDataInstance
     public int percentOfChanceToGiveExplosive;
     public int explosionDamages;
 
+    public PatternData patternWhereFogGone; 
+    public int percentOfChanceOfAvoidingAttackThanksToFog;
+    public int nbOfTurnBeforeFogGone;
+
     public EntityDataInstance(EntityData data)
     {
         name = data.entityName;
@@ -76,16 +93,16 @@ public class EntityDataInstance
         if (data.Effects != null)
             foreach (var effect in data.Effects)
                 AddEffect(effect);
-        
 
         percentOfChanceToGiveExplosive = data.PercentOfChanceToGiveExplosive;
         explosionDamages = data.ExplosionDamages;
+
+        patternWhereFogGone = data.PatternWhereFogGone;
+        percentOfChanceOfAvoidingAttackThanksToFog = data.PercentOfChanceOfAvoidingAttackThanksToFog;
+        nbOfTurnBeforeFogGone = data.NbOfTurnBeforeFogGone;
     }
 
     public int glueDurability;
-    
-    public int percentOfChanceOfAvoidingAttackThanksToFog;
-    public int nbOfTurnBeforeFogGone;
 
     public void AddEffect(EntityData.EntityEffects effect)
     {

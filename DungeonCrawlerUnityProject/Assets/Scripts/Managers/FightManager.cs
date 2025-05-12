@@ -284,13 +284,6 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         {
             ApplyBubbleEffect(attacker, attackerPosition, attackerTeam, attackToApply.Effect, attackOriginPosition, gridToApplyAttack, attackToApply.pattern.positions);
         }
-        else if (attackToApply.Effect is EntityData.EntityEffects.Fog)
-        {
-            sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
-            yield return WaitAnimationEvent();
-            
-            ApplyFogEffect(attackerTeam, attackToApply, attackOriginPosition, gridToApplyAttack, attackToApply.pattern.positions);
-        }
         else if (attackToApply.Effect is EntityData.EntityEffects.Spawner)
         {
             sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
@@ -367,23 +360,23 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
 
     }
     
-    private void ApplyFogEffect(TurnState attackerTeam,
-        AttackStageData fogAttackStage,
-        (int x, int y) originPosition,
+    private void EntityApplyFogEffect(EntityDataInstance fogger,
+        TurnState foggerTeam,
+        (int x, int y) foggerPosition,
         EntityDataInstance[,] gridToApply,
         List<Vector2Int> pattern)
     {
-        List<(int x, int y)> impactedPositions = GetImpactedPositions(gridToApply, originPosition, pattern);
+        List<(int x, int y)> impactedPositions = GetImpactedPositions(gridToApply, foggerPosition, pattern);
         foreach (var position in impactedPositions)
         {
             EntityDataInstance entity = gridToApply[position.x, position.y];
             if (entity == null) continue;
             entity.AddEffect(EntityData.EntityEffects.Fog);
             entity.percentOfChanceOfAvoidingAttackThanksToFog =
-                fogAttackStage.PercentOfChanceOfAvoidingAttackThanksToFog;
-            entity.nbOfTurnBeforeFogGone = fogAttackStage.NbOfTurnBeforeFogGone;
+                fogger.percentOfChanceOfAvoidingAttackThanksToFog;
+            entity.nbOfTurnBeforeFogGone = fogger.nbOfTurnBeforeFogGone;
             
-            sendInformation.EntityGetFogEffectAt(position, attackerTeam);
+            sendInformation.EntityGetFogEffectAt(position, foggerTeam);
         }
     }
     
@@ -633,6 +626,10 @@ private IEnumerator ProcessRegularHits(
         if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Explosive)&&
             !enemyGrid[position.x, position.y].isImmuneToExplosions)
             yield return EntityExplodeAt(position, TurnState.Enemy);
+        if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Fogger))
+        {
+            EntityApplyFogEffect(enemyGrid[position.x, position.y], TurnState.Enemy, position, enemyGrid, enemyGrid[position.x, position.y].patternWhereFogGone.positions);
+        }
         if (enemyGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
         {
             sendInformation.EntityLoseGlueEffectAt(position, TurnState.Enemy);
