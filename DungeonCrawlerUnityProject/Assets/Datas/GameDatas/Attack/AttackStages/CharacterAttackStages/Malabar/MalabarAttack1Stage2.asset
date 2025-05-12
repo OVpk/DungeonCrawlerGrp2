@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd3f947d771610746bdee2c5ba7715dc, type: 3}
+  m_Name: MalabarAttack1Stage2
+  m_EditorClassIdentifier: 
+  <effectDescription>k__BackingField: 4 DGT
+  <pattern>k__BackingField: {fileID: 11400000, guid: 4b49867eb08755745a3d096ed1ecd2b3, type: 2}
+  <damage>k__BackingField: 4
+  effect: 0
+  entityToSpawn: {fileID: 0}
+  percentOfChanceOfGlue: 0
+  glueDurability: 0
+  <unlockCondition>k__BackingField: {fileID: 11400000, guid: 64686dc6706ca5448832456561bbd72d, type: 2}
+  <selfDamage>k__BackingField: 1
