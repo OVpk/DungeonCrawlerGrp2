@@ -425,13 +425,12 @@ private void TryApplyExplosivePowder(
     List<(int x, int y)> damagedPositions,
     TurnState targetTeam)
 {
-    int roll = Random.Range(0, 100);
-    if (roll >= attacker.percentOfChanceToGiveExplosive)
-        return;
 
     // Parcourt uniquement les positions qui ont pris des dégâts
     foreach (var pos in damagedPositions)
     {
+        if (Random.Range(0, 100) >= attacker.percentOfChanceToGiveExplosive) continue;
+        
         // Ignore si protégée initialement
         if (protectedHits.Contains(pos)) 
             continue;
@@ -453,8 +452,7 @@ private void TryApplyExplosivePowder(
             // On retire l’effet de l’attaquant et on notifie
             attacker.effects.Remove(EntityData.EntityEffects.Explosive);
             sendInformation.EntityLoseExplosiveEffectAt(attackerPosition, attackerTeam);
-        }
-        break;  // un seul spawn, comme avant
+        } // un seul spawn, comme avant
     }
 }
 
