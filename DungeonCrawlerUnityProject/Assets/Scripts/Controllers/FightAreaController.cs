@@ -21,9 +21,11 @@ public class FightAreaController : PlayerController
 
     public HoveredInfoController hoveredInfoController;
 
+    public ButtonHelpController buttonHelpController;
+
     private int currentAttackIndex => attackSelectorController.currentAttack;
 
-    enum SelectorState
+    public enum SelectorState
     {
         OnPlayerGrid,
         SelectAttack,
@@ -214,6 +216,7 @@ public class FightAreaController : PlayerController
     private void SwitchState(SelectorState newState)
     {
         currentState = newState;
+        buttonHelpController.DisplayHelp(currentState);
     }
     
     
