@@ -348,9 +348,9 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
             {
                 EntityApplyFogEffect(
                     fogger,
-                    attackerTeam == TurnState.Player ? TurnState.Enemy : TurnState.Player,
+                    fogger is CharacterDataInstance ? TurnState.Player : TurnState.Enemy,
                     pos,
-                    gridToApplyAttack,
+                    fogger is CharacterDataInstance ? playerGrid : enemyGrid,
                     fogger.patternWhereFogGone.positions);
             }
         }
@@ -714,6 +714,11 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
             if (e.effects.Contains(EntityData.EntityEffects.Explosive))
                 visuals.Add((i, j)); // on note pour animation visuelle
         }
+    }
+
+    if (originInsideBubble)
+    {
+        RemoveBubbleAt(position, team);
     }
 
     // 5) Suppression des bulles si explosion hors bulle (les protégés survivent)
