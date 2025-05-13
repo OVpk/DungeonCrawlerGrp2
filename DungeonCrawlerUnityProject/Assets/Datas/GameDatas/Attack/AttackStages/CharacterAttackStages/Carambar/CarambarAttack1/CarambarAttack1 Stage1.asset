@@ -18,8 +18,7 @@ MonoBehaviour:
   effect: 0
   entityToSpawn: {fileID: 0}
   percentOfChanceOfGlue: 100
-  nbOfTurnBeforeGlueGone: 1
-  percentOfChanceOfAvoidingAttackThanksToFog: 0
-  nbOfTurnBeforeFogGone: 0
+  glueDurability: 0
+  bubbleDurability: 0
   <unlockCondition>k__BackingField: {fileID: 0}
   <selfDamage>k__BackingField: 1
