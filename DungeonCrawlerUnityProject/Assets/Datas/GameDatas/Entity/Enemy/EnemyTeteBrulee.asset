@@ -16,7 +16,7 @@ MonoBehaviour:
   <durability>k__BackingField: 5
   <type>k__BackingField: 0
   effects: 04000000
-  percentOfChanceToGiveExplosive: 100
+  percentOfChanceToGiveExplosive: 80
   explosionDamages: 2
   patternWhereFogGone: {fileID: 0}
   percentOfChanceOfAvoidingAttackThanksToFog: 0

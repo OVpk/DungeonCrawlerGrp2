@@ -671,7 +671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectButton: {fileID: 149538821}
-  sceneNameToSelect: Salle3
+  sceneNameToSelect: Salle2
 --- !u!114 &149538821
 MonoBehaviour:
   m_ObjectHideFlags: 0
