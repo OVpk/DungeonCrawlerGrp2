@@ -104,6 +104,8 @@ public class EntityDataInstance
 
     public int glueDurability;
 
+    public int bubbleDurability;
+
     public void AddEffect(EntityData.EntityEffects effect)
     {
         effects.Add(effect);
