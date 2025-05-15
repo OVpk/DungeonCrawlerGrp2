@@ -17,7 +17,6 @@ public class SimpleAi : MonoBehaviour
             {
                 if (IsPositionAlreadyPlayed((i, j))) continue;
                 if (fightManager.enemyGrid[i, j] == null) continue;
-                if (fightManager.enemyGrid[i, j].effects.Contains(EntityData.EntityEffects.Glue)) continue;
                 
                 positions.Add((i, j));
             }
@@ -26,54 +25,7 @@ public class SimpleAi : MonoBehaviour
         return positions;
     }
 
-    private bool FindSpawner(out (int x, int y) spawnerPosition)
-    {
-        List<(int x, int y)> playablePositions = GetPlayablePositions();
 
-        foreach (var position in playablePositions)
-        {
-            if (fightManager.enemyGrid[position.x, position.y] is SpawnerDataInstance)
-            {
-                spawnerPosition = position;
-                return true;
-            }
-        }
-        spawnerPosition = (-1, -1);
-        return false;
-    }
-    
-    private List<(int x, int y)> GetEmptyPositions()
-    {
-        List<(int x, int y)> positions = new List<(int x, int y)>();
-
-        for (int i = 0; i < fightManager.enemyGrid.GetLength(0); i++)
-        {
-            for (int j = 0; j < fightManager.enemyGrid.GetLength(1); j++)
-            {
-                if (fightManager.enemyGrid[i, j] == null) 
-                    positions.Add((i, j));
-            }
-        }
-
-        return positions;
-    }
-
-    private IEnumerator DoSpawn((int x, int y) spawnerPosition)
-    {
-        fightManager.sendInformation.EntityAttackAt(spawnerPosition, FightManager.TurnState.Enemy);
-        yield return fightManager.WaitAnimationEvent();
-        
-        SpawnerDataInstance spawner = (SpawnerDataInstance)fightManager.enemyGrid[spawnerPosition.x, spawnerPosition.y];
-        List<(int x, int y)> emptyPositions = GetEmptyPositions();
-        foreach (var position in emptyPositions)
-        {
-            fightManager.PlaceEntityAtPosition(spawner.enemyToSpawn, position, FightManager.TurnState.Enemy);
-        }
-        
-        fightManager.AddPositionToAlreadyPlayed(spawnerPosition, FightManager.TurnState.Enemy);
-        
-        fightManager.SwitchTurn();
-    }
     
     public bool IsPositionAlreadyPlayed((int x, int y) position)
     {
@@ -82,17 +34,12 @@ public class SimpleAi : MonoBehaviour
 
     public void PlayTurn()
     {
-        if (FindSpawner(out (int x, int y) spawnerPosition))
-        {
-            StartCoroutine(DoSpawn(spawnerPosition));
-            return;
-        }
-        
         List<(int x, int y)> playablePositions = GetPlayablePositions();
 
         if (playablePositions.Count == 0)
         {
             Debug.Log("No playable positions for the enemy.");
+            fightManager.SwitchTurn();
             return;
         }
         
@@ -102,9 +49,17 @@ public class SimpleAi : MonoBehaviour
 
         AttackStageData bestAttackStage = fightManager.FindBestUnlockedStage(chosenEnemy.attacks[0]); // index toujours à 0. Pour l'instant l'ennemi n'a qu'une attaque
 
-        (int x, int y) bestAttackPosition = FindBestOriginPosition(bestAttackStage);
+        
+        (int x, int y) bestAttackPosition = ChooseAttackPosition(chosenEnemy.attacks[0], bestAttackStage, chosenPosition);
 
         StartCoroutine(fightManager.Attack(chosenPosition, 0, bestAttackPosition, FightManager.TurnState.Enemy)); // index toujours à 0. Pour l'instant l'ennemi n'a qu'une attaque
+    }
+
+    private (int x, int y) ChooseAttackPosition(AttackData attack, AttackStageData chosenStage, (int x, int y) attackerPosition)
+    {
+        if (chosenStage.Effect == EntityData.EntityEffects.Spawner) return (0, 0);
+        if (attack.isPositionLocked) return attackerPosition;
+        return FindBestOriginPosition(chosenStage);
     }
 
     private (int x, int y) FindBestOriginPosition(AttackStageData attackStage)

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5652962051869178460}
   - component: {fileID: 2674686570027247090}
   - component: {fileID: 9152660895985005361}
-  - component: {fileID: 6388685747344183748}
   m_Layer: 0
   m_Name: Fog Animation
   m_TagString: Untagged
@@ -107,18 +106,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!111 &6388685747344183748
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1919989807398033389}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 1fd4f77eefcebe142a065ee402ecf1c8, type: 2}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0

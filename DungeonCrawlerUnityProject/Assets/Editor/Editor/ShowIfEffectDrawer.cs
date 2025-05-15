@@ -1,53 +1,37 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ShowIfEffectAttribute))]
+[CustomPropertyDrawer(typeof(ShowIfEffectAttribute), true)]
 public class ShowIfEffectDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        var attr = (ShowIfEffectAttribute)attribute;
+        var attr    = (ShowIfEffectAttribute)attribute;
         var srcProp = property.serializedObject.FindProperty(attr.sourceFieldName);
 
-        // si le champ source est introuvable, on affiche quand même
-        if (srcProp == null)
+        // Si on n'a pas trouvé l'enum, on affiche par défaut
+        if (srcProp == null || srcProp.propertyType != SerializedPropertyType.Enum)
         {
             EditorGUI.PropertyField(position, property, label, true);
             return;
         }
 
-        bool shouldShow = false;
+        // Récupère la valeur courante de l'enum
+        var current = (EntityData.EntityEffects)srcProp.enumValueIndex;
 
-        // cas : champ enum unique
-        if (srcProp.propertyType == SerializedPropertyType.Enum)
+        // Recherche manuelle dans requiredEffects
+        bool shouldShow = false;
+        for (int i = 0; i < attr.requiredEffects.Length; i++)
         {
-            shouldShow = (srcProp.enumValueIndex == (int)attr.requiredEffect);
-        }
-        // cas : tableau d'enum
-        else if (srcProp.isArray && srcProp.propertyType == SerializedPropertyType.Generic)
-        {
-            for (int i = 0; i < srcProp.arraySize; i++)
+            if (attr.requiredEffects[i] == current)
             {
-                var elem = srcProp.GetArrayElementAtIndex(i);
-                if (elem.propertyType == SerializedPropertyType.Enum &&
-                    elem.enumValueIndex == (int)attr.requiredEffect)
-                {
-                    shouldShow = true;
-                    break;
-                }
+                shouldShow = true;
+                break;
             }
-        }
-        else
-        {
-            // autre type : on choisit d'afficher
-            shouldShow = true;
         }
 
         if (shouldShow)
-        {
             EditorGUI.PropertyField(position, property, label, true);
-        }
-        // else : on n'affiche rien (height sera à 0)
     }
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
@@ -55,31 +39,20 @@ public class ShowIfEffectDrawer : PropertyDrawer
         var attr    = (ShowIfEffectAttribute)attribute;
         var srcProp = property.serializedObject.FindProperty(attr.sourceFieldName);
 
-        if (srcProp == null)
+        // Par défaut, on retourne la hauteur normale si on ne peut pas vérifier
+        if (srcProp == null || srcProp.propertyType != SerializedPropertyType.Enum)
             return EditorGUI.GetPropertyHeight(property, label, true);
 
-        bool shouldShow = false;
+        var current = (EntityData.EntityEffects)srcProp.enumValueIndex;
 
-        if (srcProp.propertyType == SerializedPropertyType.Enum)
+        bool shouldShow = false;
+        for (int i = 0; i < attr.requiredEffects.Length; i++)
         {
-            shouldShow = (srcProp.enumValueIndex == (int)attr.requiredEffect);
-        }
-        else if (srcProp.isArray && srcProp.propertyType == SerializedPropertyType.Generic)
-        {
-            for (int i = 0; i < srcProp.arraySize; i++)
+            if (attr.requiredEffects[i] == current)
             {
-                var elem = srcProp.GetArrayElementAtIndex(i);
-                if (elem.propertyType == SerializedPropertyType.Enum &&
-                    elem.enumValueIndex == (int)attr.requiredEffect)
-                {
-                    shouldShow = true;
-                    break;
-                }
+                shouldShow = true;
+                break;
             }
-        }
-        else
-        {
-            shouldShow = true;
         }
 
         return shouldShow

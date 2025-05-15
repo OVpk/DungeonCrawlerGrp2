@@ -32,5 +32,12 @@ public interface IFightEventListener
     
     void OnEntityLoseExplosiveEffect((int x, int y) position, FightManager.TurnState team);
 
+    void OnEntityGetGlueEffect((int x, int y) position, FightManager.TurnState team);
+    
+    void OnEntityLoseGlueEffect((int x, int y) position, FightManager.TurnState team);
+    
+    void OnEntityGetFogEffect((int x, int y) position, FightManager.TurnState team);
+    
+    void OnEntityLoseFogEffect((int x, int y) position, FightManager.TurnState team);
 
 }

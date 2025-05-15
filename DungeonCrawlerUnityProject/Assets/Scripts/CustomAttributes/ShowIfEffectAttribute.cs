@@ -5,12 +5,12 @@ using UnityEngine;
 public class ShowIfEffectAttribute : PropertyAttribute
 {
     public readonly string sourceFieldName;
-    public readonly EntityData.EntityEffects requiredEffect;
+    public readonly EntityData.EntityEffects[] requiredEffects;
 
-    public ShowIfEffectAttribute(string sourceFieldName, EntityData.EntityEffects requiredEffect)
+    public ShowIfEffectAttribute(string sourceFieldName, params EntityData.EntityEffects[] requiredEffects)
     {
-        this.sourceFieldName  = sourceFieldName;
-        this.requiredEffect   = requiredEffect;
+        this.sourceFieldName = sourceFieldName;
+        this.requiredEffects = requiredEffects;
     }
 }
 
