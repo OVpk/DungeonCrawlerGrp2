@@ -281,7 +281,7 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
     if (attackToApply.Effect is EntityData.EntityEffects.ProtectedHorizontaly
         || attackToApply.Effect is EntityData.EntityEffects.ProtectedVerticaly)
     {
-        ApplyBubbleEffect(attacker, attackerPosition, attackerTeam,
+        ApplyBubbleEffect(attacker, attackerPosition, attackerTeam, attackToApply,
             attackToApply.Effect, attackOriginPosition, gridToApplyAttack,
             attackToApply.pattern.positions);
     }
@@ -365,13 +365,15 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
     private void ApplyBubbleEffect(EntityDataInstance protector,
         (int x, int y) protectorPosition,
         TurnState protectorTeam,
+        AttackStageData attackToApply,
         EntityData.EntityEffects effectToApply,
         (int x, int y) originPosition,
         EntityDataInstance[,] gridToApply,
         List<Vector2Int> pattern)
     {
-        
         protector.AddEffect(EntityData.EntityEffects.Protector);
+        protector.bubbleDurability = attackToApply.BubbleDurability;
+        
         switch (effectToApply)
         {
             case EntityData.EntityEffects.ProtectedHorizontaly : 
@@ -521,15 +523,52 @@ private IEnumerator ProcessProtectedHits(
     EntityDataInstance[,] grid,
     List<(int x, int y)> protectedHits)
 {
-    foreach (var pos in protectedHits)
+    var protectorPositions = new HashSet<(int x, int y)>();
+    
+    foreach (var protectedHit in protectedHits)
     {
-        // Détermine l'équipe en fonction du type d'entité
-        TurnState team = grid[pos.x, pos.y] is CharacterDataInstance
-            ? TurnState.Player : TurnState.Enemy;
-        RemoveBubbleAt(pos, team);
-        // Optionnel: attendre une animation si souhaité
-        yield return null;
+        foreach (var protectorPosition in FindProtectorPositions(protectedHit, grid))
+        {
+            protectorPositions.Add(protectorPosition);
+        }
     }
+    foreach (var protectorPosition in protectorPositions)
+    {
+        EntityDataInstance protector = grid[protectorPosition.x, protectorPosition.y];
+        protector.bubbleDurability--;
+        if (protector.bubbleDurability <= 0)
+        {
+            RemoveBubbleAt(protectorPosition, grid);
+            yield return null;
+        }
+    }
+    yield return null;
+}
+
+private HashSet<(int x, int y)> FindProtectorPositions((int x, int y) protectedPosition, EntityDataInstance[,] gridToCheck)
+{
+    HashSet<(int x, int y)> protectors = new HashSet<(int x, int y)>();
+    
+    EntityDataInstance protectedEntity = gridToCheck[protectedPosition.x, protectedPosition.y];
+    if (protectedEntity.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
+    {
+        for (int i = 0; i < gridToCheck.GetLength(1); i++)
+        {
+            if (gridToCheck[protectedPosition.x, i] == null) continue;
+            if (gridToCheck[protectedPosition.x, i].effects.Contains(EntityData.EntityEffects.Protector))
+                protectors.Add((protectedPosition.x, i));
+        }
+    }
+    if (protectedEntity.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+    {
+        for (int i = 0; i < gridToCheck.GetLength(0); i++)
+        {
+            if (gridToCheck[i, protectedPosition.y] == null) continue;
+            if (gridToCheck[i, protectedPosition.y].effects.Contains(EntityData.EntityEffects.Protector))
+                protectors.Add((i, protectedPosition.y));
+        }
+    }
+    return protectors;
 }
 
 private IEnumerator ProcessRegularHits(
@@ -569,21 +608,12 @@ private IEnumerator ProcessRegularHits(
         if (damages <= 0) yield break;
         TurnState entityTeam = entity is CharacterDataInstance ? TurnState.Player : TurnState.Enemy;
         EntityDataInstance[,] gridToApply = entityTeam == TurnState.Player ? playerGrid : enemyGrid;
-        if (entity.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly) ||
-            entity.effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
-        {
-            RemoveBubbleAt(entityPosition, entityTeam);
-        }
-        else
-        {
-            if (entity.effects.Contains(EntityData.EntityEffects.Fog) &&
-                Random.Range(0, 100) <= entity.percentOfChanceOfAvoidingAttackThanksToFog)
-                yield break;
-            
-            entity.durability -= damages;
-            sendInformation.EntityTakeDamageAt(entityPosition, damages, entityTeam);
-            yield return WaitAnimationEvent();
-        }
+        if (entity.effects.Contains(EntityData.EntityEffects.Fog) && 
+            Random.Range(0, 100) <= entity.percentOfChanceOfAvoidingAttackThanksToFog) yield break;
+        
+        entity.durability -= damages; 
+        sendInformation.EntityTakeDamageAt(entityPosition, damages, entityTeam); 
+        yield return WaitAnimationEvent();
 
         if (entity.durability <= 0)
         {
@@ -604,8 +634,7 @@ private IEnumerator ProcessRegularHits(
             yield return EntityExplodeAt(position, TurnState.Player);
         
         if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Protector))
-            RemoveBubbleAt(position, TurnState.Player);
-        
+            RemoveBubbleAt(position, playerGrid);
 
         if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Fog))
         {
@@ -718,14 +747,14 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
 
     if (originInsideBubble)
     {
-        RemoveBubbleAt(position, team);
+        RemoveBubbleAt(position, gridToApply);
     }
 
     // 5) Suppression des bulles si explosion hors bulle (les protégés survivent)
     if (!originInsideBubble)
     {
         foreach (var pos in protectedPositions)
-            RemoveBubbleAt(pos, team);
+            RemoveBubbleAt(pos, gridToApply);
     }
 
     // 6) Application des animations visuelles d'explosion pour chaîne, sans dégâts
@@ -766,13 +795,12 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
 
     public void BreakLayerAt((int x, int y) position)
     {
-        
         StartCoroutine(CharacterDeathAt(position));
     }
 
-    public void RemoveBubbleAt((int x, int y) position, TurnState team)
+    public void RemoveBubbleAt((int x, int y) position, EntityDataInstance[,] gridToApply)
     {
-        EntityDataInstance[,] gridToApply = team == TurnState.Player ? playerGrid : enemyGrid;
+        TurnState team = gridToApply is CharacterDataInstance[,] ? TurnState.Player : TurnState.Enemy;
         EntityDataInstance entity = gridToApply[position.x, position.y];
         
         if (entity.effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
