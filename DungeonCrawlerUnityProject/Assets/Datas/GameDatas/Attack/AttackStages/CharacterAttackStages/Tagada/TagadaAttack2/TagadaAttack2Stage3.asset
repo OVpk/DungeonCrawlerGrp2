@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd3f947d771610746bdee2c5ba7715dc, type: 3}
-  m_Name: TagadaAttack2 Stage1
+  m_Name: TagadaAttack2Stage3
   m_EditorClassIdentifier: 
-  <effectDescription>k__BackingField: COLLE
-  <pattern>k__BackingField: {fileID: 11400000, guid: e5631b691f3c3dd49a23127b1710b45d, type: 2}
-  <damage>k__BackingField: 0
-  effect: 1
+  <effectDescription>k__BackingField: 3 DGT
+  <pattern>k__BackingField: {fileID: 11400000, guid: d526f63c611681347bdc316d22e8521f, type: 2}
+  <damage>k__BackingField: 3
+  effect: 0
   entityToSpawn: {fileID: 0}
   percentOfChanceOfGlue: 100
   glueDurability: 1
   bubbleDurability: 0
-  <unlockCondition>k__BackingField: {fileID: 11400000, guid: 236a93a62631bb449ad88d6af16dddfb, type: 2}
+  <unlockCondition>k__BackingField: {fileID: 11400000, guid: 477fcc4b1ad62454d925de2767a8ec3f, type: 2}
   <selfDamage>k__BackingField: 0

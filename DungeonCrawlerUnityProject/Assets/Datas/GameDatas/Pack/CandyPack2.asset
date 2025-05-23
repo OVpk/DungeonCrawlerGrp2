@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <sprite>k__BackingField: {fileID: 21300000, guid: 7529b939512ff954299c5cb3995608c0, type: 3}
   <candyData>k__BackingField: {fileID: 11400000, guid: df8c59e0d1da24e489c26865754fbc2b, type: 2}
-  <stock>k__BackingField: 10
+  <stock>k__BackingField: 5

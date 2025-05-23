@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <attackName>k__BackingField: COLLANT
   <attackStages>k__BackingField:
-  - {fileID: 11400000, guid: be41704c294eb8d4290e319c4905e49b, type: 2}
   - {fileID: 11400000, guid: ce2a0cbd27df3364dbbcf934252723ba, type: 2}
   - {fileID: 11400000, guid: aa85220661c2a5d48930c677bc4cf8bb, type: 2}
   - {fileID: 11400000, guid: d0046c022edf1784090e2c9e845728c4, type: 2}
