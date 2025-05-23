@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f4a7c332fc5ac34bb71b082d04ea321, type: 3}
+  m_Name: TagadaAttack2
+  m_EditorClassIdentifier: 
+  <attackName>k__BackingField: ATTAQUE 2
+  <attackStages>k__BackingField:
+  - {fileID: 11400000, guid: a5290467303e4a64bb3e619f36fce9aa, type: 2}
+  - {fileID: 11400000, guid: db00f3579ae29b84098b840d01064aa7, type: 2}
+  - {fileID: 11400000, guid: 46b5a5d1fb550bc40b0159da8c3c9730, type: 2}
+  <gridToCheck>k__BackingField: 0
+  <gridToApply>k__BackingField: 1
+  <isPositionLocked>k__BackingField: 0

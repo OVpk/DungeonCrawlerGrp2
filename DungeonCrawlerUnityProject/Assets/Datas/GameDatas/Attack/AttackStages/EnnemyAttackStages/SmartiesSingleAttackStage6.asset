@@ -15,5 +15,10 @@ MonoBehaviour:
   <effectDescription>k__BackingField: SmartiesSingleAttackStage6
   <pattern>k__BackingField: {fileID: 11400000, guid: 1284ad7f5c457814a9f9553c2c443f93, type: 2}
   <damage>k__BackingField: 3
+  effect: 0
+  entityToSpawn: {fileID: 0}
+  percentOfChanceOfGlue: 0
+  glueDurability: 0
+  bubbleDurability: 0
   <unlockCondition>k__BackingField: {fileID: 11400000, guid: 3aac72dbc0373c64cacedfbfb64e28d4, type: 2}
-  <selfDamage>k__BackingField: 1
+  <selfDamage>k__BackingField: 0
