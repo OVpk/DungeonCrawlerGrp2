@@ -56,19 +56,31 @@ public class ComplexCarousel : MonoBehaviour
             attacks.Add(attackData);
         }
         SetBestStageIndex();
-        currentAttackStage = bestAttackStageIndex;
+        currentAttackStage = bestAttackStageIndex >= 0 ? bestAttackStageIndex : 0;
+        UpdateDisplay();
+    }
+
+    public void FixStageToBest()
+    {
+        SetBestStageIndex();
+        currentAttackStage = bestAttackStageIndex >= 0 ? bestAttackStageIndex : 0;
         UpdateDisplay();
     }
 
     private void SetBestStageIndex()
     {
         AttackStageData bestAttackStage = FightManager.Instance.FindBestUnlockedStage(attacks[currentAttack]);
+        if (bestAttackStage == null)
+        {
+            bestAttackStageIndex = -1;
+            return;
+        }
         for (int i = 0; i < attacks[currentAttack].attackStages.Length; i++)
         {
             if (attacks[currentAttack].attackStages[i] == bestAttackStage)
             {
                 bestAttackStageIndex = i;
-                break;
+                return;
             }
         }
     }
@@ -97,7 +109,7 @@ public class ComplexCarousel : MonoBehaviour
         currentAttack = newCard;
         
         SetBestStageIndex();
-        currentAttackStage = bestAttackStageIndex;
+        currentAttackStage = bestAttackStageIndex >= 0 ? bestAttackStageIndex : 0;
 
         var seq = DOTween.Sequence();
         seq.Join(leftCard.DOAnchorPos(leftTarget, horizontalDuration).SetEase(horizontalEase));

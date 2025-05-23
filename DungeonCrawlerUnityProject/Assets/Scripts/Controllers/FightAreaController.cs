@@ -181,11 +181,15 @@ public class FightAreaController : PlayerController
 
     private void SelectAttack()
     {
+        if (FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attacks[currentAttackIndex]) == null) return;
+        
         SwitchState(SelectorState.SelectAttackPosition);
         
         List<Vector2Int> obsoletePattern = selectedCharacter.attacks[currentAttackIndex].attackStages[currentStageIndex].pattern.positions;
         FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, obsoletePattern, selectedCharacter.attacks[currentAttackIndex].gridToApply);
         
+        attackSelectorController.FixStageToBest();
+        SetAttackOriginPosition();
         MoveAttackPattern((0,0));
     }
 
@@ -211,6 +215,8 @@ public class FightAreaController : PlayerController
         FightManager.Instance.sendInformation.EntitiesNoLongerTargetedByPatternAt(attackOriginPosition, pattern, selectedCharacter.attacks[currentAttackIndex].gridToApply);
         
         SwitchState(SelectorState.SelectAttack);
+        
+        attackSelectorController.FixStageToBest();
         SetAttackOriginPosition();
         MoveAttackPattern((0,0));
     }
