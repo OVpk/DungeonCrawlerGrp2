@@ -45,7 +45,7 @@ public class ComplexCarousel : MonoBehaviour
 
     private Color actualStageColor = new Color(0.6549f, 1f, 0.4863f);
     private Color obsoleteStageColor = new Color(0.6039f, 0.6039f, 0.6039f);
-    private Color nextStageColor = new Color(1f, 1f, 1f);
+    private Color nextStageColor = new Color(1f, 0.4f, 0.4f);
 
     public void LoadData(AttackData[] attacksData)
     {
