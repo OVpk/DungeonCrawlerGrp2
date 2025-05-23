@@ -200,7 +200,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
             _ => throw new ArgumentOutOfRangeException()
         };
         
-        AttackStageData bestStage = attack.attackStages[0];
+        AttackStageData bestStage = null;
         for (int i = attack.attackStages.Length-1; i >= 0; i--)
         {
             if (attack.attackStages[i].IsUnlock(gridToCheck))
