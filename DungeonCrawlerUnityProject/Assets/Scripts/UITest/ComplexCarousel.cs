@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+
 
 public class ComplexCarousel : MonoBehaviour
 {
@@ -32,23 +34,43 @@ public class ComplexCarousel : MonoBehaviour
     public Ease verticalEase = Ease.OutQuad;
 
     public int currentAttack = 0;
-    private int currentAttackStage = 0;
+    public int currentAttackStage = 0;
+    private int bestAttackStageIndex = 0;
     private bool isHorizontalAnimating = false;
     private bool isVerticalAnimating = false;
 
     private Vector2 leftCardPos, centerCardPos, rightCardPos;
     private Vector2 topEntryPos, centerEntryPos, bottomEntryPos;
 
+
+    private Color actualStageColor = new Color(0.6549f, 1f, 0.4863f);
+    private Color obsoleteStageColor = new Color(0.6039f, 0.6039f, 0.6039f);
+    private Color nextStageColor = new Color(1f, 1f, 1f);
+
     public void LoadData(AttackData[] attacksData)
     {
         currentAttack = 0;
-        currentAttackStage = 0;
         attacks.Clear();
         foreach (var attackData in attacksData)
         {
             attacks.Add(attackData);
         }
+        SetBestStageIndex();
+        currentAttackStage = bestAttackStageIndex;
         UpdateDisplay();
+    }
+
+    private void SetBestStageIndex()
+    {
+        AttackStageData bestAttackStage = FightManager.Instance.FindBestUnlockedStage(attacks[currentAttack]);
+        for (int i = 0; i < attacks[currentAttack].attackStages.Length; i++)
+        {
+            if (attacks[currentAttack].attackStages[i] == bestAttackStage)
+            {
+                bestAttackStageIndex = i;
+                break;
+            }
+        }
     }
 
     void Start()
@@ -73,6 +95,9 @@ public class ComplexCarousel : MonoBehaviour
         Vector2 rightTarget  = dir > 0 ? leftCardPos   : centerCardPos;
         
         currentAttack = newCard;
+        
+        SetBestStageIndex();
+        currentAttackStage = bestAttackStageIndex;
 
         var seq = DOTween.Sequence();
         seq.Join(leftCard.DOAnchorPos(leftTarget, horizontalDuration).SetEase(horizontalEase));
@@ -81,7 +106,6 @@ public class ComplexCarousel : MonoBehaviour
 
         seq.OnComplete(() =>
         {
-            currentAttackStage = 0; // reset vertical on new card
             ResetHorizontalPositions();
             UpdateDisplay();
             isHorizontalAnimating = false;
@@ -92,7 +116,11 @@ public class ComplexCarousel : MonoBehaviour
     {
         if (attacks[currentAttack].attackStages.Length < 2) return;
         isVerticalAnimating = true;
-        int newEntry = (currentAttackStage + dir).Mod(attacks[currentAttack].attackStages.Length);
+        int newEntry = currentAttackStage + dir;
+        
+        if (newEntry < 0 || newEntry >= attacks[currentAttack].attackStages.Length) return;
+        
+        currentAttackStage = newEntry;
 
         Vector2 topTarget    = dir > 0 ? topEntryPos    : centerEntryPos;
         Vector2 centerTarget = dir > 0 ? centerEntryPos : bottomEntryPos;
@@ -105,7 +133,6 @@ public class ComplexCarousel : MonoBehaviour
 
         seq.OnComplete(() =>
         {
-            currentAttackStage = newEntry;
             ResetVerticalPositions();
             UpdateDisplay();
             isVerticalAnimating = false;
@@ -133,6 +160,38 @@ public class ComplexCarousel : MonoBehaviour
         centerMainText.text = attack.attackName;
         // Update center entry text
         var attackStage = attack.attackStages[currentAttackStage];
+
+        if (currentAttackStage == bestAttackStageIndex)
+        {
+            centerEntry.gameObject.GetComponent<Image>().color = actualStageColor;
+        }
+        else if (currentAttackStage < bestAttackStageIndex)
+        {
+            centerEntry.gameObject.GetComponent<Image>().color = obsoleteStageColor;
+        }
+        else if (currentAttackStage > bestAttackStageIndex)
+        {
+            centerEntry.gameObject.GetComponent<Image>().color = nextStageColor;
+        }
+
+        if (currentAttackStage == 0)
+        {
+            bottomEntry.gameObject.GetComponent<Image>().enabled = false;
+        }
+        else
+        {
+            bottomEntry.gameObject.GetComponent<Image>().enabled = true;
+        }
+
+        if (currentAttackStage == attack.attackStages.Length-1)
+        {
+            topEntry.gameObject.GetComponent<Image>().enabled = false;
+        }
+        else
+        {
+            topEntry.gameObject.GetComponent<Image>().enabled = true;
+        }
+        
         if (attackStage.unlockCondition == null)
         {
             centerConditionText.text = "X";
