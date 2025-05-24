@@ -69,7 +69,12 @@ public class LevelManager : MonoBehaviour
         
         levelDisplayer.DisplayLevel(false);
         levelDisplayer.DisplayArea(true);
-        GameManager.Instance.ChangeController(GameManager.ControllerTypes.InArea);
+        GameManager.Instance.ChangeController(GameManager.ControllerTypes.InFightArea);
+    }
+
+    public void EnterFightArea(FightAreaData fightArea)
+    {
+        
     }
 
     public void ExitArea()
@@ -83,15 +88,6 @@ public class LevelManager : MonoBehaviour
     {
         currentAreaPosition = position;
         currentArea = level[currentAreaPosition.x, currentAreaPosition.y];
-    }
-    
-    private void SaveFightArea(FightAreaData fightArea)
-    {
-        if (lastFightAreas.Count == maxNbOfFightAreasSaved)
-        {
-            lastFightAreas.Dequeue();
-        }
-        lastFightAreas.Enqueue(fightArea);
     }
 
     private void GoToNextStep()
