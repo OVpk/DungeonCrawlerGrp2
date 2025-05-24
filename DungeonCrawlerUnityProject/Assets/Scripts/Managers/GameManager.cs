@@ -5,13 +5,11 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] private OverWorldController overWorldController;
-    [SerializeField] private AreaController areaController;
     [SerializeField] private FightAreaController fightAreaController;
     
     public enum ControllerTypes
     {
         InOverWorld,
-        InArea,
         InFightArea
     }
 
@@ -31,8 +29,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        ChangeController(ControllerTypes.InFightArea);
+        ChangeController(ControllerTypes.InOverWorld);
     }
+    
+    
 
     public void ChangeController(ControllerTypes newControllerType)
     {
@@ -41,17 +41,10 @@ public class GameManager : MonoBehaviour
         {
             case ControllerTypes.InOverWorld :
                 overWorldController.ChangeActiveState(true);
-                areaController.ChangeActiveState(false);
-                fightAreaController.ChangeActiveState(false);
-                break;
-            case ControllerTypes.InArea :
-                overWorldController.ChangeActiveState(false);
-                areaController.ChangeActiveState(true);
                 fightAreaController.ChangeActiveState(false);
                 break;
             case ControllerTypes.InFightArea :
                 overWorldController.ChangeActiveState(false);
-                areaController.ChangeActiveState(false);
                 fightAreaController.ChangeActiveState(true);
                 break;
         }

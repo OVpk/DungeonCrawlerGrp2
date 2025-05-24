@@ -84,8 +84,6 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
 
     private HashSet<(int x, int y)> playerAlreadyPlayedPositions = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> enemyAlreadyPlayedPositions = new HashSet<(int x, int y)>();
-    
-    public EnemyGridData enemyGridData;
 
     public List<CandyPackData> candyPackData;
     public List<CandyPackDataInstance> candyPack = new List<CandyPackDataInstance>();
@@ -93,7 +91,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
 
     [SerializeField] public SimpleCardSlider packDisplayer;
 
-    private void InitEnemyGrid()
+    private void InitEnemyGrid(EnemyGridData enemyGridData)
     {
         EnemyData[,] enemyGridData2d = enemyGridData.Enemies2D;
         for (int i = 0; i < enemyGrid.GetLength(0); i++)
@@ -143,8 +141,11 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     {
         InitDisplayedGrid(playerGrid);
         InitDisplayedGrid(enemyGrid);
-        
-        InitEnemyGrid();
+    }
+
+    public void LoadFightArea(FightAreaData data)
+    {
+        InitEnemyGrid(data.enemyGrid);
     }
 
     #region Display
