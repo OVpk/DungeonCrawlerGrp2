@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: Carambar1
   m_EditorClassIdentifier: 
   <entityName>k__BackingField: CARAMBAR
-  <durability>k__BackingField: 4
+  <durability>k__BackingField: 3
   <type>k__BackingField: 0
   effects: 
   percentOfChanceToGiveExplosive: 0
   explosionDamages: 0
+  patternWhereFogGone: {fileID: 0}
+  percentOfChanceOfAvoidingAttackThanksToFog: 0
+  nbOfTurnBeforeFogGone: 0
   <isImmuneToExplosions>k__BackingField: 0
   <sprite>k__BackingField: {fileID: 21300000, guid: fc744db934c325841b5c8e0b9459d477, type: 3}
   <animator>k__BackingField: {fileID: 22100000, guid: 10ffa4f3c60acbf44953f3392ad189bc, type: 2}

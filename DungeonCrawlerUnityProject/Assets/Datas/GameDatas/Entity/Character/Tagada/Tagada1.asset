@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tagada1
   m_EditorClassIdentifier: 
   <entityName>k__BackingField: TAGADA
-  <durability>k__BackingField: 2
+  <durability>k__BackingField: 1
   <type>k__BackingField: 0
   effects: 
   percentOfChanceToGiveExplosive: 0
