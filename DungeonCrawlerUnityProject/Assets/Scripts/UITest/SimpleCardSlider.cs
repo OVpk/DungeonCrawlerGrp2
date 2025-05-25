@@ -34,8 +34,6 @@ public class SimpleCardSlider : MonoBehaviour
         centerPos = centerImage.rectTransform.anchoredPosition;
         rightPos = rightImage.rectTransform.anchoredPosition;
         imageScale = Vector3.one;
-
-        UpdateDisplay();
     }
 
     public void UpdateDisplay()

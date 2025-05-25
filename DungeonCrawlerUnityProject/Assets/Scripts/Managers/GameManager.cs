@@ -4,18 +4,21 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [SerializeField] private OverWorldController overWorldController;
-    [SerializeField] private AreaController areaController;
+    [SerializeField] private ExplorationController overWorldController;
     [SerializeField] private FightAreaController fightAreaController;
+
+    private GameObject fightScene => FightManager.Instance.transform.root.gameObject;
+    private GameObject explorationScene => ExplorationManager.Instance.transform.root.gameObject;
     
-    public enum ControllerTypes
+    public enum GameState
     {
         InOverWorld,
-        InArea,
         InFightArea
     }
 
-    private ControllerTypes currentControllerType;
+    private GameState currentGameState;
+
+    public CandyPackDataInstance[] candyPacks;
 
     private void Awake()
     {
@@ -31,27 +34,41 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        ChangeController(ControllerTypes.InFightArea);
+        ChangeController(GameState.InOverWorld);
     }
 
-    public void ChangeController(ControllerTypes newControllerType)
+    public void ChangeGameState(GameState newGameState)
     {
-        currentControllerType = newControllerType;
-        switch (currentControllerType)
+        currentGameState = newGameState;
+        ChangeDisplayedScene(currentGameState);
+        ChangeController(currentGameState);
+    }
+
+    private void ChangeDisplayedScene(GameState newGameState)
+    {
+        switch (newGameState)
         {
-            case ControllerTypes.InOverWorld :
+            case GameState.InOverWorld :
+                explorationScene.SetActive(true);
+                fightScene.SetActive(false);
+                break;
+            case GameState.InFightArea :
+                explorationScene.SetActive(false);
+                fightScene.SetActive(true);
+                break;
+        }
+    }
+
+    private void ChangeController(GameState newGameState)
+    {
+        switch (newGameState)
+        {
+            case GameState.InOverWorld :
                 overWorldController.ChangeActiveState(true);
-                areaController.ChangeActiveState(false);
                 fightAreaController.ChangeActiveState(false);
                 break;
-            case ControllerTypes.InArea :
+            case GameState.InFightArea :
                 overWorldController.ChangeActiveState(false);
-                areaController.ChangeActiveState(true);
-                fightAreaController.ChangeActiveState(false);
-                break;
-            case ControllerTypes.InFightArea :
-                overWorldController.ChangeActiveState(false);
-                areaController.ChangeActiveState(false);
                 fightAreaController.ChangeActiveState(true);
                 break;
         }
