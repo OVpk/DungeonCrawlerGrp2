@@ -26,6 +26,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         if (IsCleaningGridNecessary(currentTurn)) CleanAlreadyPlayedPositions(currentTurn);
         EndTurn(currentTurn);
         
+        CheckEndGame();
         
         currentTurn = currentTurn == TurnState.Player ? TurnState.Enemy : TurnState.Player;
         
@@ -124,6 +125,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         candyPack.Clear();
         foreach (var pack in packs)
         {
+            if (pack == null) continue;
             candyPack.Add(pack);
         }
         packDisplayer.packs = candyPack;
@@ -673,6 +675,8 @@ private IEnumerator ProcessRegularHits(
             playerGrid[position.x, position.y] = null;
             sendInformation.EntityDeathAt(position, TurnState.Player);
             yield return WaitAnimationEvent();
+            
+            CheckEndGame();
         }
         else
         {
@@ -950,9 +954,33 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         return positions;
     }
 
-    private void ExitArea()
+    private IEnumerator ExitArea()
     {
+        yield return new WaitForSeconds(3f);
         GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
         ExplorationManager.Instance.SetDisplay();
+    }
+
+    private bool HaveLoose(TurnState teamToCheck)
+    {
+        EntityDataInstance[,] gridToCheck = teamToCheck == TurnState.Player ? playerGrid : enemyGrid;
+        if (!IsCharacterStockEmpty(teamToCheck)) return false;
+        foreach (var entity in gridToCheck)
+            if (entity != null) return false;
+        return true;
+    }
+
+    private void CheckEndGame()
+    {
+        if (HaveLoose(TurnState.Player))
+        {
+            throw new Exception("l'enemi a gagné");
+        }
+        else if (HaveLoose(TurnState.Enemy))
+        {
+            //DONNER RECOMPENSES AUSSI
+            GameManager.Instance.candyPacks = candyPack.ToArray();
+            StartCoroutine(ExitArea());
+        }
     }
 }

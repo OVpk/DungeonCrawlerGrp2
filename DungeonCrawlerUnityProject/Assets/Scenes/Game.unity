@@ -282,7 +282,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 582483025}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &582483029
 Camera:
   m_ObjectHideFlags: 0
@@ -344,8 +344,8 @@ GameObject:
   m_Component:
   - component: {fileID: 727970721}
   - component: {fileID: 727970720}
-  - component: {fileID: 727970719}
   - component: {fileID: 727970718}
+  - component: {fileID: 727970722}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -380,7 +380,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 727970719}
+      - m_Target: {fileID: 727970722}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: MovementAction
         m_Mode: 0
@@ -408,7 +408,7 @@ MonoBehaviour:
     m_ActionName: X-Box Controller/D-Pad[/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/right,/XInputControllerWindows/dpad/up]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 727970719}
+      - m_Target: {fileID: 727970722}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: ButtonAction
         m_Mode: 0
@@ -439,18 +439,6 @@ MonoBehaviour:
   m_DefaultActionMap: X-Box Controller
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &727970719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 727970717}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d2c4773b1c906945b095e70d7694167, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &727970720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,6 +470,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &727970722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727970717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ce4b1750e60064d8a110d2935efff2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &878838197
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,6 +597,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 981572477}
+  - component: {fileID: 981572478}
   m_Layer: 0
   m_Name: Exploration
   m_TagString: Untagged
@@ -621,6 +622,21 @@ Transform:
   - {fileID: 878838198}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &981572478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 981572476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03556e3ace5226a489fd8ed299d575fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customLevelData: {fileID: 11400000, guid: c2a95257fe9772a4dbe10f2f144d423c, type: 2}
+  leftDisplayedArea: {fileID: 1668440757}
+  rightDisplayedArea: {fileID: 990226628}
 --- !u!1 &990226624
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,6 +648,7 @@ GameObject:
   - component: {fileID: 990226625}
   - component: {fileID: 990226627}
   - component: {fileID: 990226626}
+  - component: {fileID: 990226628}
   m_Layer: 5
   m_Name: RightArea
   m_TagString: Untagged
@@ -696,6 +713,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990226624}
   m_CullTransparentMesh: 1
+--- !u!114 &990226628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990226624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cddfe360e213814089b5f6fe5876a02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseRenderer: {fileID: 990226626}
+  rewardText: {fileID: 0}
 --- !u!1 &1165411349
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,8 +756,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd260ca29f8294f4281aa8e0db603ff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overWorldController: {fileID: 0}
+  overWorldController: {fileID: 727970722}
   fightAreaController: {fileID: 727970720}
+  firstPack: {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}
 --- !u!4 &1165411351
 Transform:
   m_ObjectHideFlags: 0
@@ -828,6 +860,7 @@ GameObject:
   - component: {fileID: 1668440754}
   - component: {fileID: 1668440756}
   - component: {fileID: 1668440755}
+  - component: {fileID: 1668440757}
   m_Layer: 5
   m_Name: LeftArea
   m_TagString: Untagged
@@ -892,6 +925,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1668440753}
   m_CullTransparentMesh: 1
+--- !u!114 &1668440757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668440753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cddfe360e213814089b5f6fe5876a02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseRenderer: {fileID: 1668440755}
+  rewardText: {fileID: 0}
 --- !u!1 &1861222563
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,6 +1140,10 @@ PrefabInstance:
     - target: {fileID: 6119153587705070626, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
       propertyPath: m_Name
       value: FightArea
+      objectReference: {fileID: 0}
+    - target: {fileID: 8480016163251829905, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
