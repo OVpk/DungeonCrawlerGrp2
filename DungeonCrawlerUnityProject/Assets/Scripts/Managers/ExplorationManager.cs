@@ -26,13 +26,12 @@ public class ExplorationManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
     }
 
     private void Start()
     {
-        Array.Copy(customLevelData.customLevel2d, level, customLevelData.customLevel2d.Length);
+        level = customLevelData.customLevel2d;
         SwitchCurrentAreaTo((0,0));
     }
 
@@ -72,8 +71,14 @@ public class ExplorationManager : MonoBehaviour
     {
         switch (direction)
         {
-            case (1, 0) : leftDisplayedArea.SetHighlight(Color.magenta); break;
-            case (0, 1) : rightDisplayedArea.SetHighlight(Color.magenta); break;
+            case (1, 0) : 
+                leftDisplayedArea.SetHighlight(Color.magenta);
+                rightDisplayedArea.ClearHighlight();
+                break;
+            case (0, 1) : 
+                rightDisplayedArea.SetHighlight(Color.magenta); 
+                leftDisplayedArea.ClearHighlight();
+                break;
             default: throw new Exception("Impossible direction");
         }
     }

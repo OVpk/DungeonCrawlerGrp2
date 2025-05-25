@@ -18,7 +18,9 @@ public class GameManager : MonoBehaviour
 
     private GameState currentGameState;
 
-    public CandyPackDataInstance[] candyPacks;
+    public CandyPackDataInstance[] candyPacks = new CandyPackDataInstance[3];
+
+    public CandyPackData firstPack;
 
     private void Awake()
     {
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        candyPacks[0] = firstPack.Instance();
         ChangeController(GameState.InOverWorld);
     }
 
