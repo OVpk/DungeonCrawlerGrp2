@@ -35,6 +35,28 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         entityLocation.GetComponent<SpriteRenderer>().sortingOrder -= positionInGrid.x;
         entity.GetComponent<SpriteRenderer>().sortingOrder -= positionInGrid.x;
     }
+
+    public void ResetDisplay()
+    {
+        isEntityActived = false;
+        isBubbleHLeftActive = false;
+        isBubbleHMiddleActive = false;
+        isBubbleHRightActive = false;
+        isBubbleVActive = false;
+        
+        durabilityText.gameObject.SetActive(false);
+        typeText.gameObject.SetActive(false);
+        
+        entity.ClearHighlight();
+        entity.gameObject.SetActive(false);
+        
+        entityLocation.SetGrayscale(false);
+        entityLocation.ClearHighlight();
+        
+        effectDisplayer.fogAnim.gameObject.SetActive(false);
+        effectDisplayer.glueAnim.gameObject.SetActive(false);
+        effectDisplayer.explosivePowder.gameObject.SetActive(false);
+    }
     
 
     private bool IsConcerned((int x, int y) pos, FightManager.TurnState evtTeam)
@@ -310,5 +332,12 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         effectDisplayer.fogAnim.gameObject.SetActive(false);
+    }
+
+    public void OnGridIsClear(FightManager.TurnState team)
+    {
+        if (this.team != team) return;
+        
+        ResetDisplay();
     }
 }

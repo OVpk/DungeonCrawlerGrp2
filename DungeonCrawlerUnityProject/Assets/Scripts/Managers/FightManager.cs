@@ -85,14 +85,29 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     private HashSet<(int x, int y)> playerAlreadyPlayedPositions = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> enemyAlreadyPlayedPositions = new HashSet<(int x, int y)>();
 
-    public List<CandyPackData> candyPackData;
     public List<CandyPackDataInstance> candyPack = new List<CandyPackDataInstance>();
 
 
     [SerializeField] public SimpleCardSlider packDisplayer;
 
+    private void ClearGrid(EntityDataInstance[,] grid)
+    {
+        TurnState team = grid is CharacterDataInstance[,] ? TurnState.Player :
+            grid is EnemyDataInstance[,] ? TurnState.Enemy : throw new ArgumentOutOfRangeException(nameof(grid));
+        for (int i = 0; i < grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < grid.GetLength(1); j++)
+            {
+                grid[0, 0] = null;
+            }
+        }
+        sendInformation.GridIsClear(team);
+    }
+
     private void InitEnemyGrid(EnemyGridData enemyGridData)
     {
+        ClearGrid(enemyGrid);
+        
         EnemyData[,] enemyGridData2d = enemyGridData.Enemies2D;
         for (int i = 0; i < enemyGrid.GetLength(0); i++)
         {
@@ -104,13 +119,15 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         }
     }
     
-    private void InitPack()
+    private void InitPack(CandyPackDataInstance[] packs)
     {
-        foreach (var pack in candyPackData)
+        candyPack.Clear();
+        foreach (var pack in packs)
         {
-            candyPack.Add(pack.Instance());
+            candyPack.Add(pack);
         }
         packDisplayer.packs = candyPack;
+        packDisplayer.UpdateDisplay();
     }
 
     public void PlaceCharacterFromPack(CandyPackDataInstance pack, (int x, int y)position)
@@ -134,7 +151,6 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         {
             Instance = this;
         }
-        InitPack();
     }
 
     private void Start()
@@ -143,9 +159,15 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         InitDisplayedGrid(enemyGrid);
     }
 
-    public void LoadFightArea(FightAreaData data)
+    public void LoadFightArea(FightAreaData data, CandyPackDataInstance[] packsInInventory)
     {
+        InitPack(packsInInventory);
         InitEnemyGrid(data.enemyGrid);
+        CleanAlreadyPlayedPositions(TurnState.Player);
+        CleanAlreadyPlayedPositions(TurnState.Enemy);
+        if (currentTurn == TurnState.Enemy) SwitchTurn();
+        
+        
     }
 
     #region Display
@@ -926,5 +948,11 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
             }
         }
         return positions;
+    }
+
+    private void ExitArea()
+    {
+        GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
+        ExplorationManager.Instance.SetDisplay();
     }
 }

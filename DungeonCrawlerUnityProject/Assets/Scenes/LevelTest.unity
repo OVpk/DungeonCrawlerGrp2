@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overWorldController: {fileID: 748583407}
-  areaController: {fileID: 748583409}
+  fightAreaController: {fileID: 0}
 --- !u!1 &357117520
 GameObject:
   m_ObjectHideFlags: 0
