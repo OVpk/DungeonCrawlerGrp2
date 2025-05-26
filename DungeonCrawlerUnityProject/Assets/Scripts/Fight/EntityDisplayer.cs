@@ -40,12 +40,6 @@ public class EntityDisplayer : MonoBehaviour
         baseRenderer.sprite = data.sprite;
         animator.runtimeAnimatorController = data.animator;
     }
-    
-
-    public void SetGrayscale(bool active)
-    {
-        _instanceMaterial.SetFloat(UseGrayscale, active ? 1f : 0f);
-    }
 
     public void SetHighlight(Color color)
     {
