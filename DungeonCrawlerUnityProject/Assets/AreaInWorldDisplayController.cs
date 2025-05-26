@@ -16,6 +16,8 @@ public class AreaInWorldDisplayController : MonoBehaviour
 
     public TMP_Text rewardText;
     
+    public TMP_Text areaName;
+    
     private void Awake()
     {
         // Clone material instance to avoid global changes
@@ -29,6 +31,7 @@ public class AreaInWorldDisplayController : MonoBehaviour
     {
         ClearHighlight();
         DisplayRewards(fightArea);
+        areaName.text = fightArea.areaName;
     }
 
     private void DisplayRewards(FightAreaData fightArea)

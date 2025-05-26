@@ -17,6 +17,11 @@ public class ExplorationManager : MonoBehaviour
     
     [SerializeField] private CustomLevelData customLevelData;
     
+    public TMP_Text moneyText;
+
+
+
+    
     private void Awake()
     {
         if (Instance != null)
@@ -65,6 +70,7 @@ public class ExplorationManager : MonoBehaviour
     {
         leftDisplayedArea.Init((FightAreaData)leftArea);
         rightDisplayedArea.Init((FightAreaData)rightArea);
+        UpdateMoneyUI();
     }
 
     public void MoveAreaSelector((int x, int y) direction)
@@ -81,5 +87,10 @@ public class ExplorationManager : MonoBehaviour
                 break;
             default: throw new Exception("Impossible direction");
         }
+    }
+    
+    private void UpdateMoneyUI()
+    {
+        moneyText.text = GameManager.Instance.money.ToString();
     }
 }
