@@ -50,7 +50,7 @@ public class ExplorationManager : MonoBehaviour
         if (currentArea is FightAreaData data)
         {
             GameManager.Instance.ChangeGameState(GameManager.GameState.InFightArea);
-            FightManager.Instance.LoadFightArea(data, GameManager.Instance.candyPacks);
+            FightManager.Instance.LoadFightArea(data);
         }
         else
         {

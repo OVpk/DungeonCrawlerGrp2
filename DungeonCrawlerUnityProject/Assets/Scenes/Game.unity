@@ -197,6 +197,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225025703}
   m_CullTransparentMesh: 1
+--- !u!1001 &387376248
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4943459011666813209, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_Name
+      value: Shop
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289301595126425802, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.389823
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289301595126425802, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.701812
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289301595126425802, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.999602
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289301595126425802, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289301595126425802, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289301595126425802, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289301595126425802, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289301595126425802, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289301595126425802, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6289301595126425802, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
 --- !u!1 &582483025
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,6 +403,7 @@ GameObject:
   - component: {fileID: 727970720}
   - component: {fileID: 727970718}
   - component: {fileID: 727970722}
+  - component: {fileID: 727970723}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -480,6 +538,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2ce4b1750e60064d8a110d2935efff2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &727970723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727970717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f234c884dc1e0409fe141e7abf27af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &878838197
@@ -634,7 +704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03556e3ace5226a489fd8ed299d575fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customLevelData: {fileID: 11400000, guid: c2a95257fe9772a4dbe10f2f144d423c, type: 2}
+  customLevelData: {fileID: 11400000, guid: 5d23a47ed1f6f184e85d499df1e37eac, type: 2}
   leftDisplayedArea: {fileID: 1668440757}
   rightDisplayedArea: {fileID: 990226628}
 --- !u!1 &990226624
@@ -758,7 +828,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overWorldController: {fileID: 727970722}
   fightAreaController: {fileID: 727970720}
-  firstPack: {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}
+  shopController: {fileID: 0}
+  firstPacks: []
+  money: 0
 --- !u!4 &1165411351
 Transform:
   m_ObjectHideFlags: 0
@@ -1196,3 +1268,4 @@ SceneRoots:
   - {fileID: 5984751795696660366}
   - {fileID: 981572477}
   - {fileID: 6541232235687459792}
+  - {fileID: 387376248}

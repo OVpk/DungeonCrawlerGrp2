@@ -7,4 +7,6 @@ public class FightAreaData : AreaData
     
     [field: SerializeField] public EnemyGridData enemyGrid { get; private set; }
     
+    [field: SerializeField] public RewardData reward { get; private set; }
+    
 }
