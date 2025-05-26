@@ -828,8 +828,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overWorldController: {fileID: 727970722}
   fightAreaController: {fileID: 727970720}
-  shopController: {fileID: 0}
-  firstPacks: []
+  shopController: {fileID: 727970723}
+  firstPacks:
+  - {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
   money: 0
 --- !u!4 &1165411351
 Transform:
