@@ -9,18 +9,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93551563d6238c141bf8069e80005295, type: 3}
+  m_Script: {fileID: 0}
   m_Name: NewCustomLevelData
-  m_EditorClassIdentifier: 
-  <height>k__BackingField: 3
-  <width>k__BackingField: 3
+  m_EditorClassIdentifier: Assembly-CSharp::CustomLevelData
+  <height>k__BackingField: 5
+  <width>k__BackingField: 5
   customLevel:
   - {fileID: 11400000, guid: 0368175a56d29a14ca656bc9c45bad88, type: 2}
   - {fileID: 11400000, guid: 97b1e4e4897aa064cbc4b6dd329d3fbf, type: 2}
+  - {fileID: 11400000, guid: 4973b50029213f34d96c7eeccf6ca134, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 151443b8c3ff78c41bb130f35e636ed4, type: 2}
   - {fileID: 11400000, guid: 00cdfc4a326262b4387c881cdee8b63b, type: 2}
   - {fileID: 11400000, guid: 3a6e5e59db632a74ebace79b563cd980, type: 2}
-  - {fileID: 11400000, guid: 4973b50029213f34d96c7eeccf6ca134, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 11400000, guid: c0cc8ac01f9bc044d806539e43d69d7c, type: 2}
   - {fileID: 11400000, guid: 01e5c62f9c70aa5458e58789f250d840, type: 2}
   - {fileID: 11400000, guid: 8d4021e7fa1b37b439341b7dbfb90229, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

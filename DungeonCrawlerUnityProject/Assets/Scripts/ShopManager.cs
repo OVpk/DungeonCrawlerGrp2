@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,10 +6,8 @@ using TMPro;
 
 public class ShopManager : MonoBehaviour
 {
-    [Header("Données")]
-    public ShopAreaData shopAreaData;
-    public int money = 100;
-
+    
+    
     [Header("UI")]
     public GameObject shopItemPrefab;
     public Transform gridParent;
@@ -19,21 +18,37 @@ public class ShopManager : MonoBehaviour
     
     public List<CandyPackData> purchasedCandyPacks = new List<CandyPackData>();
     private List<ShopItemUI> itemUIs = new List<ShopItemUI>();
-    
-    private CandyPackDataInstance[] instances;
+
+    private CandyPack[] instances;
     private int columns = 3;
     private int rows = 2;
     private int selX = 0;
     private int selY = 0;
 
+    public static ShopManager Instance;
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
+    
     void Start()
     {
-        InitShop();
+        //InitShop();
         UpdateMoneyUI();
         PositionCursor();
         errorText.gameObject.SetActive(false);
     }
 
+    /*
     void InitShop()
     {
         int count = shopAreaData.articalShopData.Length;
@@ -51,6 +66,7 @@ public class ShopManager : MonoBehaviour
             itemUIs.Add(ui);
         }
     }
+    */
 
     public void MoveSelector(int dx, int dy)
     {
@@ -73,7 +89,7 @@ public class ShopManager : MonoBehaviour
         int idx = selY * columns + selX;
         if (idx >= instances.Length) return;
 
-        var article = shopAreaData.articalShopData[idx];
+    //    var article = shopAreaData.articalShopData[idx];
         var inst = instances[idx];
         var ui   = itemUIs[idx];
 
@@ -83,26 +99,26 @@ public class ShopManager : MonoBehaviour
             return;
         }
 
-        if (money < article.price)
+    //    if (GameManager.Instance.money < article.price)
         {
             ShowError("Pas assez d'argent !");
             return;
         }
 
 
-        money-= article.price;
+    //    GameManager.Instance.money -= article.price;
         inst.currentStock--;
         ui.SetSoldOut();
         UpdateMoneyUI();
         errorText.gameObject.SetActive(false);
-        
-        purchasedCandyPacks.Add(article.candyPack);
-        Debug.Log($"Pack acheté : {article.candyPack.name} (total possédés : {purchasedCandyPacks.Count})");
+
+    //    purchasedCandyPacks.Add(article.candyPack);
+    //    Debug.Log($"Pack acheté : {article.candyPack.name} (total possédés : {purchasedCandyPacks.Count})");
     }
 
     void UpdateMoneyUI()
     {
-        moneyText.text = money.ToString();
+        moneyText.text = GameManager.Instance.money.ToString();
     }
 
     void ShowError(string msg)
