@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a99700eacad8841478c992eab9eada1e, type: 3}
   m_Name: Salle20B
   m_EditorClassIdentifier: 
-  <areaName>k__BackingField: Salle20
+  <areaName>k__BackingField: Salle20B
   <iconDistance1>k__BackingField: {fileID: 0}
   <iconDistance2>k__BackingField: {fileID: 0}
   <iconDistance3>k__BackingField: {fileID: 0}
   <description>k__BackingField: 
   <background>k__BackingField: {fileID: 0}
   <enemyGrid>k__BackingField: {fileID: 11400000, guid: 4026122dfc319e1429d0f9745a487ff0, type: 2}
+  <reward>k__BackingField: {fileID: 0}
