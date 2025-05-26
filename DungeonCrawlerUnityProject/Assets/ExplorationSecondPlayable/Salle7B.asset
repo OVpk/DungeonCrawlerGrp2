@@ -19,4 +19,4 @@ MonoBehaviour:
   <description>k__BackingField: 
   <background>k__BackingField: {fileID: 0}
   <enemyGrid>k__BackingField: {fileID: 11400000, guid: 4aefa251d898dbc46b44ebb3834da35f, type: 2}
-  <reward>k__BackingField: {fileID: 0}
+  <reward>k__BackingField: {fileID: 11400000, guid: 669de9f354466bf4daee144bc33454ed, type: 2}
