@@ -7,7 +7,7 @@ using TMPro;
 public class SimpleCardSlider : MonoBehaviour
 {
     [Header("Liste des CandyPacks")]  
-    public List<CandyPackDataInstance> packs = new List<CandyPackDataInstance>();
+    public List<CandyPack> packs = new List<CandyPack>();
 
     [Header("UI Images")]
     public Image leftImage;
@@ -34,8 +34,6 @@ public class SimpleCardSlider : MonoBehaviour
         centerPos = centerImage.rectTransform.anchoredPosition;
         rightPos = rightImage.rectTransform.anchoredPosition;
         imageScale = Vector3.one;
-
-        UpdateDisplay();
     }
 
     public void UpdateDisplay()
@@ -45,9 +43,9 @@ public class SimpleCardSlider : MonoBehaviour
         int rightIdx = Modulo(currentIndex + 1, packs.Count);
 
         // Met à jour les sprites
-        leftImage.sprite = packs[leftIdx].sprite;
-        centerImage.sprite = packs[centerIdx].sprite;
-        rightImage.sprite = packs[rightIdx].sprite;
+        leftImage.sprite = packs[leftIdx].data.sprite;
+        centerImage.sprite = packs[centerIdx].data.sprite;
+        rightImage.sprite = packs[rightIdx].data.sprite;
 
         // Applique l'opacité
         SetFade(leftImage, leftImgAlpha);

@@ -21,4 +21,4 @@ MonoBehaviour:
   glueDurability: 1
   bubbleDurability: 0
   <unlockCondition>k__BackingField: {fileID: 11400000, guid: 9f6ca44f7fc0dd64283f8375e6d070e3, type: 2}
-  <selfDamage>k__BackingField: 0
+  <selfDamage>k__BackingField: 1

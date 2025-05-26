@@ -40,4 +40,6 @@ public interface IFightEventListener
     
     void OnEntityLoseFogEffect((int x, int y) position, FightManager.TurnState team);
 
+    void OnGridIsClear(FightManager.TurnState team);
+
 }

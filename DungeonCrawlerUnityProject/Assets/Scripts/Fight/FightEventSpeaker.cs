@@ -220,5 +220,13 @@ public class FightEventSpeaker : MonoBehaviour
             listener.OnEntityLoseFogEffect(position, team);
         }
     }
+
+    public void GridIsClear(FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnGridIsClear(team);
+        }
+    }
     
 }

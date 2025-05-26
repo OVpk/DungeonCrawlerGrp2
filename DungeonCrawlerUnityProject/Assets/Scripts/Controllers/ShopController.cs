@@ -3,15 +3,6 @@ using UnityEngine;
 
 public class ShopController : PlayerController
 {
-
-    public ShopManager manager;
-    private (int x, int y) selectorPosition = (0,0);
-
-    private void Start()
-    {
-       ChangeActiveState(true);
-    }
-
     protected override void Move(Directions direction)
     {
         (int dx, int dy) = direction switch
@@ -22,14 +13,15 @@ public class ShopController : PlayerController
             Directions.Down  => ( 0,  1),
             _ => (0,0)
         };
-        manager.MoveSelector(dx, dy);
+        ShopManager.Instance.MoveSelector(dx, dy);
     }
 
     protected override void Press(Buttons button)
     {
-        if (button == Buttons.A)
+        switch (button)
         {
-            manager.TryPurchase();
+            case Buttons.A : ShopManager.Instance.TryPurchase(); break;
+            case Buttons.B : ShopManager.Instance.ExitShop(); break;
         }
     }
 }

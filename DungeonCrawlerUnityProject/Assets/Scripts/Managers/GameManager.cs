@@ -1,19 +1,32 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [SerializeField] private OverWorldController overWorldController;
+    [SerializeField] private ExplorationController overWorldController;
     [SerializeField] private FightAreaController fightAreaController;
+    [SerializeField] private ShopController shopController;
+
+    private GameObject fightScene => FightManager.Instance.transform.root.gameObject;
+    private GameObject explorationScene => ExplorationManager.Instance.transform.root.gameObject;
+    private GameObject shopScene => ShopManager.Instance.transform.root.gameObject;
     
-    public enum ControllerTypes
+    public enum GameState
     {
         InOverWorld,
-        InFightArea
+        InFightArea,
+        InShop
     }
 
-    private ControllerTypes currentControllerType;
+    private GameState currentGameState;
+
+    public List<CandyPack> candyPacks = new List<CandyPack>();
+
+    public CandyPackData[] firstPacks;
+
+    public int money;
 
     private void Awake()
     {
@@ -29,23 +42,60 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        ChangeController(ControllerTypes.InOverWorld);
-    }
-    
-    
-
-    public void ChangeController(ControllerTypes newControllerType)
-    {
-        currentControllerType = newControllerType;
-        switch (currentControllerType)
+        foreach (var pack in firstPacks)
         {
-            case ControllerTypes.InOverWorld :
+            candyPacks.Add(new CandyPack(pack));
+        }
+        ChangeGameState(GameState.InOverWorld);
+    }
+
+    public void ChangeGameState(GameState newGameState)
+    {
+        currentGameState = newGameState;
+        ChangeDisplayedScene(currentGameState);
+        ChangeController(currentGameState);
+    }
+
+    private void ChangeDisplayedScene(GameState newGameState)
+    {
+        switch (newGameState)
+        {
+            case GameState.InOverWorld :
+                explorationScene.SetActive(true);
+                fightScene.SetActive(false);
+                shopScene.SetActive(false);
+                break;
+            case GameState.InFightArea :
+                explorationScene.SetActive(false);
+                fightScene.SetActive(true);
+                shopScene.SetActive(false);
+                break;
+            case GameState.InShop :
+                explorationScene.SetActive(false);
+                fightScene.SetActive(false);
+                shopScene.SetActive(true);
+                break;
+        }
+    }
+
+    private void ChangeController(GameState newGameState)
+    {
+        switch (newGameState)
+        {
+            case GameState.InOverWorld :
                 overWorldController.ChangeActiveState(true);
                 fightAreaController.ChangeActiveState(false);
+                shopController.ChangeActiveState(false);
                 break;
-            case ControllerTypes.InFightArea :
+            case GameState.InFightArea :
                 overWorldController.ChangeActiveState(false);
                 fightAreaController.ChangeActiveState(true);
+                shopController.ChangeActiveState(false);
+                break;
+            case GameState.InShop :
+                overWorldController.ChangeActiveState(false);
+                fightAreaController.ChangeActiveState(false);
+                shopController.ChangeActiveState(true);
                 break;
         }
     }

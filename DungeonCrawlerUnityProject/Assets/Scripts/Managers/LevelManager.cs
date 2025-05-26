@@ -69,7 +69,6 @@ public class LevelManager : MonoBehaviour
         
         levelDisplayer.DisplayLevel(false);
         levelDisplayer.DisplayArea(true);
-        GameManager.Instance.ChangeController(GameManager.ControllerTypes.InFightArea);
     }
 
     public void EnterFightArea(FightAreaData fightArea)
@@ -81,7 +80,6 @@ public class LevelManager : MonoBehaviour
     {
         levelDisplayer.DisplayLevel(true);
         levelDisplayer.DisplayArea(false);
-        GameManager.Instance.ChangeController(GameManager.ControllerTypes.InOverWorld);
     }
 
     private void SwitchCurrentAreaTo((int x, int y) position)

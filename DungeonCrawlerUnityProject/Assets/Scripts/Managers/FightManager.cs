@@ -6,7 +6,6 @@ using Random = UnityEngine.Random;
 
 public class FightManager : MonoBehaviour, IFightDisplayerListener
 {
-    
     [field: SerializeField] public FightEventSpeaker sendInformation { get; private set; }
     
     public enum TurnState
@@ -21,11 +20,14 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     
     public bool canUseControlls = true;
 
+    private RewardData reward;
+
     public void SwitchTurn()
     {
         if (IsCleaningGridNecessary(currentTurn)) CleanAlreadyPlayedPositions(currentTurn);
         EndTurn(currentTurn);
         
+        CheckEndGame();
         
         currentTurn = currentTurn == TurnState.Player ? TurnState.Enemy : TurnState.Player;
         
@@ -85,14 +87,26 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     private HashSet<(int x, int y)> playerAlreadyPlayedPositions = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> enemyAlreadyPlayedPositions = new HashSet<(int x, int y)>();
 
-    public List<CandyPackData> candyPackData;
-    public List<CandyPackDataInstance> candyPack = new List<CandyPackDataInstance>();
-
-
     [SerializeField] public SimpleCardSlider packDisplayer;
+
+    private void ClearGrid(EntityDataInstance[,] grid)
+    {
+        TurnState team = grid is CharacterDataInstance[,] ? TurnState.Player :
+            grid is EnemyDataInstance[,] ? TurnState.Enemy : throw new ArgumentOutOfRangeException(nameof(grid));
+        for (int i = 0; i < grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < grid.GetLength(1); j++)
+            {
+                grid[0, 0] = null;
+            }
+        }
+        sendInformation.GridIsClear(team);
+    }
 
     private void InitEnemyGrid(EnemyGridData enemyGridData)
     {
+        ClearGrid(enemyGrid);
+        
         EnemyData[,] enemyGridData2d = enemyGridData.Enemies2D;
         for (int i = 0; i < enemyGrid.GetLength(0); i++)
         {
@@ -106,18 +120,15 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     
     private void InitPack()
     {
-        foreach (var pack in candyPackData)
-        {
-            candyPack.Add(pack.Instance());
-        }
-        packDisplayer.packs = candyPack;
+        packDisplayer.packs = GameManager.Instance.candyPacks;
+        packDisplayer.UpdateDisplay();
     }
 
-    public void PlaceCharacterFromPack(CandyPackDataInstance pack, (int x, int y)position)
+    public void PlaceCharacterFromPack(CandyPack pack, (int x, int y)position)
     {
         if (pack.currentStock <= 0) return;
         if (playerGrid[position.x, position.y] != null) return;
-        PlaceEntityAtPosition(pack.candyData, position, TurnState.Player);
+        PlaceEntityAtPosition(pack.data.candyData, position, TurnState.Player);
         pack.currentStock--;
         packDisplayer.UpdateDisplay();
     }
@@ -134,7 +145,6 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         {
             Instance = this;
         }
-        InitPack();
     }
 
     private void Start()
@@ -145,7 +155,12 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
 
     public void LoadFightArea(FightAreaData data)
     {
+        InitPack();
         InitEnemyGrid(data.enemyGrid);
+        reward = data.reward;
+        CleanAlreadyPlayedPositions(TurnState.Player);
+        CleanAlreadyPlayedPositions(TurnState.Enemy);
+        if (currentTurn == TurnState.Enemy) SwitchTurn();
     }
 
     #region Display
@@ -651,6 +666,8 @@ private IEnumerator ProcessRegularHits(
             playerGrid[position.x, position.y] = null;
             sendInformation.EntityDeathAt(position, TurnState.Player);
             yield return WaitAnimationEvent();
+            
+            CheckEndGame();
         }
         else
         {
@@ -880,7 +897,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
     {
         if (teamToCheck == TurnState.Enemy) return true;
         
-        foreach (var pack in candyPack)
+        foreach (var pack in GameManager.Instance.candyPacks)
         {
             if (pack.currentStock > 0) return false;
         }
@@ -926,5 +943,56 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
             }
         }
         return positions;
+    }
+
+    private IEnumerator ExitArea()
+    {
+        yield return new WaitForSeconds(3f);
+        GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
+        ExplorationManager.Instance.SetDisplay();
+    }
+
+    private bool HaveLoose(TurnState teamToCheck)
+    {
+        EntityDataInstance[,] gridToCheck = teamToCheck == TurnState.Player ? playerGrid : enemyGrid;
+        if (!IsCharacterStockEmpty(teamToCheck)) return false;
+        foreach (var entity in gridToCheck)
+            if (entity != null) return false;
+        return true;
+    }
+
+    private void CheckEndGame()
+    {
+        if (HaveLoose(TurnState.Player))
+        {
+            throw new Exception("l'enemi a gagné");
+        }
+        else if (HaveLoose(TurnState.Enemy))
+        {
+            if (reward.rewardType == RewardData.RewardType.Shop)
+            {
+                GameManager.Instance.ChangeGameState(GameManager.GameState.InShop);
+                ShopManager.Instance.InitShop();
+                return;
+            }
+            GiveReward();
+            StartCoroutine(ExitArea());
+        }
+    }
+
+    private void GiveReward()
+    {
+        switch (reward.rewardType)
+        {
+            case RewardData.RewardType.Candy : RefillPack(GameManager.Instance.candyPacks[Random.Range(0, GameManager.Instance.candyPacks.Count)], reward.nbOfCandy); break;
+            case RewardData.RewardType.Money : GameManager.Instance.money += reward.money; break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private void RefillPack(CandyPack pack, int nb)
+    {
+        pack.currentStock = Math.Clamp(pack.currentStock += nb, 0, pack.maxStock);
     }
 }
