@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Salle1Reward
   m_EditorClassIdentifier: 
   <rewardType>k__BackingField: 0
-  <nbOfCandy>k__BackingField: 0
+  <nbOfCandy>k__BackingField: 1
   <money>k__BackingField: 0
