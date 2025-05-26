@@ -1,29 +1,24 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;                            
+using TMPro;
 
 public class ShopManager : MonoBehaviour
 {
-    
-    
     [Header("UI")]
     public GameObject shopItemPrefab;
     public Transform gridParent;
     public RectTransform selectorCursor;
-    public TMP_Text moneyText;           
-    public TMP_Text errorText;         
+    public TMP_Text moneyText;
+    public TMP_Text errorText;
 
-    
-    public List<CandyPackData> purchasedCandyPacks = new List<CandyPackData>();
     private List<ShopItemUI> itemUIs = new List<ShopItemUI>();
-
-    private CandyPack[] instances;
-    private int columns = 3;
-    private int rows = 2;
+    public List<ArticalShopData> allShopItems = new List<ArticalShopData>();
+    private List<ArticalShopData> availableShopItems = new List<ArticalShopData>();
     private int selX = 0;
     private int selY = 0;
+
+    private const int MaxDisplayedItems = 4;
 
     public static ShopManager Instance;
 
@@ -39,45 +34,86 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    
-    void Start()
+    public void InitShop()
     {
-        //InitShop();
+        FilterAndDisplayItems();
         UpdateMoneyUI();
         PositionCursor();
         errorText.gameObject.SetActive(false);
     }
 
-    /*
-    void InitShop()
+    private void FilterAndDisplayItems()
     {
-        int count = shopAreaData.articalShopData.Length;
-        instances = new CandyPackDataInstance[count];
+        // Filtrer les items disponibles
+        availableShopItems = new List<ArticalShopData>();
 
-        for (int i = 0; i < count; i++)
+        foreach (var article in allShopItems)
         {
-            var article = shopAreaData.articalShopData[i];
-            instances[i] = article.candyPack.Instance();
+            if (availableShopItems.Count >= MaxDisplayedItems)
+                break;
 
+            if (IsItemAvailable(article))
+            {
+                availableShopItems.Add(article);
+            }
+        }
+
+        // Réinitialiser l'affichage
+        foreach (Transform child in gridParent)
+        {
+            Destroy(child.gameObject);
+        }
+        itemUIs.Clear();
+
+        // Créer l'affichage pour les articles disponibles
+        foreach (var article in availableShopItems)
+        {
             var go = Instantiate(shopItemPrefab, gridParent);
             var ui = go.GetComponent<ShopItemUI>();
-            ui.index = i;
-            ui.Setup(instances[i].sprite, article.price, instances[i].currentStock > 0);
+            ui.Setup(article.item.visualInShop, article.price, true);
             itemUIs.Add(ui);
         }
     }
-    */
+
+    private bool IsItemAvailable(ArticalShopData article)
+    {
+        if (article.item is CandyPackData candy)
+        {
+            // Disponible seulement si le joueur ne possède pas déjà ce CandyPack
+            var pack = GameManager.Instance.candyPacks.Find(p => p.data == candy);
+            return pack == null;
+        }
+
+        if (article.item is PackUpgradeData upgrade)
+        {
+            // Disponible si le joueur possède le CandyPack à upgrader, et si l'upgrade n'a pas encore été appliquée
+            var pack = GameManager.Instance.candyPacks.Find(p => p.data == upgrade.packToUpgrade);
+            return pack != null && !pack.usedUpgrades.Contains(upgrade) && !availableShopItems.Exists(a => a.item is PackUpgradeData upg && upg.packToUpgrade == upgrade.packToUpgrade);
+        }
+
+        if (article.item is PackRefillData refill)
+        {
+            // Disponible si le joueur possède le CandyPack à recharger
+            var pack = GameManager.Instance.candyPacks.Find(p => p.data == refill.packToRefill);
+            return pack != null;
+        }
+
+        return false;
+    }
 
     public void MoveSelector(int dx, int dy)
     {
+        int columns = Mathf.CeilToInt((float)itemUIs.Count / MaxDisplayedItems);
+        int rows = Mathf.CeilToInt(itemUIs.Count / (float)columns);
+
         selX = Mathf.Clamp(selX + dx, 0, columns - 1);
         selY = Mathf.Clamp(selY + dy, 0, rows - 1);
         PositionCursor();
     }
 
-    void PositionCursor()
+    private void PositionCursor()
     {
-        int idx = selY * columns + selX;
+        int idx = selY * MaxDisplayedItems + selX;
         if (idx < itemUIs.Count)
         {
             selectorCursor.position = itemUIs[idx].transform.position;
@@ -86,42 +122,56 @@ public class ShopManager : MonoBehaviour
 
     public void TryPurchase()
     {
-        int idx = selY * columns + selX;
-        if (idx >= instances.Length) return;
+        int idx = selY * MaxDisplayedItems + selX;
+        if (idx >= availableShopItems.Count) return;
 
-    //    var article = shopAreaData.articalShopData[idx];
-        var inst = instances[idx];
-        var ui   = itemUIs[idx];
-
-        if (!ui.isAvailable)
-        {
-            ShowError("Article épuisé.");
-            return;
-        }
-
-    //    if (GameManager.Instance.money < article.price)
+        var article = availableShopItems[idx];
+        if (GameManager.Instance.money < article.price)
         {
             ShowError("Pas assez d'argent !");
             return;
         }
 
-
-    //    GameManager.Instance.money -= article.price;
-        inst.currentStock--;
-        ui.SetSoldOut();
+        GameManager.Instance.money -= article.price;
+        ApplyItemEffect(article.item);
         UpdateMoneyUI();
+        availableShopItems.RemoveAt(idx);
+        FilterAndDisplayItems();
         errorText.gameObject.SetActive(false);
-
-    //    purchasedCandyPacks.Add(article.candyPack);
-    //    Debug.Log($"Pack acheté : {article.candyPack.name} (total possédés : {purchasedCandyPacks.Count})");
     }
 
-    void UpdateMoneyUI()
+    private void ApplyItemEffect(ItemData item)
+    {
+        if (item is CandyPackData candy)
+        {
+            GameManager.Instance.candyPacks.Add(new CandyPack(candy));
+        }
+        else if (item is PackUpgradeData upgrade)
+        {
+            var pack = GameManager.Instance.candyPacks.Find(p => p.data == upgrade.packToUpgrade);
+            if (pack != null)
+            {
+                pack.ApplyUpgrade(upgrade);
+            }
+        }
+        else if (item is PackRefillData refill)
+        {
+            var pack = GameManager.Instance.candyPacks.Find(p => p.data == refill.packToRefill);
+            if (pack != null)
+            {
+                pack.currentStock += refill.nbToRefill;
+                if (pack.currentStock > pack.maxStock)
+                    pack.currentStock = pack.maxStock;
+            }
+        }
+    }
+
+    private void UpdateMoneyUI()
     {
         moneyText.text = GameManager.Instance.money.ToString();
     }
 
-    void ShowError(string msg)
+    private void ShowError(string msg)
     {
         errorText.text = msg;
         errorText.gameObject.SetActive(true);
