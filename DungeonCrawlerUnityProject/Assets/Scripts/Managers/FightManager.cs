@@ -972,6 +972,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
             if (reward.rewardType == RewardData.RewardType.Shop)
             {
                 GameManager.Instance.ChangeGameState(GameManager.GameState.InShop);
+                ShopManager.Instance.InitShop();
                 return;
             }
             GiveReward();

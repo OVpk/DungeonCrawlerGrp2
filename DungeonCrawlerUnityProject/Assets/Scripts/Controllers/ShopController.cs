@@ -3,13 +3,6 @@ using UnityEngine;
 
 public class ShopController : PlayerController
 {
-    private (int x, int y) selectorPosition = (0,0);
-
-    private void Start()
-    {
-       ChangeActiveState(true);
-    }
-
     protected override void Move(Directions direction)
     {
         (int dx, int dy) = direction switch
