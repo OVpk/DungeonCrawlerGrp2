@@ -396,7 +396,8 @@ MonoBehaviour:
   overWorldController: {fileID: 727970722}
   fightAreaController: {fileID: 727970720}
   shopController: {fileID: 727970723}
-  firstPacks: []
+  firstPacks:
+  - {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
   money: 0
 --- !u!4 &1165411351
 Transform:
@@ -461,6 +462,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3474845578406053521, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: customLevelData
+      value: 
+      objectReference: {fileID: 11400000, guid: d4d8bdb10b697d44d91d8682752073f4, type: 2}
     - target: {fileID: 5337769998734241006, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
       propertyPath: m_Name
       value: Exploration

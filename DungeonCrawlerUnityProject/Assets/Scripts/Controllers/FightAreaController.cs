@@ -157,7 +157,7 @@ public class FightAreaController : PlayerController
         uiController.SwitchAB();
         attackSelectorController.LoadData(selectedCharacter.attacks);
         SetAttackOriginPosition();
-        MoveAttackPattern((0,0));
+        MoveAttackSelector((0,0));
     }
 
     private void SetAttackOriginPosition()

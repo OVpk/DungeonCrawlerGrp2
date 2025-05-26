@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
         {
             candyPacks.Add(new CandyPack(pack));
         }
-        ChangeController(GameState.InOverWorld);
+        ChangeGameState(GameState.InOverWorld);
     }
 
     public void ChangeGameState(GameState newGameState)

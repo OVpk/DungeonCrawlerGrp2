@@ -38,6 +38,7 @@ public class ExplorationManager : MonoBehaviour
     {
         level = customLevelData.customLevel2d;
         SwitchCurrentAreaTo((0,0));
+        SetDisplay();
     }
 
     private void SwitchCurrentAreaTo((int x, int y) position)
