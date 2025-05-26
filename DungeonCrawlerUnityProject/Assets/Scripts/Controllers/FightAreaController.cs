@@ -15,7 +15,7 @@ public class FightAreaController : PlayerController
 
     private int currentPackIndex => FightManager.Instance.packDisplayer.currentIndex;
 
-    private CandyPackDataInstance selectedPack;
+    private CandyPack selectedPack;
 
     private CharacterDataInstance selectedCharacter;
 
@@ -36,6 +36,8 @@ public class FightAreaController : PlayerController
     }
 
     private SelectorState currentState = SelectorState.SelectPack;
+    
+    
     
 
     protected override void Move(Directions direction)
@@ -86,7 +88,7 @@ public class FightAreaController : PlayerController
 
     private void SelectPack()
     {
-        selectedPack = FightManager.Instance.candyPack[currentPackIndex];
+        selectedPack = GameManager.Instance.candyPacks[currentPackIndex];
         FightManager.Instance.sendInformation.EntityHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
         hoveredInfoController.UpdateInformations(FightManager.Instance.playerGrid[playerGridSelectorPosition.x, playerGridSelectorPosition.y]);
         SwitchState(SelectorState.PlaceCharacter);

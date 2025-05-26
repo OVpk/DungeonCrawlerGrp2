@@ -6,7 +6,6 @@ using Random = UnityEngine.Random;
 
 public class FightManager : MonoBehaviour, IFightDisplayerListener
 {
-    
     [field: SerializeField] public FightEventSpeaker sendInformation { get; private set; }
     
     public enum TurnState
@@ -20,6 +19,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     [field:SerializeField] public SimpleAi aiController { get; private set; }
     
     public bool canUseControlls = true;
+
+    private RewardData reward;
 
     public void SwitchTurn()
     {
@@ -86,9 +87,6 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     private HashSet<(int x, int y)> playerAlreadyPlayedPositions = new HashSet<(int x, int y)>();
     public HashSet<(int x, int y)> enemyAlreadyPlayedPositions = new HashSet<(int x, int y)>();
 
-    public List<CandyPackDataInstance> candyPack = new List<CandyPackDataInstance>();
-
-
     [SerializeField] public SimpleCardSlider packDisplayer;
 
     private void ClearGrid(EntityDataInstance[,] grid)
@@ -120,23 +118,17 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         }
     }
     
-    private void InitPack(CandyPackDataInstance[] packs)
+    private void InitPack()
     {
-        candyPack.Clear();
-        foreach (var pack in packs)
-        {
-            if (pack == null) continue;
-            candyPack.Add(pack);
-        }
-        packDisplayer.packs = candyPack;
+        packDisplayer.packs = GameManager.Instance.candyPacks;
         packDisplayer.UpdateDisplay();
     }
 
-    public void PlaceCharacterFromPack(CandyPackDataInstance pack, (int x, int y)position)
+    public void PlaceCharacterFromPack(CandyPack pack, (int x, int y)position)
     {
         if (pack.currentStock <= 0) return;
         if (playerGrid[position.x, position.y] != null) return;
-        PlaceEntityAtPosition(pack.candyData, position, TurnState.Player);
+        PlaceEntityAtPosition(pack.data.candyData, position, TurnState.Player);
         pack.currentStock--;
         packDisplayer.UpdateDisplay();
     }
@@ -161,15 +153,14 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         InitDisplayedGrid(enemyGrid);
     }
 
-    public void LoadFightArea(FightAreaData data, CandyPackDataInstance[] packsInInventory)
+    public void LoadFightArea(FightAreaData data)
     {
-        InitPack(packsInInventory);
+        InitPack();
         InitEnemyGrid(data.enemyGrid);
+        reward = data.reward;
         CleanAlreadyPlayedPositions(TurnState.Player);
         CleanAlreadyPlayedPositions(TurnState.Enemy);
         if (currentTurn == TurnState.Enemy) SwitchTurn();
-        
-        
     }
 
     #region Display
@@ -906,7 +897,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
     {
         if (teamToCheck == TurnState.Enemy) return true;
         
-        foreach (var pack in candyPack)
+        foreach (var pack in GameManager.Instance.candyPacks)
         {
             if (pack.currentStock > 0) return false;
         }
@@ -978,9 +969,29 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         }
         else if (HaveLoose(TurnState.Enemy))
         {
-            //DONNER RECOMPENSES AUSSI
-            GameManager.Instance.candyPacks = candyPack.ToArray();
+            if (reward.rewardType == RewardData.RewardType.Shop)
+            {
+                GameManager.Instance.ChangeGameState(GameManager.GameState.InShop);
+                return;
+            }
+            GiveReward();
             StartCoroutine(ExitArea());
         }
+    }
+
+    private void GiveReward()
+    {
+        switch (reward.rewardType)
+        {
+            case RewardData.RewardType.Candy : RefillPack(GameManager.Instance.candyPacks[Random.Range(0, GameManager.Instance.candyPacks.Count)], reward.nbOfCandy); break;
+            case RewardData.RewardType.Money : GameManager.Instance.money += reward.money; break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private void RefillPack(CandyPack pack, int nb)
+    {
+        pack.currentStock = Math.Clamp(pack.currentStock += nb, 0, pack.maxStock);
     }
 }
