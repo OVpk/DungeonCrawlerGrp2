@@ -814,10 +814,6 @@ MonoBehaviour:
   <sendInformation>k__BackingField: {fileID: 623254399}
   <aiController>k__BackingField: {fileID: 623254400}
   canUseControlls: 1
-  enemyGridData: {fileID: 11400000, guid: 4026122dfc319e1429d0f9745a487ff0, type: 2}
-  candyPackData:
-  - {fileID: 11400000, guid: 5dabfc31e419a754fa825a88ffed2712, type: 2}
-  - {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}
   packDisplayer: {fileID: 1168267819}
   entityLocationPrefab: {fileID: 8523470483974167307, guid: 9c8e5ee742a23fc4db3a87c295e976b1, type: 3}
   playerGridContainer: {fileID: 217088544}
@@ -1205,9 +1201,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd260ca29f8294f4281aa8e0db603ff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overWorldController: {fileID: 1881747679}
-  areaController: {fileID: 1881747681}
+  overWorldController: {fileID: 0}
   fightAreaController: {fileID: 1881747680}
+  shopController: {fileID: 0}
+  firstPacks: []
+  money: 0
 --- !u!114 &1881747679
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -16,6 +16,8 @@ public class AreaInWorldDisplayController : MonoBehaviour
 
     public TMP_Text rewardText;
     
+    public TMP_Text areaName;
+    
     private void Awake()
     {
         // Clone material instance to avoid global changes
@@ -28,13 +30,36 @@ public class AreaInWorldDisplayController : MonoBehaviour
     public void Init(FightAreaData fightArea)
     {
         ClearHighlight();
-        DisplayRewards();
+        DisplayRewards(fightArea);
+        areaName.text = fightArea.areaName;
     }
-    
-    public void DisplayRewards()
+
+    private void DisplayRewards(FightAreaData fightArea)
     {
-        // récompenses
+        if (fightArea.reward != null)
+        {
+            switch (fightArea.reward.rewardType)
+            {
+                case RewardData.RewardType.Candy:
+                    rewardText.text = $"Candies: {fightArea.reward.nbOfCandy}";
+                    break;
+                case RewardData.RewardType.Money:
+                    rewardText.text = $"Money: {fightArea.reward.money}$";
+                    break;
+                case RewardData.RewardType.Shop:
+                    rewardText.text = "Visit Shop!";
+                    break;
+                default:
+                    rewardText.text = "Unknown reward.";
+                    break;
+            }
+        }
+        else
+        {
+            rewardText.text = "No rewards available.";
+        }
     }
+
     
     public void ClearHighlight()
     {

@@ -176,4 +176,9 @@ public class ShopManager : MonoBehaviour
         errorText.text = msg;
         errorText.gameObject.SetActive(true);
     }
+
+    public void ExitShop()
+    {
+        GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
+    }
 }
