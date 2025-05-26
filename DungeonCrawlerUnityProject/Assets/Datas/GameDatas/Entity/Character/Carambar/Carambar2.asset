@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Carambar2
   m_EditorClassIdentifier: 
   <entityName>k__BackingField: CARAMBAR
-  <durability>k__BackingField: 3
+  <durability>k__BackingField: 4
   <type>k__BackingField: 1
   effects: 
   percentOfChanceToGiveExplosive: 0

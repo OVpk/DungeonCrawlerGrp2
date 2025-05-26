@@ -17,5 +17,8 @@ MonoBehaviour:
   <damage>k__BackingField: 0
   effect: 6
   entityToSpawn: {fileID: 11400000, guid: c47b9ad93d1332e41a9594077601a477, type: 2}
+  percentOfChanceOfGlue: 0
+  glueDurability: 0
+  bubbleDurability: 0
   <unlockCondition>k__BackingField: {fileID: 0}
-  <selfDamage>k__BackingField: 0
+  <selfDamage>k__BackingField: 1

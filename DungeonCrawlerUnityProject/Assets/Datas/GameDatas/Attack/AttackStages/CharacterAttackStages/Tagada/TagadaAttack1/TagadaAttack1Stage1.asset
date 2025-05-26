@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd3f947d771610746bdee2c5ba7715dc, type: 3}
+  m_Name: TagadaAttack1Stage1
+  m_EditorClassIdentifier: 
+  <effectDescription>k__BackingField: 1 DGT
+  <pattern>k__BackingField: {fileID: 11400000, guid: 9e78f79833823b14896e3f9083cba1b1, type: 2}
+  <damage>k__BackingField: 1
+  effect: 0
+  entityToSpawn: {fileID: 0}
+  percentOfChanceOfGlue: 100
+  glueDurability: 0
+  bubbleDurability: 0
+  <unlockCondition>k__BackingField: {fileID: 11400000, guid: 236a93a62631bb449ad88d6af16dddfb, type: 2}
+  <selfDamage>k__BackingField: 1
