@@ -19,7 +19,7 @@ MonoBehaviour:
   percentOfChanceToGiveExplosive: 0
   explosionDamages: 0
   patternWhereFogGone: {fileID: 11400000, guid: 14160491d58625146bba83c1b06b655d, type: 2}
-  percentOfChanceOfAvoidingAttackThanksToFog: 50
+  percentOfChanceOfAvoidingAttackThanksToFog: 30
   nbOfTurnBeforeFogGone: 3
   <isImmuneToExplosions>k__BackingField: 0
   <sprite>k__BackingField: {fileID: 21300000, guid: 0e06dd846a78ec845949e89684ad0b40, type: 3}
