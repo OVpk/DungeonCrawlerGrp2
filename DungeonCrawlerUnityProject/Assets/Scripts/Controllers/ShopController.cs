@@ -18,9 +18,10 @@ public class ShopController : PlayerController
 
     protected override void Press(Buttons button)
     {
-        if (button == Buttons.A)
+        switch (button)
         {
-            ShopManager.Instance.TryPurchase();
+            case Buttons.A : ShopManager.Instance.TryPurchase(); break;
+            case Buttons.B : ShopManager.Instance.ExitShop(); break;
         }
     }
 }
