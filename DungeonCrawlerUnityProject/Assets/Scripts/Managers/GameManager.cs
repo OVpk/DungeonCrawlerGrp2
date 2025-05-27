@@ -38,15 +38,16 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
-    }
-
-    private void Start()
-    {
+        
         foreach (var pack in firstPacks)
         {
             candyPacks.Add(new CandyPack(pack));
         }
-        ChangeGameState(GameState.InOverWorld);
+    }
+
+    private void Start()
+    {
+        ChangeGameState(GameState.InFightArea);
     }
 
     public void ChangeGameState(GameState newGameState)

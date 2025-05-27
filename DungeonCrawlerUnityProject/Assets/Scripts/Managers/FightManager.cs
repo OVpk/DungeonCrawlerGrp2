@@ -152,6 +152,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     {
         InitDisplayedGrid(playerGrid);
         InitDisplayedGrid(enemyGrid);
+        LoadFightArea((FightAreaData)ExplorationManager.Instance.currentArea);
     }
 
     public void LoadFightArea(FightAreaData data)

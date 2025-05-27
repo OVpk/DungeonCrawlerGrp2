@@ -340,4 +340,6 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         
         ResetDisplay();
     }
+    
+    
 }

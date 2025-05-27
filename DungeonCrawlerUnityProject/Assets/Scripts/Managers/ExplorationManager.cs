@@ -11,7 +11,7 @@ public class ExplorationManager : MonoBehaviour
     public AreaData[,] level { get; private set; }
     
     public (int x, int y) currentAreaPosition { get; private set; }
-    private AreaData currentArea;
+    public AreaData currentArea { get; private set; }
     private AreaData leftArea;
     private AreaData rightArea;
     
@@ -32,13 +32,9 @@ public class ExplorationManager : MonoBehaviour
         {
             Instance = this;
         }
-    }
-
-    private void Start()
-    {
+        
         level = customLevelData.customLevel2d;
         SwitchCurrentAreaTo((0,0));
-        SetDisplay();
     }
 
     private void SwitchCurrentAreaTo((int x, int y) position)
