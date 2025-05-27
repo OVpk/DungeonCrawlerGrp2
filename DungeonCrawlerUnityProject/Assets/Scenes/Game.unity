@@ -130,6 +130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1414996325029861051, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4943459011666813209, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: m_Name
       value: Shop
