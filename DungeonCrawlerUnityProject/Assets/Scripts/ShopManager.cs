@@ -180,5 +180,6 @@ public class ShopManager : MonoBehaviour
     public void ExitShop()
     {
         GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
+        ExplorationManager.Instance.SetDisplay();
     }
 }
