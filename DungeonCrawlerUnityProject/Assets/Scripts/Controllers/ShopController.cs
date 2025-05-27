@@ -13,7 +13,6 @@ public class ShopController : PlayerController
             Directions.Down  => ( 0,  1),
             _ => (0,0)
         };
-        Debug.Log("input detected");
         ShopManager.Instance.MoveSelector(dx, dy);
     }
 
