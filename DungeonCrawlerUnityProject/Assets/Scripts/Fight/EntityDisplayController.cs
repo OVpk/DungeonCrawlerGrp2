@@ -57,7 +57,17 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         effectDisplayer.glueAnim.gameObject.SetActive(false);
         effectDisplayer.explosivePowder.gameObject.SetActive(false);
     }
-    
+
+    private bool isAlreadyDeadOneTime = false;
+
+    private void OnEnable()
+    {
+        if (!isEntityActived && isAlreadyDeadOneTime)
+        {
+            entity.gameObject.SetActive(false);
+        }
+    }
+
 
     private bool IsConcerned((int x, int y) pos, FightManager.TurnState evtTeam)
         => team == evtTeam && pos == positionInGrid;
@@ -66,6 +76,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
 
+        isAlreadyDeadOneTime = true;
+        
         isEntityActived = false;
         entity.PlayDeathAnim();
         durabilityText.gameObject.SetActive(false);
