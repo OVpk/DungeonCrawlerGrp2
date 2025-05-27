@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6113735880d32384686cd5ccfbcbc274, type: 3}
-  m_Name: UpGradeTagada10
+  m_Name: UpGradeTagada3
   m_EditorClassIdentifier: 
   <visualInShop>k__BackingField: {fileID: 21300000, guid: 38ea647e6cb5c9b418060fbd0133a419, type: 3}
   <packToUpgrade>k__BackingField: {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
-  <newMaxStock>k__BackingField: 10
+  <newMaxStock>k__BackingField: 17

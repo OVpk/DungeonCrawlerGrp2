@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9be6bce98adc1a42839dbc1388bdbed, type: 3}
-  m_Name: ArticalUpgradeTagadaPack10
+  m_Name: ArticalUpgradeCarambarPack3
   m_EditorClassIdentifier: 
-  <item>k__BackingField: {fileID: 11400000, guid: 2f40693f37f6ceb45b7fa4d4739cf58a, type: 2}
-  <price>k__BackingField: 10
+  <item>k__BackingField: {fileID: 11400000, guid: 680c165350c363c4482d33c06256de72, type: 2}
+  <price>k__BackingField: 12

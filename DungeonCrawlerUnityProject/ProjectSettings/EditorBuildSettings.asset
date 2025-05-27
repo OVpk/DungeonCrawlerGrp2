@@ -8,70 +8,73 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/LevelTest.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/MainScene.unity
     guid: 913a70cdd8ddb7046ad856d2688166ec
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle1.unity
     guid: d5f4adbc3e98576409a14b185cf1e8eb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle2.unity
     guid: 24a39895feb151a4ab7c74b714f5da8a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle3.unity
     guid: d4b90cb1e8466084488202353bfda9ac
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle4.unity
     guid: 1a820dc2544f15c4aa1071ac2eaa0332
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle5.unity
     guid: 230c84d984644a646aa991b9ad9b0eaf
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle6.unity
     guid: 6b0c60ab027607044b3e3375425c308e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle7.unity
     guid: a9d7ac4144a6b89448135913be8e073a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle8.unity
     guid: 12699e5d7a3b82d498d2aa75d1424fb1
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle9.unity
     guid: adbe90a6ed51e5d4b9273d7f191102db
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle10.unity
     guid: 4075d3f6ea81175498f6af7c2fbe00b7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle11.unity
     guid: 8c70b6502db77754bbc65a3b06f9fc8c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle12.unity
     guid: 8a4af3afe7f9de34998cb3ac993bee45
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle13.unity
     guid: 5de6190ebefc14740b79d846363d7b60
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle14.unity
     guid: e31dc27808f2ec444bf83789de777641
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle15.unity
     guid: 8a8276306df1e4f44baf96a615b65637
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle16.unity
     guid: c43952be8fd698e419d16ad01d6f6ab8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle17.unity
     guid: 2eb4271c60030e8429cc8099d32bfedb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle18.unity
     guid: b7199a7e0a18bc146b52313db61b3e13
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle19.unity
     guid: 99194cad78c6dd54a967d063707e31ef
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/FirstPlayable/Salle20.unity
     guid: d1b9e8e82b979934c92c0b9e63d572da
   - enabled: 0
     path: Assets/Scenes/GDScene/Quentin/SalleTestQuentin.unity
     guid: 090d86b383094354285fc443ca31ebdb
+  - enabled: 1
+    path: Assets/Scenes/Game.unity
+    guid: ba9dad4c531e8a14e8b8eaa4e36c2819
   m_configObjects: {}
