@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Random = Unity.Mathematics.Random;
 
 public class ShopManager : MonoBehaviour
 {
@@ -42,10 +43,15 @@ public class ShopManager : MonoBehaviour
         errorText.gameObject.SetActive(false);
     }
 
+    private int currentRefillArticleNb = 0;
+    public int maxRefillArticleNb = 2;
+
     private void FilterAndDisplayItems()
     {
         // Filtrer les items disponibles
         availableShopItems = new List<ArticalShopData>();
+        
+        //List<ArticalShopData> shuffleList = random
 
         foreach (var article in allShopItems)
         {
@@ -54,6 +60,12 @@ public class ShopManager : MonoBehaviour
 
             if (IsItemAvailable(article))
             {
+                if (article.item is PackRefillData)
+                {
+                    if (currentRefillArticleNb >= maxRefillArticleNb) continue;
+                    currentRefillArticleNb++;
+                    availableShopItems.Add(article);
+                }
                 availableShopItems.Add(article);
             }
         }
