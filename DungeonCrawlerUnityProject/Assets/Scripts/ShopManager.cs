@@ -118,23 +118,28 @@ public class ShopManager : MonoBehaviour
 
     public void MoveSelector(int dx, int dy)
     {
-        Debug.Log("direction"+dx + dy);
-        int columns = Mathf.CeilToInt((float)itemUIs.Count / MaxDisplayedItems);
-        int rows = Mathf.CeilToInt(itemUIs.Count / (float)columns);
+        // Calcul des limites basées sur les éléments disponibles
+        int columns = Mathf.Min(MaxDisplayedItems, itemUIs.Count); // Nombre de colonnes visibles
+        int rows = Mathf.CeilToInt((float)itemUIs.Count / MaxDisplayedItems); // Nombre de lignes
 
+        // Met à jour les indices de sélection
         selX = Mathf.Clamp(selX + dx, 0, columns - 1);
         selY = Mathf.Clamp(selY + dy, 0, rows - 1);
-        
-        PositionCursor();
-    }
 
-    private void PositionCursor()
-    {
-        Debug.Log("update pos");
+        // Positionne le curseur si l'indice est valide
         int idx = selY * MaxDisplayedItems + selX;
         if (idx < itemUIs.Count)
         {
-            Debug.Log("check pass");
+            PositionCursor();
+        }
+    }
+
+
+    private void PositionCursor()
+    {
+        int idx = selY * MaxDisplayedItems + selX;
+        if (idx < itemUIs.Count)
+        {
             selectorCursor.position = itemUIs[idx].transform.position;
         }
     }
