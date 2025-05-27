@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -158,6 +159,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         InitPack();
         InitEnemyGrid(data.enemyGrid);
         reward = data.reward;
+        ShowReward(false);
         CleanAlreadyPlayedPositions(TurnState.Player);
         CleanAlreadyPlayedPositions(TurnState.Enemy);
         if (currentTurn == TurnState.Enemy) SwitchTurn();
@@ -976,7 +978,37 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
                 return;
             }
             GiveReward();
+            ShowReward(true);
             StartCoroutine(ExitArea());
+        }
+    }
+
+    public TMP_Text rewardText;
+
+    private void ShowReward(bool state)
+    {
+        if (state)
+        {
+            rewardText.gameObject.SetActive(true);
+            switch (reward.rewardType)
+            {
+                case RewardData.RewardType.Candy:
+                    rewardText.text = $"You win Candies: {reward.nbOfCandy}";
+                    break;
+                case RewardData.RewardType.Money:
+                    rewardText.text = $"You win Money: {reward.money}$";
+                    break;
+                case RewardData.RewardType.Shop:
+                    rewardText.text = "Visit Shop!";
+                    break;
+                default:
+                    rewardText.text = "Unknown reward.";
+                    break;
+            }
+        }
+        else
+        {
+            rewardText.gameObject.SetActive(false);
         }
     }
 

@@ -79,16 +79,29 @@ public class ShopManager : MonoBehaviour
     {
         if (article.item is CandyPackData candy)
         {
-            // Disponible seulement si le joueur ne possède pas déjà ce CandyPack
+            // Vérifie si le joueur ne possède pas déjà ce CandyPack
             var pack = GameManager.Instance.candyPacks.Find(p => p.data == candy);
-            return pack == null;
+            if (pack != null)
+                return false;
+
+            // Vérifie si le CandyPack requis est possédé
+            if (candy.necessaryPackToSeeThisOneInShop != null)
+            {
+                var requiredPack = GameManager.Instance.candyPacks.Find(p => p.data == candy.necessaryPackToSeeThisOneInShop);
+                if (requiredPack == null)
+                    return false;
+            }
+
+            return true;
         }
 
         if (article.item is PackUpgradeData upgrade)
         {
             // Disponible si le joueur possède le CandyPack à upgrader, et si l'upgrade n'a pas encore été appliquée
             var pack = GameManager.Instance.candyPacks.Find(p => p.data == upgrade.packToUpgrade);
-            return pack != null && !pack.usedUpgrades.Contains(upgrade) && !availableShopItems.Exists(a => a.item is PackUpgradeData upg && upg.packToUpgrade == upgrade.packToUpgrade);
+            return pack != null 
+                   && !pack.usedUpgrades.Contains(upgrade) 
+                   && !availableShopItems.Exists(a => a.item is PackUpgradeData upg && upg.packToUpgrade == upgrade.packToUpgrade);
         }
 
         if (article.item is PackRefillData refill)
@@ -100,6 +113,7 @@ public class ShopManager : MonoBehaviour
 
         return false;
     }
+
 
     public void MoveSelector(int dx, int dy)
     {
