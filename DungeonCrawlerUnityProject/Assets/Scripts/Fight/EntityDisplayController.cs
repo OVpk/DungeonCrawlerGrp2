@@ -103,11 +103,11 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         typeText.gameObject.SetActive(true);
 
         durabilityNb = entityData.durability;
-        durabilityText.text = durabilityNb + "b";
+        durabilityText.text = durabilityNb + "<sprite index=4>";
         typeText.text = entityData.type switch
         {
-            EntityData.EntityTypes.Mou => "a",
-            EntityData.EntityTypes.Dur => "`",
+            EntityData.EntityTypes.Mou => "<sprite index=3>",
+            EntityData.EntityTypes.Dur => "<sprite index=0>",
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -185,7 +185,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         entity.PlayHitAnim();
 
         durabilityNb = Math.Clamp(durabilityNb - nbDamages, 0, durabilityNb);
-        durabilityText.text = durabilityNb.ToString();
+        durabilityText.text = durabilityNb + "<sprite index=4>";
     }
 
     public void OnEntityDisplayBubble((int x, int y) position, FightManager.TurnState team, bool state, BubbleDirections direction)

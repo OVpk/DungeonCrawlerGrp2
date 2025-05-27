@@ -17,12 +17,12 @@ public class HoveredInfoController : MonoBehaviour
         if (character == null) {UpdateInformationWithEmpty(); return;}
         
         characterName.text = character.name;
-        string currentType = character.type == EntityData.EntityTypes.Mou ? "a" : "`";
-        currentLayerInfo.text = character.durability + "b / " + currentType;
+        string currentType = character.type == EntityData.EntityTypes.Mou ? "<sprite index=3>" : "<sprite index=0>";
+        currentLayerInfo.text = character.durability + "<sprite index=4> / " + currentType;
         if (character.nextLayer != null)
         {
-            string nextType = character.nextLayer.type == EntityData.EntityTypes.Mou ? "a" : "`";
-            nextLayerInfo.text = character.nextLayer.durability + "b / " + nextType;
+            string nextType = character.nextLayer.type == EntityData.EntityTypes.Mou ? "<sprite index=3>" : "<sprite index=0>";
+            nextLayerInfo.text = character.nextLayer.durability + "<sprite index=4> / " + nextType;
         }
         else
         {
