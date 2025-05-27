@@ -233,6 +233,6 @@ public class ShopManager : MonoBehaviour
             newList.Add(rnd);
             list.Remove(rnd);
         }
-        return list;
+        return newList;
     }
 }
