@@ -134,6 +134,38 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 710d24f550942a34694148cc09d77eda, type: 2}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 351d4bbf59df9b74f8aef96a098fdfaa, type: 2}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: bb9a349ab4fe67c40a129fa09afe8bbb, type: 2}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 04bc0fa338f371a4b875f2797ff3afa3, type: 2}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1816561e2e637a04b8b512618b979bbd, type: 2}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: ea37155f35373214a9bf4099a7753d6d, type: 2}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: cd587983e869a114cb1601a03e17c2d9, type: 2}
     - target: {fileID: 4943459011666813209, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: m_Name
       value: Shop
