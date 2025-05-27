@@ -136,7 +136,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: allShopItems.Array.size
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: allShopItems.Array.data[0]
@@ -157,15 +157,27 @@ PrefabInstance:
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: allShopItems.Array.data[4]
       value: 
-      objectReference: {fileID: 11400000, guid: 1816561e2e637a04b8b512618b979bbd, type: 2}
+      objectReference: {fileID: 11400000, guid: 02d957ebcf2092d49bb1bfc6bbc90c08, type: 2}
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: allShopItems.Array.data[5]
       value: 
-      objectReference: {fileID: 11400000, guid: ea37155f35373214a9bf4099a7753d6d, type: 2}
+      objectReference: {fileID: 11400000, guid: 59b2c9cb8c500ed4aa7e9b935ec80d59, type: 2}
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: allShopItems.Array.data[6]
       value: 
+      objectReference: {fileID: 11400000, guid: 1816561e2e637a04b8b512618b979bbd, type: 2}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.data[7]
+      value: 
+      objectReference: {fileID: 11400000, guid: ea37155f35373214a9bf4099a7753d6d, type: 2}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.data[8]
+      value: 
       objectReference: {fileID: 11400000, guid: cd587983e869a114cb1601a03e17c2d9, type: 2}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: allShopItems.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 67cf4b7beb3fbf7468adf53f4ebbb15c, type: 2}
     - target: {fileID: 4943459011666813209, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: m_Name
       value: Shop
@@ -434,6 +446,7 @@ MonoBehaviour:
   shopController: {fileID: 727970723}
   firstPacks:
   - {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
+  - {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}
   money: 0
 --- !u!4 &1165411351
 Transform:
