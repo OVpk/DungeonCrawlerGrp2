@@ -602,6 +602,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: FightArea
       objectReference: {fileID: 0}
+    - target: {fileID: 7472296024221292392, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_fontSize
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472296024221292392, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8480016163251829905, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
       propertyPath: m_Enabled
       value: 0
