@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Random = Unity.Mathematics.Random;
 
 public class ShopManager : MonoBehaviour
 {
@@ -50,8 +49,8 @@ public class ShopManager : MonoBehaviour
     {
         // Filtrer les items disponibles
         availableShopItems = new List<ArticalShopData>();
-        
-        //List<ArticalShopData> shuffleList = random
+        currentRefillArticleNb = 0;
+        allShopItems = ShuffleList(allShopItems);
 
         foreach (var article in allShopItems)
         {
@@ -223,5 +222,17 @@ public class ShopManager : MonoBehaviour
     {
         GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
         ExplorationManager.Instance.SetDisplay();
+    }
+    
+    public static List<T> ShuffleList<T>(List<T> list)
+    {
+        List<T> newList = new List<T>();
+        while (list.Count > 0)
+        {
+            var rnd = list[Random.Range(0, list.Count)];
+            newList.Add(rnd);
+            list.Remove(rnd);
+        }
+        return list;
     }
 }
