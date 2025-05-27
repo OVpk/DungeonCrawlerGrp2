@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <effectDescription>k__BackingField: 1 DGT
   <pattern>k__BackingField: {fileID: 11400000, guid: 9e78f79833823b14896e3f9083cba1b1, type: 2}
-  <damage>k__BackingField: 1
+  <damage>k__BackingField: 50
   effect: 0
   entityToSpawn: {fileID: 0}
   percentOfChanceOfGlue: 100
