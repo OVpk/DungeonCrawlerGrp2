@@ -70,9 +70,10 @@ public class ShopManager : MonoBehaviour
         {
             var go = Instantiate(shopItemPrefab, gridParent);
             var ui = go.GetComponent<ShopItemUI>();
-            ui.Setup(article.item.visualInShop, article.price, true);
+            ui.Setup(article.item.visualInShop, article.price, article, true); // Passe l'article
             itemUIs.Add(ui);
         }
+
     }
 
     private bool IsItemAvailable(ArticalShopData article)
@@ -140,19 +141,25 @@ public class ShopManager : MonoBehaviour
         if (idx >= availableShopItems.Count) return;
 
         var article = availableShopItems[idx];
+
+        // Vérifie l'argent
         if (GameManager.Instance.money < article.price)
         {
             ShowError("Pas assez d'argent !");
             return;
         }
 
+        // Réduit l'argent du joueur
         GameManager.Instance.money -= article.price;
         ApplyItemEffect(article.item);
         UpdateMoneyUI();
-        availableShopItems.RemoveAt(idx);
-        FilterAndDisplayItems();
+
+        // Marquer l'article comme "Sold Out"
+        var ui = itemUIs[idx];
+        ui.SetSoldOut();
         errorText.gameObject.SetActive(false);
     }
+
 
     private void ApplyItemEffect(ItemData item)
     {
