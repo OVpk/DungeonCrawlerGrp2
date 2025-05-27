@@ -917,6 +917,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 835675267b5ad534a81e8ad616991dda, type: 2}
     - target: {fileID: 2683272282119839874, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_fontSize
+      value: 2.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 2683272282119839874, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
       propertyPath: m_margin.x
       value: 0
       objectReference: {fileID: 0}
@@ -928,6 +932,10 @@ PrefabInstance:
       propertyPath: m_spriteAsset
       value: 
       objectReference: {fileID: 11400000, guid: 835675267b5ad534a81e8ad616991dda, type: 2}
+    - target: {fileID: 2683272282119839874, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 2.54
+      objectReference: {fileID: 0}
     - target: {fileID: 2702624400315380762, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
       propertyPath: m_margin.w
       value: 0
@@ -948,6 +956,22 @@ PrefabInstance:
       propertyPath: m_spriteAsset
       value: 
       objectReference: {fileID: 11400000, guid: 835675267b5ad534a81e8ad616991dda, type: 2}
+    - target: {fileID: 3006435417190168305, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.109998845
+      objectReference: {fileID: 0}
+    - target: {fileID: 3006435417190168305, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.5199985
+      objectReference: {fileID: 0}
+    - target: {fileID: 3906999706534337723, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3906999706534337723, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.6
+      objectReference: {fileID: 0}
     - target: {fileID: 4786225623317051566, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
       propertyPath: m_margin.x
       value: 0
@@ -997,6 +1021,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5978372721266810103, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_fontSize
+      value: 2.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 5978372721266810103, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
       propertyPath: m_margin.x
       value: 0
       objectReference: {fileID: 0}
@@ -1008,6 +1036,10 @@ PrefabInstance:
       propertyPath: m_spriteAsset
       value: 
       objectReference: {fileID: 11400000, guid: 835675267b5ad534a81e8ad616991dda, type: 2}
+    - target: {fileID: 5978372721266810103, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 2.54
+      objectReference: {fileID: 0}
     - target: {fileID: 6119153587705070626, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
       propertyPath: m_Name
       value: FightArea
