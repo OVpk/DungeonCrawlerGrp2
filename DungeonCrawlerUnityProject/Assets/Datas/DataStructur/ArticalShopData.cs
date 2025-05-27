@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/Shop/ArcticalPack")]
+[CreateAssetMenu(menuName = "Data/Shop/ArticleShop")]
 public class ArticalShopData : ScriptableObject
 {
     [field: SerializeField] public ItemData item { get; private set; }
