@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd3f947d771610746bdee2c5ba7715dc, type: 3}
   m_Name: WormAttackStage1
   m_EditorClassIdentifier: 
-  <effectDescription>k__BackingField: 3 DGT
+  <effectDescription>k__BackingField: 2 DGT
   <pattern>k__BackingField: {fileID: 11400000, guid: aff96b8f72fd0334a867fda03deaf97b, type: 2}
-  <damage>k__BackingField: 3
+  <damage>k__BackingField: 2
   effect: 0
   entityToSpawn: {fileID: 0}
   percentOfChanceOfGlue: 0
