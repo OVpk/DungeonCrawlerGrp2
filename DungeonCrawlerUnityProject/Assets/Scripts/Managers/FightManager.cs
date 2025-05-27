@@ -972,6 +972,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         }
         else if (HaveLoose(TurnState.Enemy))
         {
+            ShowReward(true);
             if (reward.rewardType == RewardData.RewardType.Shop)
             {
                 GameManager.Instance.ChangeGameState(GameManager.GameState.InShop);
@@ -979,7 +980,6 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
                 return;
             }
             GiveReward();
-            ShowReward(true);
             StartCoroutine(ExitArea());
         }
     }
