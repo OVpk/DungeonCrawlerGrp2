@@ -57,7 +57,15 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         effectDisplayer.glueAnim.gameObject.SetActive(false);
         effectDisplayer.explosivePowder.gameObject.SetActive(false);
     }
-    
+
+    private void OnEnable()
+    {
+        if (!isEntityActived)
+        {
+            entity.gameObject.SetActive(false);
+        }
+    }
+
 
     private bool IsConcerned((int x, int y) pos, FightManager.TurnState evtTeam)
         => team == evtTeam && pos == positionInGrid;
