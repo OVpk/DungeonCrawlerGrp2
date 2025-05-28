@@ -17,7 +17,6 @@ public class EntityDisplayer : MonoBehaviour
     private static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
     private static readonly int OutlineSize = Shader.PropertyToID("_OutlineSize");
 
-    private static readonly int TriggerIdle = Animator.StringToHash("Idle");
     private static readonly int TriggerSpawn = Animator.StringToHash("Spawn");
     private static readonly int TriggerAttack = Animator.StringToHash("Attack");
     private static readonly int TriggerHit = Animator.StringToHash("Hit");
@@ -54,7 +53,6 @@ public class EntityDisplayer : MonoBehaviour
         _instanceMaterial.SetColor("_Color", Color.white); // Met à jour la teinte
     }
 
-    public void PlayIdleAnim() => animator.SetTrigger(TriggerIdle);
     public void PlaySleepAnim() => animator.SetTrigger(TriggerSleep);
     public void PlaySpawnAnim() => animator.SetTrigger(TriggerSpawn);
     public void PlayAttackAnim() => animator.SetTrigger(TriggerAttack);
@@ -66,8 +64,14 @@ public class EntityDisplayer : MonoBehaviour
     {
         SayInformationCanContinue();
     }
+
+    public void SetSleepingState(bool state)
+    {
+        animator.SetBool(IsSleeping, state);
+    }
     
     private List<IFightDisplayerListener> listeners = new List<IFightDisplayerListener>();
+    private static readonly int IsSleeping = Animator.StringToHash("IsSleeping");
 
     public void Register(IFightDisplayerListener listener)
     {
