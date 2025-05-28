@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyTeteBrulee
   m_EditorClassIdentifier: 
   <entityName>k__BackingField: EnemyTeteBrulee
-  <durability>k__BackingField: 5
+  <durability>k__BackingField: 4
   <type>k__BackingField: 0
   effects: 04000000
   percentOfChanceToGiveExplosive: 80

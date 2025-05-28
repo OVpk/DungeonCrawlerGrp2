@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9be6bce98adc1a42839dbc1388bdbed, type: 3}
-  m_Name: ArticalUpgradeMalabarPack2
+  m_Name: ArticalPackRefillMalabar3
   m_EditorClassIdentifier: 
-  <item>k__BackingField: {fileID: 11400000, guid: 386e21fbd359f5e47afc8ee45cf2b2f5, type: 2}
-  <price>k__BackingField: 45
+  <item>k__BackingField: {fileID: 11400000, guid: fa2f961a7d307034db7d894a5c9b4411, type: 2}
+  <price>k__BackingField: 55

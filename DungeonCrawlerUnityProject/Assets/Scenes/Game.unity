@@ -753,7 +753,7 @@ PrefabInstance:
     - target: {fileID: 3474845578406053521, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
       propertyPath: customLevelData
       value: 
-      objectReference: {fileID: 11400000, guid: b9e30a583fef4024eba5fe339fa1fb13, type: 2}
+      objectReference: {fileID: 11400000, guid: 2423f0ca304e18549997563ad95f9a7b, type: 2}
     - target: {fileID: 3995817877762262114, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
       propertyPath: m_margin.x
       value: 0
@@ -922,6 +922,10 @@ PrefabInstance:
       propertyPath: m_spriteAsset
       value: 
       objectReference: {fileID: 11400000, guid: 835675267b5ad534a81e8ad616991dda, type: 2}
+    - target: {fileID: 2293774233266110387, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2683272282119839874, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
       propertyPath: m_fontSize
       value: 2.54

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9be6bce98adc1a42839dbc1388bdbed, type: 3}
   m_Name: ArticalNewPackCarambar
   m_EditorClassIdentifier: 
-  <item>k__BackingField: {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
-  <price>k__BackingField: 15
+  <item>k__BackingField: {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}
+  <price>k__BackingField: 45
