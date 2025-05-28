@@ -23,6 +23,9 @@ public class ExplorationController : PlayerController
             case Buttons.A :
                 EnterArea();
                 break;
+            case Buttons.Y :
+                ExplorationManager.Instance.GoToShop();
+                break;
         }
     }
 
