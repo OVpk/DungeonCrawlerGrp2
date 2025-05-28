@@ -973,12 +973,6 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         else if (HaveLoose(TurnState.Enemy))
         {
             ShowReward(true);
-            if (reward.rewardType == RewardData.RewardType.Shop)
-            {
-                GameManager.Instance.ChangeGameState(GameManager.GameState.InShop);
-                ShopManager.Instance.InitShop();
-                return;
-            }
             GiveReward();
             StartCoroutine(ExitArea());
         }
@@ -998,9 +992,6 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
                     break;
                 case RewardData.RewardType.Money:
                     rewardText.text = $"You win Money: {reward.money}$";
-                    break;
-                case RewardData.RewardType.Shop:
-                    rewardText.text = "Visit Shop!";
                     break;
                 default:
                     rewardText.text = "Unknown reward.";
