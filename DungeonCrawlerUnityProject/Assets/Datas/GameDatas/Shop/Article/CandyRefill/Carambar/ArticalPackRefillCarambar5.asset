@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ArticalPackRefillCarambar5
   m_EditorClassIdentifier: 
   <item>k__BackingField: {fileID: 11400000, guid: 98e7e5237442c36408f8b42042db0691, type: 2}
-  <price>k__BackingField: 5
+  <price>k__BackingField: 50
