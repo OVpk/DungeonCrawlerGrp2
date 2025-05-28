@@ -46,9 +46,6 @@ public class AreaInWorldDisplayController : MonoBehaviour
                 case RewardData.RewardType.Money:
                     rewardText.text = $"Money: {fightArea.reward.money}$";
                     break;
-                case RewardData.RewardType.Shop:
-                    rewardText.text = "Visit Shop!";
-                    break;
                 default:
                     rewardText.text = "Unknown reward.";
                     break;

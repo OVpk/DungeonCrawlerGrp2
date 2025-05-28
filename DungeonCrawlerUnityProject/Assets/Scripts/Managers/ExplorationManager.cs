@@ -90,4 +90,10 @@ public class ExplorationManager : MonoBehaviour
     {
         moneyText.text = GameManager.Instance.money.ToString();
     }
+
+    public void GoToShop()
+    {
+        GameManager.Instance.ChangeGameState(GameManager.GameState.InShop);
+        ShopManager.Instance.InitShop();
+    }
 }
