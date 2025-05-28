@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93551563d6238c141bf8069e80005295, type: 3}
+  m_Name: "Fran\xE7oisCustomLevelData"
+  m_EditorClassIdentifier: 
+  <height>k__BackingField: 8
+  <width>k__BackingField: 8
+  customLevel:
+  - {fileID: 11400000, guid: 53322008bb462a643a4c6fed630a792e, type: 2}
+  - {fileID: 11400000, guid: 3007fde6a85db1a4eb6cf58567e3250a, type: 2}
+  - {fileID: 11400000, guid: 85b073077ea9f32468cdd1e1d1dbcc6c, type: 2}
+  - {fileID: 11400000, guid: 7bcc72189d0c97a43a0f0b1a16ea9551, type: 2}
+  - {fileID: 11400000, guid: d16237a5785ca8c49bbbcc066a56a7d2, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: b056d2716221090419c932c6ade91239, type: 2}
+  - {fileID: 11400000, guid: c2fd007da601a6a49aded1a9ce944eeb, type: 2}
+  - {fileID: 11400000, guid: 058ead67c4f146e46ac80fe8ee6b75fa, type: 2}
+  - {fileID: 11400000, guid: a2b535170aa304a418544754d7d56778, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 85b073077ea9f32468cdd1e1d1dbcc6c, type: 2}
+  - {fileID: 11400000, guid: 7bcc72189d0c97a43a0f0b1a16ea9551, type: 2}
+  - {fileID: 11400000, guid: d16237a5785ca8c49bbbcc066a56a7d2, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 058ead67c4f146e46ac80fe8ee6b75fa, type: 2}
+  - {fileID: 11400000, guid: a2b535170aa304a418544754d7d56778, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: a2b535170aa304a418544754d7d56778, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
