@@ -672,8 +672,6 @@ MonoBehaviour:
   shopController: {fileID: 727970723}
   firstPacks:
   - {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
-  - {fileID: 11400000, guid: 4148c16fb9807d34ea6e65de05b4c533, type: 2}
-  - {fileID: 11400000, guid: 5dabfc31e419a754fa825a88ffed2712, type: 2}
   money: 0
 --- !u!4 &1165411351
 Transform:
