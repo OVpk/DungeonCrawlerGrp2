@@ -289,6 +289,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: maxRefillArticleNb
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: allShopItems.Array.size
       value: 15
       objectReference: {fileID: 0}
@@ -668,6 +672,8 @@ MonoBehaviour:
   shopController: {fileID: 727970723}
   firstPacks:
   - {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
+  - {fileID: 11400000, guid: 4148c16fb9807d34ea6e65de05b4c533, type: 2}
+  - {fileID: 11400000, guid: 5dabfc31e419a754fa825a88ffed2712, type: 2}
   money: 0
 --- !u!4 &1165411351
 Transform:
