@@ -94,6 +94,5 @@ public class ExplorationManager : MonoBehaviour
     public void GoToShop()
     {
         GameManager.Instance.ChangeGameState(GameManager.GameState.InShop);
-        ShopManager.Instance.InitShop();
     }
 }

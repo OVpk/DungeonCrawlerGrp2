@@ -952,6 +952,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
     private IEnumerator ExitArea()
     {
         yield return new WaitForSeconds(3f);
+        ShopManager.Instance.InitShop();
         GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
         ExplorationManager.Instance.SetDisplay();
     }
