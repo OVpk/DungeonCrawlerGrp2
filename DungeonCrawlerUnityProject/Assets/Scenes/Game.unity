@@ -290,7 +290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: maxRefillArticleNb
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: allShopItems.Array.size
