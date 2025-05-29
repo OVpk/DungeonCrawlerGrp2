@@ -157,6 +157,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
 
     public void LoadFightArea(FightAreaData data)
     {
+        isGameEnded = false;
         InitPack();
         InitEnemyGrid(data.enemyGrid);
         reward = data.reward;
@@ -964,14 +965,20 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         return true;
     }
 
+    private bool isGameEnded = false;
+
     private void CheckEndGame()
     {
+        if (isGameEnded) return;
+        
         if (HaveLoose(TurnState.Player))
         {
+            isGameEnded = true;
             throw new Exception("l'enemi a gagné");
         }
         else if (HaveLoose(TurnState.Enemy))
         {
+            isGameEnded = true;
             ShowReward(true);
             GiveReward();
             StartCoroutine(ExitArea());
