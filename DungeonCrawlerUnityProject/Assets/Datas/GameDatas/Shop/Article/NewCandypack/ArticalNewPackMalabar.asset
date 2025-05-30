@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9be6bce98adc1a42839dbc1388bdbed, type: 3}
   m_Name: ArticalNewPackMalabar
   m_EditorClassIdentifier: 
-  <item>k__BackingField: {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}
-  <price>k__BackingField: 25
+  <item>k__BackingField: {fileID: 11400000, guid: 5dabfc31e419a754fa825a88ffed2712, type: 2}
+  <price>k__BackingField: 200

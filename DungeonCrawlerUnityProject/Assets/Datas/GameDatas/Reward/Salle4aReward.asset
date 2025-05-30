@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 209c8af6d1b48a94daed187661ff9cd6, type: 3}
-  m_Name: Salle4aReward
+  m_Name: Salle4AReward
   m_EditorClassIdentifier: 
   <rewardType>k__BackingField: 0
-  <nbOfCandy>k__BackingField: 4
+  <nbOfCandy>k__BackingField: 3
   <money>k__BackingField: 0

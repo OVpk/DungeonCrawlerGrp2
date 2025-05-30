@@ -165,8 +165,12 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetGrayscale(true);
-        if (isEntityActived) 
+        
+        if (isEntityActived)
+        {
             entity.PlaySleepAnim();
+        }
+        entity.SetSleepingState(true);
     }
 
     public void OnEntityLocationEnabled((int x, int y) position, FightManager.TurnState team)
@@ -174,8 +178,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         entityLocation.SetGrayscale(false);
-        if (isEntityActived)
-            entity.PlayIdleAnim();
+        entity.SetSleepingState(false);
     }
 
     public void OnEntityTakeDamage((int x, int y) position, int nbDamages, FightManager.TurnState team)

@@ -8,8 +8,7 @@ public class RewardData : ScriptableObject
     public enum RewardType
     {
         Candy,
-        Money,
-        Shop
+        Money
     }
     [field: SerializeField] public RewardType rewardType { get; private set; }
     

@@ -157,6 +157,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
 
     public void LoadFightArea(FightAreaData data)
     {
+        isGameEnded = false;
         InitPack();
         InitEnemyGrid(data.enemyGrid);
         reward = data.reward;
@@ -951,6 +952,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
     private IEnumerator ExitArea()
     {
         yield return new WaitForSeconds(3f);
+        ShopManager.Instance.InitShop();
         GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
         ExplorationManager.Instance.SetDisplay();
     }
@@ -964,21 +966,21 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         return true;
     }
 
+    private bool isGameEnded = false;
+
     private void CheckEndGame()
     {
+        if (isGameEnded) return;
+        
         if (HaveLoose(TurnState.Player))
         {
+            isGameEnded = true;
             throw new Exception("l'enemi a gagné");
         }
         else if (HaveLoose(TurnState.Enemy))
         {
+            isGameEnded = true;
             ShowReward(true);
-            if (reward.rewardType == RewardData.RewardType.Shop)
-            {
-                GameManager.Instance.ChangeGameState(GameManager.GameState.InShop);
-                ShopManager.Instance.InitShop();
-                return;
-            }
             GiveReward();
             StartCoroutine(ExitArea());
         }
@@ -998,9 +1000,6 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
                     break;
                 case RewardData.RewardType.Money:
                     rewardText.text = $"You win Money: {reward.money}$";
-                    break;
-                case RewardData.RewardType.Shop:
-                    rewardText.text = "Visit Shop!";
                     break;
                 default:
                     rewardText.text = "Unknown reward.";

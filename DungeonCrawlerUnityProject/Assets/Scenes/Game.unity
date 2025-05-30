@@ -289,6 +289,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
+      propertyPath: maxRefillArticleNb
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: allShopItems.Array.size
       value: 15
       objectReference: {fileID: 0}
@@ -916,6 +920,10 @@ PrefabInstance:
       propertyPath: m_spriteAsset
       value: 
       objectReference: {fileID: 11400000, guid: 835675267b5ad534a81e8ad616991dda, type: 2}
+    - target: {fileID: 2293774233266110387, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2683272282119839874, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
       propertyPath: m_fontSize
       value: 2.54
