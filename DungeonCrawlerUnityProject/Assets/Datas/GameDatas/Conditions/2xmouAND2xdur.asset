@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5acff76ebb994e249a9ac601e3807dd3, type: 3}
   m_Name: 2xmouAND2xdur
   m_EditorClassIdentifier: 
-  <description>k__BackingField: 2a 2 <sprite index=0>
+  <description>k__BackingField: 2 <sprite index=3> 2 <sprite index=0>
   conditionA: {fileID: 11400000, guid: 236a93a62631bb449ad88d6af16dddfb, type: 2}
   operatorType: 0
   conditionB: {fileID: 11400000, guid: cd954bbba6a099a4cb339cb249c67345, type: 2}
