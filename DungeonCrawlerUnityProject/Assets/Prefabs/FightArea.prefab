@@ -396,6 +396,26 @@ PrefabInstance:
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 4637478625797093524, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 14.3626
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637478625797093524, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 7.3317
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637478625797093524, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 3.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637478625797093524, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 7202736212177672986, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8086419871987164073, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
       propertyPath: m_Name
       value: FightSceneUi
