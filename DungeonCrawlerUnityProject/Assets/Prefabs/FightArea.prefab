@@ -290,6 +290,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5943159915301257386}
     m_Modifications:
+    - target: {fileID: 1099636193835490330, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313416209073854705, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1345536295705520494, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5034428928844105723, guid: b05aceae9a60803478b919394ee503c2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -24.553753
@@ -330,9 +342,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5426323504602934856, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6874000172303884793, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6901781814632341883, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6951552912568741424, guid: b05aceae9a60803478b919394ee503c2, type: 3}
       propertyPath: m_Name
       value: Background
+      objectReference: {fileID: 0}
+    - target: {fileID: 7734818461863634275, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8289071666537621820, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 024331d217ad6454786476ef07d57816, type: 3}
+    - target: {fileID: 8289071666537621820, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8830825410751023211, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8928391122734618438, guid: b05aceae9a60803478b919394ee503c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
