@@ -466,6 +466,7 @@ GameObject:
   - component: {fileID: 727970718}
   - component: {fileID: 727970722}
   - component: {fileID: 727970723}
+  - component: {fileID: 727970724}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -536,6 +537,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 727970724}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: MovementAction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 0922f714-a847-4893-befd-1946c8367a5c
     m_ActionName: X-Box Controller/D-Pad[/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/right,/XInputControllerWindows/dpad/up]
   - m_PersistentCalls:
@@ -565,6 +578,18 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 727970723}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: ButtonAction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 727970724}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: ButtonAction
         m_Mode: 0
@@ -638,6 +663,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f234c884dc1e0409fe141e7abf27af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &727970724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727970717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb4eeb4c88f64b4b9d52f3f2a1f7855, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1165411349
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,6 +707,7 @@ MonoBehaviour:
   overWorldController: {fileID: 727970722}
   fightAreaController: {fileID: 727970720}
   shopController: {fileID: 727970723}
+  refillPackController: {fileID: 727970724}
   firstPacks:
   - {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
   money: 0
@@ -1135,6 +1173,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &6645125584840581258
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 992012191278767678, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_Name
+      value: RefillPack
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303257916866408347, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 286.07513
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303257916866408347, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1032.1243
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303257916866408347, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8.207178
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303257916866408347, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303257916866408347, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303257916866408347, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303257916866408347, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303257916866408347, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303257916866408347, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303257916866408347, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c34a9bb7a3ebfc84689ddea8710b01a0, type: 3}
 --- !u!114 &6767419671565190535 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6367092390878063474, guid: fd972ea0b2f24eb46b214cb2831c56ce, type: 3}
@@ -1154,5 +1249,6 @@ SceneRoots:
   - {fileID: 727970721}
   - {fileID: 5984751795696660366}
   - {fileID: 562467763962873846}
-  - {fileID: 6541232235687459792}
   - {fileID: 387376248}
+  - {fileID: 6645125584840581258}
+  - {fileID: 6541232235687459792}
