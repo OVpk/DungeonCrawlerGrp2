@@ -949,12 +949,20 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         return positions;
     }
 
-    private IEnumerator ExitArea()
+    private IEnumerator ExitArea(GameManager.GameState whereGo)
     {
         yield return new WaitForSeconds(3f);
-        ShopManager.Instance.InitShop();
-        GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
-        ExplorationManager.Instance.SetDisplay();
+        if (whereGo == GameManager.GameState.InOverWorld)
+        {
+            ShopManager.Instance.InitShop();
+            GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
+            ExplorationManager.Instance.SetDisplay();
+        }
+        if (whereGo == GameManager.GameState.InRefillPack)
+        {
+            GameManager.Instance.ChangeGameState(GameManager.GameState.InRefillPack);
+            RefillPackManager.Instance.Init(reward.nbOfCandy);
+        }
     }
 
     private bool HaveLoose(TurnState teamToCheck)
@@ -981,8 +989,10 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         {
             isGameEnded = true;
             ShowReward(true);
-            GiveReward();
-            StartCoroutine(ExitArea());
+            GiveMoney();
+            StartCoroutine(ExitArea(reward.rewardType == RewardData.RewardType.Candy 
+                ? GameManager.GameState.InRefillPack 
+                : GameManager.GameState.InOverWorld));
         }
     }
 
@@ -1012,19 +1022,11 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         }
     }
 
-    private void GiveReward()
+    private void GiveMoney()
     {
-        switch (reward.rewardType)
+        if (reward.rewardType == RewardData.RewardType.Money)
         {
-            case RewardData.RewardType.Candy : RefillPack(GameManager.Instance.candyPacks[Random.Range(0, GameManager.Instance.candyPacks.Count)], reward.nbOfCandy); break;
-            case RewardData.RewardType.Money : GameManager.Instance.money += reward.money; break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            GameManager.Instance.money += reward.money;
         }
-    }
-
-    private void RefillPack(CandyPack pack, int nb)
-    {
-        pack.currentStock = Math.Clamp(pack.currentStock += nb, 0, pack.maxStock);
     }
 }
