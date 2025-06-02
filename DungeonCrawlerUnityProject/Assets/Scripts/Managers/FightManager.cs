@@ -157,6 +157,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
 
     public void LoadFightArea(FightAreaData data)
     {
+        isGameEnded = false;
         InitPack();
         InitEnemyGrid(data.enemyGrid);
         reward = data.reward;
@@ -948,11 +949,20 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         return positions;
     }
 
-    private IEnumerator ExitArea()
+    private IEnumerator ExitArea(GameManager.GameState whereGo)
     {
         yield return new WaitForSeconds(3f);
-        GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
-        ExplorationManager.Instance.SetDisplay();
+        if (whereGo == GameManager.GameState.InOverWorld)
+        {
+            ShopManager.Instance.InitShop();
+            GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
+            ExplorationManager.Instance.SetDisplay();
+        }
+        if (whereGo == GameManager.GameState.InRefillPack)
+        {
+            GameManager.Instance.ChangeGameState(GameManager.GameState.InRefillPack);
+            RefillPackManager.Instance.Init(reward.nbOfCandy);
+        }
     }
 
     private bool HaveLoose(TurnState teamToCheck)
@@ -964,23 +974,25 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         return true;
     }
 
+    private bool isGameEnded = false;
+
     private void CheckEndGame()
     {
+        if (isGameEnded) return;
+        
         if (HaveLoose(TurnState.Player))
         {
+            isGameEnded = true;
             throw new Exception("l'enemi a gagné");
         }
         else if (HaveLoose(TurnState.Enemy))
         {
+            isGameEnded = true;
             ShowReward(true);
-            if (reward.rewardType == RewardData.RewardType.Shop)
-            {
-                GameManager.Instance.ChangeGameState(GameManager.GameState.InShop);
-                ShopManager.Instance.InitShop();
-                return;
-            }
-            GiveReward();
-            StartCoroutine(ExitArea());
+            GiveMoney();
+            StartCoroutine(ExitArea(reward.rewardType == RewardData.RewardType.Candy 
+                ? GameManager.GameState.InRefillPack 
+                : GameManager.GameState.InOverWorld));
         }
     }
 
@@ -999,9 +1011,6 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
                 case RewardData.RewardType.Money:
                     rewardText.text = $"You win Money: {reward.money}$";
                     break;
-                case RewardData.RewardType.Shop:
-                    rewardText.text = "Visit Shop!";
-                    break;
                 default:
                     rewardText.text = "Unknown reward.";
                     break;
@@ -1013,19 +1022,11 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         }
     }
 
-    private void GiveReward()
+    private void GiveMoney()
     {
-        switch (reward.rewardType)
+        if (reward.rewardType == RewardData.RewardType.Money)
         {
-            case RewardData.RewardType.Candy : RefillPack(GameManager.Instance.candyPacks[Random.Range(0, GameManager.Instance.candyPacks.Count)], reward.nbOfCandy); break;
-            case RewardData.RewardType.Money : GameManager.Instance.money += reward.money; break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            GameManager.Instance.money += reward.money;
         }
-    }
-
-    private void RefillPack(CandyPack pack, int nb)
-    {
-        pack.currentStock = Math.Clamp(pack.currentStock += nb, 0, pack.maxStock);
     }
 }

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 271dfbe72f319354a99f12d6b7146472, type: 3}
   m_Name: 6xMou
   m_EditorClassIdentifier: 
-  <description>k__BackingField: 6a
+  <description>k__BackingField: 6 <sprite index=3>
   targetType: 1
   requiredCount: 6

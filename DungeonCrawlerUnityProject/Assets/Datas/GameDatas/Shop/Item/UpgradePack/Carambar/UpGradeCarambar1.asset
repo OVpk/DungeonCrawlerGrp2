@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: UpGradeCarambar1
   m_EditorClassIdentifier: 
   <visualInShop>k__BackingField: {fileID: 21300000, guid: 464e9de442b0e964080bb76356fb9ed5, type: 3}
-  <packToUpgrade>k__BackingField: {fileID: 11400000, guid: 5dabfc31e419a754fa825a88ffed2712, type: 2}
+  <packToUpgrade>k__BackingField: {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}
   <newMaxStock>k__BackingField: 10

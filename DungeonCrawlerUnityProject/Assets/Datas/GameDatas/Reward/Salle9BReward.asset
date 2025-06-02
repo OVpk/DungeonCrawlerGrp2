@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 209c8af6d1b48a94daed187661ff9cd6, type: 3}
   m_Name: Salle9BReward
   m_EditorClassIdentifier: 
-  <rewardType>k__BackingField: 2
+  <rewardType>k__BackingField: 1
   <nbOfCandy>k__BackingField: 0
-  <money>k__BackingField: 0
+  <money>k__BackingField: 55

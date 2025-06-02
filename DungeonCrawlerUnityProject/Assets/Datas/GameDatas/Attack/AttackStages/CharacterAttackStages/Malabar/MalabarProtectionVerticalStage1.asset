@@ -19,6 +19,6 @@ MonoBehaviour:
   entityToSpawn: {fileID: 0}
   percentOfChanceOfGlue: 0
   glueDurability: 0
-  bubbleDurability: 2
+  bubbleDurability: 3
   <unlockCondition>k__BackingField: {fileID: 0}
   <selfDamage>k__BackingField: 0

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ArticalUpgradeMalabarPack2
   m_EditorClassIdentifier: 
   <item>k__BackingField: {fileID: 11400000, guid: 386e21fbd359f5e47afc8ee45cf2b2f5, type: 2}
-  <price>k__BackingField: 6
+  <price>k__BackingField: 45
