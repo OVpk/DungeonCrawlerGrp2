@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ArticalUpgradeCarambarPack1
   m_EditorClassIdentifier: 
   <item>k__BackingField: {fileID: 11400000, guid: 2bad8aa4e4f24584683a40207c3b9e7a, type: 2}
-  <price>k__BackingField: 10
+  <price>k__BackingField: 20
