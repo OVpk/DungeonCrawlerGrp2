@@ -397,10 +397,10 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
         switch (effectToApply)
         {
             case EntityData.EntityEffects.ProtectedHorizontaly : 
-                sendInformation.EntityCreateProtectionAt(protectorPosition, protectorTeam, EntityDisplayController.BubbleDirections.Horizontal);
+                sendInformation.EntityCreateProtectionAt(protectorPosition, protectorTeam, EntityDisplayController.BubbleDirections.Horizontal, protector.bubbleDurability);
                 break;
             case EntityData.EntityEffects.ProtectedVerticaly :
-                sendInformation.EntityCreateProtectionAt(protectorPosition, protectorTeam, EntityDisplayController.BubbleDirections.Vertical);
+                sendInformation.EntityCreateProtectionAt(protectorPosition, protectorTeam, EntityDisplayController.BubbleDirections.Vertical, protector.bubbleDurability);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(effectToApply), effectToApply, null);
@@ -556,6 +556,10 @@ private IEnumerator ProcessProtectedHits(
     {
         EntityDataInstance protector = grid[protectorPosition.x, protectorPosition.y];
         protector.bubbleDurability--;
+        
+        sendInformation.BubbleTakeDamageAt(protectorPosition,
+            grid is CharacterDataInstance[,] ? TurnState.Player : TurnState.Enemy);
+        
         if (protector.bubbleDurability <= 0)
         {
             RemoveBubbleAt(protectorPosition, grid);
@@ -734,7 +738,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
     bool originInsideBubble = insideBubbleH || insideBubbleV;
 
     // 3) Capture de l'état de protection initial des entités
-    var protectedPositions = new HashSet<(int x, int y)>();
+    var protectedPositions = new List<(int x, int y)>();
     for (int i = 0; i < gridToApply.GetLength(0); i++)
     {
         for (int j = 0; j < gridToApply.GetLength(1); j++)
@@ -769,14 +773,13 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
 
     if (originInsideBubble)
     {
-        RemoveBubbleAt(position, gridToApply);
+        yield return ProcessProtectedHits(gridToApply, new List<(int x, int y)>(){position});
     }
 
     // 5) Suppression des bulles si explosion hors bulle (les protégés survivent)
     if (!originInsideBubble)
     {
-        foreach (var pos in protectedPositions)
-            RemoveBubbleAt(pos, gridToApply);
+        yield return ProcessProtectedHits(gridToApply, protectedPositions);
     }
 
     // 6) Application des animations visuelles d'explosion pour chaîne, sans dégâts
