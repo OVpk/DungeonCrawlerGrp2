@@ -114,7 +114,8 @@ public class ShopManager : MonoBehaviour
             var pack = GameManager.Instance.candyPacks.Find(p => p.data == upgrade.packToUpgrade);
             return pack != null 
                    && !pack.usedUpgrades.Contains(upgrade) 
-                   && !availableShopItems.Exists(a => a.item is PackUpgradeData upg && upg.packToUpgrade == upgrade.packToUpgrade);
+                   && !availableShopItems.Exists(a => a.item is PackUpgradeData upg && upg.packToUpgrade == upgrade.packToUpgrade)
+                   && pack.usedUpgrades.Contains(upgrade.necessaryUpgradeToSeeThisOneInShop);
         }
 
         if (article.item is PackRefillData refill)

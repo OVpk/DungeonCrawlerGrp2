@@ -18,5 +18,5 @@ MonoBehaviour:
   <iconDistance3>k__BackingField: {fileID: 0}
   <description>k__BackingField: 
   <background>k__BackingField: {fileID: 0}
-  <enemyGrid>k__BackingField: {fileID: 11400000, guid: 6c389950394c8b04ea007e7f8ccaa55b, type: 2}
+  <enemyGrid>k__BackingField: {fileID: 11400000, guid: f4ae2eacbef5b33418520d5e8f84fc4b, type: 2}
   <reward>k__BackingField: {fileID: 11400000, guid: a3bf7700cd9764f4db7cdf3982efea6b, type: 2}

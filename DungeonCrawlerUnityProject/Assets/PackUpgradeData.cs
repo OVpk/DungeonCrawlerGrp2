@@ -7,4 +7,6 @@ public class PackUpgradeData : ItemData
 {
     [field: SerializeField] public CandyPackData packToUpgrade { get; private set; }
     [field: SerializeField] public int newMaxStock { get; private set; }
+    
+    [field: SerializeField] public PackUpgradeData necessaryUpgradeToSeeThisOneInShop { get; private set; }
 }
