@@ -371,4 +371,11 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         bubbleDurabilityNb = Math.Clamp(bubbleDurabilityNb--, 0, bubbleDurabilityNb);
         bubbleDurabilityText.text = bubbleDurabilityNb.ToString();
     }
+
+    public void OnAttackIsMissed((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.anim.Play("Missed");
+    }
 }

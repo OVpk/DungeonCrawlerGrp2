@@ -43,5 +43,7 @@ public interface IFightEventListener
     void OnGridIsClear(FightManager.TurnState team);
     
     void OnBubbleTakeDamage((int x, int y) position, FightManager.TurnState team);
+    
+    void OnAttackIsMissed((int x, int y) position, FightManager.TurnState team);
 
 }
