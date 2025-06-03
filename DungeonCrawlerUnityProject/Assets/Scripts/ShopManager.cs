@@ -64,6 +64,7 @@ public class ShopManager : MonoBehaviour
                     if (currentRefillArticleNb >= maxRefillArticleNb) continue;
                     currentRefillArticleNb++;
                     availableShopItems.Add(article);
+                    continue;
                 }
                 availableShopItems.Add(article);
             }
