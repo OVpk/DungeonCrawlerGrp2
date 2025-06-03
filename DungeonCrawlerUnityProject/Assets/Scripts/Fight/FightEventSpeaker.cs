@@ -236,5 +236,12 @@ public class FightEventSpeaker : MonoBehaviour
             listener.OnBubbleTakeDamage(position, team);
         }
     }
-    
+
+    public void AttackIsMissedAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnAttackIsMissed(position, team);
+        }
+    }
 }

@@ -490,7 +490,11 @@ private void TryApplyGlue(
     foreach (var pos in damaged)
     {
         if (protectedHits.Contains(pos)) continue;
-        if (Random.Range(0, 100) >= stage.PercentOfChanceOfGlue) continue;
+        if (Random.Range(0, 100) >= stage.PercentOfChanceOfGlue)
+        {
+            sendInformation.AttackIsMissedAt(pos, targetTeam);
+            continue;
+        }
         var e = grid[pos.x, pos.y];
         if (e == null) continue;
         e.AddEffect(EntityData.EntityEffects.Glue);
@@ -606,10 +610,17 @@ private IEnumerator ProcessRegularHits(
     {
         var e = grid[pos.x, pos.y];
         if (e == null) continue;
+        if (e.effects.Contains(EntityData.EntityEffects.Fog))
+        {
+            Debug.Log("fogggé tapé");
+        }
         if (e.effects.Contains(EntityData.EntityEffects.Fog) &&
             Random.Range(0, 100) <= e.percentOfChanceOfAvoidingAttackThanksToFog)
+        {
+            Debug.Log("missed");
+            sendInformation.AttackIsMissedAt(pos, grid is CharacterDataInstance[,] ? TurnState.Player : TurnState.Enemy);
             continue;
-
+        }
         yield return ApplyDamageAtPosition(grid, pos, stage.damage);
         damagedPositions.Add(pos);
     }
@@ -632,8 +643,6 @@ private IEnumerator ProcessRegularHits(
         if (damages <= 0) yield break;
         TurnState entityTeam = entity is CharacterDataInstance ? TurnState.Player : TurnState.Enemy;
         EntityDataInstance[,] gridToApply = entityTeam == TurnState.Player ? playerGrid : enemyGrid;
-        if (entity.effects.Contains(EntityData.EntityEffects.Fog) && 
-            Random.Range(0, 100) <= entity.percentOfChanceOfAvoidingAttackThanksToFog) yield break;
         
         entity.durability -= damages; 
         sendInformation.EntityTakeDamageAt(entityPosition, damages, entityTeam); 
