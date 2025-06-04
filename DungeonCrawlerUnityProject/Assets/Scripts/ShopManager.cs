@@ -112,10 +112,10 @@ public class ShopManager : MonoBehaviour
         {
             // Disponible si le joueur possède le CandyPack à upgrader, et si l'upgrade n'a pas encore été appliquée
             var pack = GameManager.Instance.candyPacks.Find(p => p.data == upgrade.packToUpgrade);
-            return pack != null 
-                   && !pack.usedUpgrades.Contains(upgrade) 
+            if (pack == null) return false;
+            return !pack.usedUpgrades.Contains(upgrade) 
                    && !availableShopItems.Exists(a => a.item is PackUpgradeData upg && upg.packToUpgrade == upgrade.packToUpgrade)
-                   && pack.usedUpgrades.Contains(upgrade.necessaryUpgradeToSeeThisOneInShop);
+                   && (upgrade.necessaryUpgradeToSeeThisOneInShop == null || pack.usedUpgrades.Contains(upgrade.necessaryUpgradeToSeeThisOneInShop));
         }
 
         if (article.item is PackRefillData refill)
