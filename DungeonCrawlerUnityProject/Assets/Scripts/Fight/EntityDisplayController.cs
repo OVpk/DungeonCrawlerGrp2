@@ -14,6 +14,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     public TMP_Text durabilityText;
     public int durabilityNb;
     public TMP_Text typeText;
+    public TMP_Text bubbleDurabilityText;
+    public int bubbleDurabilityNb;
 
     #region PossibleHightlightColors
 
@@ -271,9 +273,13 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         Vertical
     }
 
-    public void OnEntityCreateProtection((int x, int y) position, FightManager.TurnState team, BubbleDirections direction)
+    public void OnEntityCreateProtection((int x, int y) position, FightManager.TurnState team, BubbleDirections direction, int bubbleDurability)
     {
         if (!IsConcerned(position, team)) return;
+        
+        bubbleDurabilityText.gameObject.SetActive(true);
+        bubbleDurabilityNb = bubbleDurability;
+        bubbleDurabilityText.text = bubbleDurabilityNb.ToString();
 
         switch (direction)
         {
@@ -288,6 +294,8 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     public void OnEntityLoseProtection((int x, int y) position, FightManager.TurnState team, BubbleDirections direction)
     {
         if (!IsConcerned(position, team)) return;
+        
+        bubbleDurabilityText.gameObject.SetActive(false);
 
         switch (direction)
         {
@@ -355,6 +363,19 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         
         ResetDisplay();
     }
-    
-    
+
+    public void OnBubbleTakeDamage((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        bubbleDurabilityNb = Math.Clamp(bubbleDurabilityNb--, 0, bubbleDurabilityNb);
+        bubbleDurabilityText.text = bubbleDurabilityNb.ToString();
+    }
+
+    public void OnAttackIsMissed((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+        
+        effectDisplayer.anim.Play("Missed");
+    }
 }

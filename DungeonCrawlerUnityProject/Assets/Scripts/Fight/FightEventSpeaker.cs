@@ -149,11 +149,11 @@ public class FightEventSpeaker : MonoBehaviour
         }
     }
 
-    public void EntityCreateProtectionAt((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction)
+    public void EntityCreateProtectionAt((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction, int bubbleDurability)
     {
         foreach (var listener in listeners)
         {
-            listener.OnEntityCreateProtection(position, team, direction);
+            listener.OnEntityCreateProtection(position, team, direction, bubbleDurability);
         }
     }
 
@@ -228,5 +228,20 @@ public class FightEventSpeaker : MonoBehaviour
             listener.OnGridIsClear(team);
         }
     }
-    
+
+    public void BubbleTakeDamageAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnBubbleTakeDamage(position, team);
+        }
+    }
+
+    public void AttackIsMissedAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnAttackIsMissed(position, team);
+        }
+    }
 }

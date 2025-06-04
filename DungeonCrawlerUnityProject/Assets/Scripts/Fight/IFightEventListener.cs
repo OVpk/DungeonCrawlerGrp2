@@ -22,7 +22,7 @@ public interface IFightEventListener
 
     void OnEntityDisplayBubble((int x, int y) position, FightManager.TurnState team, bool state, EntityDisplayController.BubbleDirections direction);
 
-    void OnEntityCreateProtection((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction);
+    void OnEntityCreateProtection((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction, int bubbleDurability);
 
     void OnEntityLoseProtection((int x, int y) position, FightManager.TurnState team, EntityDisplayController.BubbleDirections direction);
 
@@ -41,5 +41,9 @@ public interface IFightEventListener
     void OnEntityLoseFogEffect((int x, int y) position, FightManager.TurnState team);
 
     void OnGridIsClear(FightManager.TurnState team);
+    
+    void OnBubbleTakeDamage((int x, int y) position, FightManager.TurnState team);
+    
+    void OnAttackIsMissed((int x, int y) position, FightManager.TurnState team);
 
 }

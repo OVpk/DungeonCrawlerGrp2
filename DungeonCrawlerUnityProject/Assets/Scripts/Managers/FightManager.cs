@@ -397,10 +397,10 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
         switch (effectToApply)
         {
             case EntityData.EntityEffects.ProtectedHorizontaly : 
-                sendInformation.EntityCreateProtectionAt(protectorPosition, protectorTeam, EntityDisplayController.BubbleDirections.Horizontal);
+                sendInformation.EntityCreateProtectionAt(protectorPosition, protectorTeam, EntityDisplayController.BubbleDirections.Horizontal, protector.bubbleDurability);
                 break;
             case EntityData.EntityEffects.ProtectedVerticaly :
-                sendInformation.EntityCreateProtectionAt(protectorPosition, protectorTeam, EntityDisplayController.BubbleDirections.Vertical);
+                sendInformation.EntityCreateProtectionAt(protectorPosition, protectorTeam, EntityDisplayController.BubbleDirections.Vertical, protector.bubbleDurability);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(effectToApply), effectToApply, null);
@@ -490,7 +490,11 @@ private void TryApplyGlue(
     foreach (var pos in damaged)
     {
         if (protectedHits.Contains(pos)) continue;
-        if (Random.Range(0, 100) >= stage.PercentOfChanceOfGlue) continue;
+        if (Random.Range(0, 100) >= stage.PercentOfChanceOfGlue)
+        {
+            sendInformation.AttackIsMissedAt(pos, targetTeam);
+            continue;
+        }
         var e = grid[pos.x, pos.y];
         if (e == null) continue;
         e.AddEffect(EntityData.EntityEffects.Glue);
@@ -556,6 +560,10 @@ private IEnumerator ProcessProtectedHits(
     {
         EntityDataInstance protector = grid[protectorPosition.x, protectorPosition.y];
         protector.bubbleDurability--;
+        
+        sendInformation.BubbleTakeDamageAt(protectorPosition,
+            grid is CharacterDataInstance[,] ? TurnState.Player : TurnState.Enemy);
+        
         if (protector.bubbleDurability <= 0)
         {
             RemoveBubbleAt(protectorPosition, grid);
@@ -602,10 +610,17 @@ private IEnumerator ProcessRegularHits(
     {
         var e = grid[pos.x, pos.y];
         if (e == null) continue;
+        if (e.effects.Contains(EntityData.EntityEffects.Fog))
+        {
+            Debug.Log("fogggé tapé");
+        }
         if (e.effects.Contains(EntityData.EntityEffects.Fog) &&
             Random.Range(0, 100) <= e.percentOfChanceOfAvoidingAttackThanksToFog)
+        {
+            Debug.Log("missed");
+            sendInformation.AttackIsMissedAt(pos, grid is CharacterDataInstance[,] ? TurnState.Player : TurnState.Enemy);
             continue;
-
+        }
         yield return ApplyDamageAtPosition(grid, pos, stage.damage);
         damagedPositions.Add(pos);
     }
@@ -628,8 +643,6 @@ private IEnumerator ProcessRegularHits(
         if (damages <= 0) yield break;
         TurnState entityTeam = entity is CharacterDataInstance ? TurnState.Player : TurnState.Enemy;
         EntityDataInstance[,] gridToApply = entityTeam == TurnState.Player ? playerGrid : enemyGrid;
-        if (entity.effects.Contains(EntityData.EntityEffects.Fog) && 
-            Random.Range(0, 100) <= entity.percentOfChanceOfAvoidingAttackThanksToFog) yield break;
         
         entity.durability -= damages; 
         sendInformation.EntityTakeDamageAt(entityPosition, damages, entityTeam); 
@@ -734,7 +747,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
     bool originInsideBubble = insideBubbleH || insideBubbleV;
 
     // 3) Capture de l'état de protection initial des entités
-    var protectedPositions = new HashSet<(int x, int y)>();
+    var protectedPositions = new List<(int x, int y)>();
     for (int i = 0; i < gridToApply.GetLength(0); i++)
     {
         for (int j = 0; j < gridToApply.GetLength(1); j++)
@@ -769,14 +782,13 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
 
     if (originInsideBubble)
     {
-        RemoveBubbleAt(position, gridToApply);
+        yield return ProcessProtectedHits(gridToApply, new List<(int x, int y)>(){position});
     }
 
     // 5) Suppression des bulles si explosion hors bulle (les protégés survivent)
     if (!originInsideBubble)
     {
-        foreach (var pos in protectedPositions)
-            RemoveBubbleAt(pos, gridToApply);
+        yield return ProcessProtectedHits(gridToApply, protectedPositions);
     }
 
     // 6) Application des animations visuelles d'explosion pour chaîne, sans dégâts
