@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4050344231484051763}
   - component: {fileID: 3319708005499503062}
   - component: {fileID: 1424893755756406109}
+  - component: {fileID: 223830533736351439}
   m_Layer: 0
   m_Name: FXPrefab
   m_TagString: Untagged
@@ -95,7 +96,7 @@ Animator:
   m_GameObject: {fileID: 6346810272042485877}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d5594cf0522c2e0409d61fb32f11a4ef, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -106,3 +107,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!111 &223830533736351439
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6346810272042485877}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 5cc344389e23c7f478b5f7c3a745bc9b, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 5cc344389e23c7f478b5f7c3a745bc9b, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
