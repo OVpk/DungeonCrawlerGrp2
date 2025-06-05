@@ -7,6 +7,8 @@ using Random = UnityEngine.Random;
 
 public class FightManager : MonoBehaviour, IFightDisplayerListener
 {
+    public RewardDisplayer rewardDisplayer;
+    
     [field: SerializeField] public FightEventSpeaker sendInformation { get; private set; }
     
     public enum TurnState
@@ -1044,29 +1046,23 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         }
     }
 
-    public TMP_Text rewardText;
-
     private void ShowReward(bool state)
     {
         if (state)
         {
-            rewardText.gameObject.SetActive(true);
             switch (reward.rewardType)
             {
                 case RewardData.RewardType.Candy:
-                    rewardText.text = $"You win Candies: {reward.nbOfCandy}";
+                    rewardDisplayer.DisplayRewards(true, reward.nbOfCandy, RewardData.RewardType.Candy);
                     break;
                 case RewardData.RewardType.Money:
-                    rewardText.text = $"You win Money: {reward.money}$";
-                    break;
-                default:
-                    rewardText.text = "Unknown reward.";
+                    rewardDisplayer.DisplayRewards(true, reward.money, RewardData.RewardType.Candy);
                     break;
             }
         }
         else
         {
-            rewardText.gameObject.SetActive(false);
+            rewardDisplayer.DisplayRewards(false, 0, RewardData.RewardType.Money);
         }
     }
 
