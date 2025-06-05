@@ -15,6 +15,25 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         Enemy
     }
 
+    public Animation sfxAnimatorPlayer;
+    public Animation sfxAnimatorEnemy;
+    public Sprite sfxGlue;
+    public Sprite sfxBulle;
+    public Sprite sfxRazzia;
+    public Sprite sfxFog;
+    public Sprite sfxExplosivePowder;
+
+    public void DisplaySfx(Sprite spriteToDisplay, TurnState team)
+    {
+        Animation animToUse = team switch
+        {
+            TurnState.Player => sfxAnimatorPlayer,
+            TurnState.Enemy => sfxAnimatorEnemy
+        };
+        animToUse.gameObject.GetComponent<SpriteRenderer>().sprite = spriteToDisplay;
+        animToUse.Play("SfxSpawn");
+    }
+
     public TurnState currentTurn { get; private set; }
     
     [field:SerializeField] public SimpleAi aiController { get; private set; }
@@ -307,6 +326,7 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
     }
     else if (attackToApply.Effect is EntityData.EntityEffects.Spawner)
     {
+        DisplaySfx(sfxRazzia, TurnState.Enemy);
         sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
         yield return WaitAnimationEvent();
         DoSpawn(attackToApply.EntityToSpawn, gridToApplyAttack);
@@ -391,6 +411,7 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
         EntityDataInstance[,] gridToApply,
         List<Vector2Int> pattern)
     {
+        DisplaySfx(sfxBulle, TurnState.Player);
         protector.AddEffect(EntityData.EntityEffects.Protector);
         protector.bubbleDurability = attackToApply.BubbleDurability;
         
@@ -423,6 +444,7 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
         EntityDataInstance[,] gridToApply,
         List<Vector2Int> pattern)
     {
+        DisplaySfx(sfxFog,TurnState.Enemy);
         List<(int x, int y)> impactedPositions = GetImpactedPositions(gridToApply, foggerPosition, pattern);
         foreach (var position in impactedPositions)
         {
@@ -447,6 +469,7 @@ private void TryApplyExplosivePowder(
     List<(int x, int y)> damagedPositions,
     TurnState targetTeam)
 {
+    bool mustDisplaySfx = false;
 
     // Parcourt uniquement les positions qui ont pris des dégâts
     foreach (var pos in damagedPositions)
@@ -475,6 +498,13 @@ private void TryApplyExplosivePowder(
             attacker.effects.Remove(EntityData.EntityEffects.Explosive);
             sendInformation.EntityLoseExplosiveEffectAt(attackerPosition, attackerTeam);
         } // un seul spawn, comme avant
+
+        mustDisplaySfx = true;
+    }
+
+    if (mustDisplaySfx)
+    {
+        DisplaySfx(sfxExplosivePowder, targetTeam);
     }
 }
 
@@ -487,6 +517,7 @@ private void TryApplyGlue(
     List<(int x, int y)> protectedHits,
     TurnState targetTeam)
 {
+    bool mustDisplaySfx = false;
     foreach (var pos in damaged)
     {
         if (protectedHits.Contains(pos)) continue;
@@ -500,6 +531,11 @@ private void TryApplyGlue(
         e.AddEffect(EntityData.EntityEffects.Glue);
         e.glueDurability = stage.GlueDurability;
         sendInformation.EntityGetGlueEffectAt(pos, targetTeam);
+        mustDisplaySfx = true;
+    }
+    if (mustDisplaySfx)
+    {
+        DisplaySfx(sfxGlue,TurnState.Enemy);
     }
 }
 
