@@ -523,7 +523,7 @@ PrefabInstance:
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: allShopItems.Array.data[7]
       value: 
-      objectReference: {fileID: 11400000, guid: 8afc9cb95ca3e7941a8c4e952926252e, type: 2}
+      objectReference: {fileID: 11400000, guid: b716e7d9e8011ac489bea2b968d376e1, type: 2}
     - target: {fileID: 1678546737609579716, guid: 3f50ba9e42563b94cad844ebd705c123, type: 3}
       propertyPath: allShopItems.Array.data[8]
       value: 
@@ -1466,6 +1466,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1540853261193247994, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1.35
+      objectReference: {fileID: 0}
     - target: {fileID: 3474845578406053521, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
       propertyPath: customLevelData
       value: 
@@ -1491,9 +1495,29 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4885946026606691984, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4885946026606691984, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4885946026606691984, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4885946026606691984, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4885946026606691984, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
       propertyPath: m_spriteAsset
       value: 
       objectReference: {fileID: 11400000, guid: 835675267b5ad534a81e8ad616991dda, type: 2}
+    - target: {fileID: 4885946026606691984, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190335
+      objectReference: {fileID: 0}
     - target: {fileID: 5058919905144622025, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
       propertyPath: m_margin.x
       value: 0
@@ -1503,12 +1527,36 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5058919905144622025, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5058919905144622025, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5058919905144622025, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5058919905144622025, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5058919905144622025, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
       propertyPath: m_spriteAsset
       value: 
       objectReference: {fileID: 11400000, guid: 835675267b5ad534a81e8ad616991dda, type: 2}
+    - target: {fileID: 5058919905144622025, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190335
+      objectReference: {fileID: 0}
     - target: {fileID: 5337769998734241006, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
       propertyPath: m_Name
       value: Exploration
+      objectReference: {fileID: 0}
+    - target: {fileID: 5805159327872670086, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1.32
       objectReference: {fileID: 0}
     - target: {fileID: 8177994172992504742, guid: 9eb8db21c89964a4589078264c0f86c1, type: 3}
       propertyPath: m_margin.x
