@@ -92,7 +92,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
 
         entity.PlayAttackAnim();
     }
-
+    
     public void OnEntitySpawn((int x, int y) position, FightManager.TurnState team, EntityDataInstance entityData)
     {
         if (!IsConcerned(position, team)) return;
@@ -102,16 +102,20 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         entity.InitVisual(entityData);
         entity.PlaySpawnAnim();
         durabilityText.gameObject.SetActive(true);
-        typeText.gameObject.SetActive(true);
-
         durabilityNb = entityData.durability;
         durabilityText.text = durabilityNb + "<sprite index=4>";
-        typeText.text = entityData.type switch
+
+        if (team == FightManager.TurnState.Player)
         {
-            EntityData.EntityTypes.Mou => "<sprite index=3>",
-            EntityData.EntityTypes.Dur => "<sprite index=0>",
-            _ => throw new ArgumentOutOfRangeException()
-        };
+            typeText.gameObject.SetActive(true);
+
+            typeText.text = entityData.type switch
+            {
+                EntityData.EntityTypes.Mou => "<sprite index=3>",
+                EntityData.EntityTypes.Dur => "<sprite index=0>",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
     }
 
     public void OnEntityHovered((int x, int y) position, FightManager.TurnState team)

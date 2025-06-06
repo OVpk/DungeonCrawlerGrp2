@@ -23,10 +23,6 @@ public class SimpleCardSlider : MonoBehaviour
     private bool isAnimating = false;
     public float animDuration = 0.5f;
 
-    private float leftImgAlpha = 0.7f;
-    private float centerImgAlpha = 1f;
-    private float rightImgAlpha = 0.3f;
-
     void Start()
     {
         // Position initiale
@@ -46,22 +42,11 @@ public class SimpleCardSlider : MonoBehaviour
         leftImage.sprite = packs[leftIdx].data.sprite;
         centerImage.sprite = packs[centerIdx].data.sprite;
         rightImage.sprite = packs[rightIdx].data.sprite;
-
-        // Applique l'opacité
-        SetFade(leftImage, leftImgAlpha);
-        SetFade(centerImage, centerImgAlpha);
-        SetFade(rightImage, rightImgAlpha);
+        
 
         // Texte de stock "current / max"
         var data = packs[centerIdx];
         stockText.text = data.currentStock + " / " + data.maxStock;
-    }
-
-    void SetFade(Graphic g, float alpha)
-    {
-        var c = g.color;
-        c.a = alpha;
-        g.color = c;
     }
 
     public void ScrollLeft()

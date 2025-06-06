@@ -1056,7 +1056,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
                     rewardDisplayer.DisplayRewards(true, reward.nbOfCandy, RewardData.RewardType.Candy);
                     break;
                 case RewardData.RewardType.Money:
-                    rewardDisplayer.DisplayRewards(true, reward.money, RewardData.RewardType.Candy);
+                    rewardDisplayer.DisplayRewards(true, reward.money, RewardData.RewardType.Money);
                     break;
             }
         }
