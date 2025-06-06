@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ArticalPackRefillMalabar3
   m_EditorClassIdentifier: 
   <item>k__BackingField: {fileID: 11400000, guid: fa2f961a7d307034db7d894a5c9b4411, type: 2}
-  <price>k__BackingField: 55
+  <price>k__BackingField: 30

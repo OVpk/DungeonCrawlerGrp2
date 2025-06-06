@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <visualInShop>k__BackingField: {fileID: 21300000, guid: f52ddd3c7d52d8445950e3ff2d86a976, type: 3}
   <packToUpgrade>k__BackingField: {fileID: 11400000, guid: 5dabfc31e419a754fa825a88ffed2712, type: 2}
-  <newMaxStock>k__BackingField: 10
+  <newMaxStock>k__BackingField: 4
+  <necessaryUpgradeToSeeThisOneInShop>k__BackingField: {fileID: 0}

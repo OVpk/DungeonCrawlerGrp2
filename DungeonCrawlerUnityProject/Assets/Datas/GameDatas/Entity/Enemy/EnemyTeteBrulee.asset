@@ -17,7 +17,7 @@ MonoBehaviour:
   <type>k__BackingField: 0
   effects: 04000000
   percentOfChanceToGiveExplosive: 80
-  explosionDamages: 2
+  explosionDamages: 1
   patternWhereFogGone: {fileID: 0}
   percentOfChanceOfAvoidingAttackThanksToFog: 0
   nbOfTurnBeforeFogGone: 0
