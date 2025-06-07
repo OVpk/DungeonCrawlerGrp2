@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ArticalUpgradeTagadaPack3
   m_EditorClassIdentifier: 
   <item>k__BackingField: {fileID: 11400000, guid: 734ae756db85ba242896d43f8a210d70, type: 2}
-  <price>k__BackingField: 35
+  <price>k__BackingField: 65
