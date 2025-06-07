@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.InRefillPack :
                 explorationScene.SetActive(false);
-                fightScene.SetActive(false);
+                fightScene.SetActive(true);
                 shopScene.SetActive(false);
                 refillPackScene.SetActive(true);
                 break;

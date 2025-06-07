@@ -7,7 +7,12 @@ public class RefillPackManager : MonoBehaviour
     public static RefillPackManager Instance;
 
     public int nbOfCandy { get; private set; }
-    
+
+    public List<Sprite> numbers;
+
+    public SpriteRenderer nbMax;
+    public SpriteRenderer currentNb;
+
     private void Awake()
     {
         if (Instance != null)
@@ -24,10 +29,12 @@ public class RefillPackManager : MonoBehaviour
     {
         InitPack();
         nbOfCandy = nbOfCandyToRefill;
+        nbMax.sprite = numbers[nbOfCandy];
+        currentNb.sprite = numbers[nbOfCandy];
     }
-    
+
     [SerializeField] public SimpleCardSlider packDisplayer;
-    
+
     private void InitPack()
     {
         packDisplayer.packs = GameManager.Instance.candyPacks;
@@ -41,6 +48,7 @@ public class RefillPackManager : MonoBehaviour
         {
             packToRefill.currentStock++;
             nbOfCandy--;
+            currentNb.sprite = numbers[nbOfCandy];
             packDisplayer.UpdateDisplay();
         }
     }
