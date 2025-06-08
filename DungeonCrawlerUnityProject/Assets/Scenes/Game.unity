@@ -694,6 +694,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2099325655}
+  - {fileID: 721241289}
   m_Father: {fileID: 275605652}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -940,7 +941,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &275605651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -977,6 +978,16 @@ MonoBehaviour:
   malabar: {fileID: 11400000, guid: 6256b8e209432db449debe05b15840ac, type: 2}
   smartiesBox: {fileID: 11400000, guid: 3705cb25e8b31a143addb34c1058ddf7, type: 2}
   smartie: {fileID: 11400000, guid: c47b9ad93d1332e41a9594077601a477, type: 2}
+  tagadaDescription: {fileID: 0}
+  carambarDescription: {fileID: 0}
+  verDescription: {fileID: 0}
+  soucoupeDescription: {fileID: 0}
+  teteBruleeDescription: {fileID: 0}
+  malabarDescription: {fileID: 0}
+  smartiesBoxDescription: {fileID: 0}
+  smartieDescription: {fileID: 0}
+  descriptionDisplayer: {fileID: 0}
+  ticketContainer: {fileID: 2099325654}
 --- !u!4 &275605652
 Transform:
   m_ObjectHideFlags: 0
@@ -2860,6 +2871,81 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &721241288
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 721241289}
+  - component: {fileID: 721241291}
+  - component: {fileID: 721241290}
+  m_Layer: 0
+  m_Name: Selector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &721241289
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721241288}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 124186988}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -194, y: -2.0000305}
+  m_SizeDelta: {x: 309.2384, y: 187.7886}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &721241290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721241288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 251c07d4dcbb96c40b78d413b0a1774b, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &721241291
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721241288}
+  m_CullTransparentMesh: 1
 --- !u!1 &727970717
 GameObject:
   m_ObjectHideFlags: 0
@@ -2874,6 +2960,7 @@ GameObject:
   - component: {fileID: 727970722}
   - component: {fileID: 727970723}
   - component: {fileID: 727970724}
+  - component: {fileID: 727970725}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -2956,6 +3043,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 727970725}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: MovementAction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 0922f714-a847-4893-befd-1946c8367a5c
     m_ActionName: X-Box Controller/D-Pad[/XInputControllerWindows/dpad/down,/XInputControllerWindows/dpad/left,/XInputControllerWindows/dpad/right,/XInputControllerWindows/dpad/up]
   - m_PersistentCalls:
@@ -2997,6 +3096,18 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 727970724}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: ButtonAction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 727970725}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: ButtonAction
         m_Mode: 0
@@ -3080,6 +3191,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eeb4eeb4c88f64b4b9d52f3f2a1f7855, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &727970725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727970717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09b2b3b1138232640a53fd9cb737aabf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &755003952

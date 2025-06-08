@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,6 +47,24 @@ public class EncyclopedieManager : MonoBehaviour
     private bool isSmartiesBoxDiscovered = false;
     private bool isSmartieDiscovered = false;
     
+    [Header("description sprites")]
+    public Sprite tagadaDescription;
+    public Sprite carambarDescription;
+    public Sprite verDescription;
+    public Sprite soucoupeDescription;
+    public Sprite teteBruleeDescription;
+    public Sprite malabarDescription;
+    public Sprite smartiesBoxDescription;
+    public Sprite smartieDescription;
+
+    public Image descriptionDisplayer;
+
+    public GameObject ticketContainer;
+    
+    private float slotHeight;
+    private int currentIndex = 0;
+    private Sprite[] descriptionSprites;
+    
     private void Awake()
     {
         if (Instance != null)
@@ -56,6 +75,24 @@ public class EncyclopedieManager : MonoBehaviour
         {
             Instance = this;
         }
+        
+        slotHeight = tagadaImg.rectTransform.rect.height;
+
+        /*
+        descriptionSprites = new Sprite[] {
+            tagadaDescription,
+            carambarDescription,
+            verDescription,
+            soucoupeDescription,
+            teteBruleeDescription,
+            malabarDescription,
+            smartiesBoxDescription,
+            smartieDescription
+        };
+
+        
+        UpdateDescriptionSprite();
+        */
     }
 
     public void EntityIsPlaced(EntityData entity)
@@ -99,6 +136,36 @@ public class EncyclopedieManager : MonoBehaviour
         {
             isSmartieDiscovered = true;
             smartieImg.sprite = smartiediscoveredSprite;
+        }
+    }
+    
+    public void MoveTicketContainer(int verticalMove)
+    {
+        if (verticalMove == 0) return;
+        
+        int newIndex = currentIndex + verticalMove;
+        // Clamp to valid range
+        newIndex = Mathf.Clamp(newIndex, 0, descriptionSprites.Length - 1);
+
+        // If index hasn't changed, do nothing
+        if (newIndex == currentIndex) return;
+
+        // Update currentIndex
+        currentIndex = newIndex;
+
+        Vector3 targetPos = ticketContainer.transform.localPosition + new Vector3(0f, slotHeight * verticalMove, 0f);
+
+        // Animate move and update description when done
+        ticketContainer.transform.DOLocalMove(targetPos, 0.5f)
+            .SetEase(Ease.InOutQuad)
+            .OnComplete(UpdateDescriptionSprite);
+    }
+    
+    private void UpdateDescriptionSprite()
+    {
+        if (descriptionSprites != null && descriptionSprites.Length > currentIndex)
+        {
+            descriptionDisplayer.sprite = descriptionSprites[currentIndex];
         }
     }
     
