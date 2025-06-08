@@ -182,7 +182,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     {
         GameObject currentBackground = backgroundContainer.transform.GetChild(0).gameObject;
         Destroy(currentBackground);
-        Instantiate(background, backgroundContainer.transform);
+        Instantiate(background, backgroundContainer.transform).transform.localPosition = new Vector3(0f,0f,0f);
     }
 
     public void LoadFightArea(FightAreaData data)
