@@ -101,7 +101,7 @@ MonoBehaviour:
   floatStrength: 0.5
   floatSpeed: 1
   windEffect: 1
-  windAngleStrength: 5
+  windAngleStrength: 2
   windSpeed: 3
   windToRight: 1
   squishyBounce: 0
@@ -682,8 +682,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floatUpDown: 1
-  floatStrength: 0.2
-  floatSpeed: 2
+  floatStrength: 0.1
+  floatSpeed: 1.5
   windEffect: 0
   windAngleStrength: 15
   windSpeed: 1
@@ -808,7 +808,7 @@ MonoBehaviour:
   floatStrength: 0.5
   floatSpeed: 1
   windEffect: 1
-  windAngleStrength: -5
+  windAngleStrength: -2
   windSpeed: 3
   windToRight: 1
   squishyBounce: 0
@@ -927,7 +927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71a357ccccf44a04baee82116212a132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatUpDown: 1
+  floatUpDown: 0
   floatStrength: 0.2
   floatSpeed: 2
   windEffect: 0

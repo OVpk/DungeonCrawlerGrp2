@@ -183,7 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatUpDown: 1
   floatStrength: 0.2
-  floatSpeed: 2
+  floatSpeed: 4
   windEffect: 0
   windAngleStrength: 15
   windSpeed: 1
@@ -313,7 +313,7 @@ MonoBehaviour:
   windToRight: 1
   squishyBounce: 1
   squishStrength: 0.1
-  squishSpeed: 2
+  squishSpeed: 3
   rotateEffect: 0
   rotateSpeed: 1
   rotateClockwise: 1
@@ -436,7 +436,7 @@ MonoBehaviour:
   windToRight: 1
   squishyBounce: 1
   squishStrength: 0.1
-  squishSpeed: 2
+  squishSpeed: 3
   rotateEffect: 0
   rotateSpeed: 1
   rotateClockwise: 1
