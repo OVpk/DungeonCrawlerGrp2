@@ -144,4 +144,16 @@ public class DOTweenAutoAnimator2D : MonoBehaviour
         transform.DOShakeScale(1f, new Vector3(scaleShakeStrength, scaleShakeStrength, 0), (int)scaleShakeSpeed, 90)
             .SetLoops(-1, LoopType.Restart);
     }
+    
+    void OnDestroy()
+    {
+        // Arrête toutes les animations DOTween associées à ce GameObject
+        transform.DOKill();
+
+        // Si un container de vent a été créé, arrête également ses animations
+        if (windContainer != null)
+        {
+            windContainer.DOKill();
+        }
+    }
 }

@@ -5,18 +5,16 @@ using TMPro;
 
 public class ShopManager : MonoBehaviour
 {
-    [Header("UI")]
-    public GameObject shopItemPrefab;
-    public Transform gridParent;
-    public RectTransform selectorCursor;
     public TMP_Text moneyText;
-    public TMP_Text errorText;
 
-    private List<ShopItemUI> itemUIs = new List<ShopItemUI>();
+    public List<ShopItemUI> itemUIs = new List<ShopItemUI>();
     public List<ArticalShopData> allShopItems = new List<ArticalShopData>();
     private List<ArticalShopData> availableShopItems = new List<ArticalShopData>();
     private int selX = 0;
-    private int selY = 0;
+
+    public TMP_Text descriptionShop;
+
+    public StockDisplayer stockDisplayer;
 
     private const int MaxDisplayedItems = 4;
 
@@ -36,10 +34,10 @@ public class ShopManager : MonoBehaviour
 
     public void InitShop()
     {
+        stockDisplayer.RefreshDisplay();
         FilterAndDisplayItems();
         UpdateMoneyUI();
         PositionCursor();
-        errorText.gameObject.SetActive(false);
     }
 
     private int currentRefillArticleNb = 0;
@@ -70,22 +68,10 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-        // Réinitialiser l'affichage
-        foreach (Transform child in gridParent)
+        for (var i = 0; i < itemUIs.Count; i++)
         {
-            Destroy(child.gameObject);
+            itemUIs[i].Setup(availableShopItems[i].item.visualInShop, availableShopItems[i].price, availableShopItems[i], true);
         }
-        itemUIs.Clear();
-
-        // Créer l'affichage pour les articles disponibles
-        foreach (var article in availableShopItems)
-        {
-            var go = Instantiate(shopItemPrefab, gridParent);
-            var ui = go.GetComponent<ShopItemUI>();
-            ui.Setup(article.item.visualInShop, article.price, article, true); // Passe l'article
-            itemUIs.Add(ui);
-        }
-
     }
 
     private bool IsItemAvailable(ArticalShopData article)
@@ -131,43 +117,32 @@ public class ShopManager : MonoBehaviour
 
     public void MoveSelector(int dx, int dy)
     {
-        // Calcul des limites basées sur les éléments disponibles
-        int columns = Mathf.Min(MaxDisplayedItems, itemUIs.Count); // Nombre de colonnes visibles
-        int rows = Mathf.CeilToInt((float)itemUIs.Count / MaxDisplayedItems); // Nombre de lignes
+        int movementY = selX + (dy * 2) >= 0 && selX + (dy * 2) < itemUIs.Count ? (dy * 2) : 0;
+        selX = Mathf.Clamp(selX + dx + movementY, 0, itemUIs.Count - 1);
 
-        // Met à jour les indices de sélection
-        selX = Mathf.Clamp(selX + dx, 0, columns - 1);
-        selY = Mathf.Clamp(selY + dy, 0, rows - 1);
-
-        // Positionne le curseur si l'indice est valide
-        int idx = selY * MaxDisplayedItems + selX;
-        if (idx < itemUIs.Count)
+        if (selX < itemUIs.Count)
         {
             PositionCursor();
         }
     }
 
+    public Image displayedCursor;
 
     private void PositionCursor()
     {
-        int idx = selY * MaxDisplayedItems + selX;
-        if (idx < itemUIs.Count)
-        {
-            selectorCursor.position = itemUIs[idx].transform.position;
-        }
+        displayedCursor.transform.position = itemUIs[selX].transform.position;
+        descriptionShop.text = availableShopItems[selX].item.descriptionInShop;
     }
 
     public void TryPurchase()
     {
-        int idx = selY * MaxDisplayedItems + selX;
-        if (idx >= availableShopItems.Count) return;
+        if (selX >= availableShopItems.Count) return;
 
-        var article = availableShopItems[idx];
+        var article = availableShopItems[selX];
 
         // Vérifie l'argent
         if (GameManager.Instance.money < article.price)
         {
-            ShowError("Pas assez d'argent !");
             return;
         }
 
@@ -175,11 +150,11 @@ public class ShopManager : MonoBehaviour
         GameManager.Instance.money -= article.price;
         ApplyItemEffect(article.item);
         UpdateMoneyUI();
+        stockDisplayer.RefreshDisplay();
 
         // Marquer l'article comme "Sold Out"
-        var ui = itemUIs[idx];
+        var ui = itemUIs[selX];
         ui.SetSoldOut();
-        errorText.gameObject.SetActive(false);
     }
 
 
@@ -212,12 +187,6 @@ public class ShopManager : MonoBehaviour
     private void UpdateMoneyUI()
     {
         moneyText.text = GameManager.Instance.money.ToString();
-    }
-
-    private void ShowError(string msg)
-    {
-        errorText.text = msg;
-        errorText.gameObject.SetActive(true);
     }
 
     public void ExitShop()

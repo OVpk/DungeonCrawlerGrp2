@@ -6,7 +6,6 @@ public class ShopItemUI : MonoBehaviour
 {
     public Image candyImage;
     public TMP_Text priceText;
-    public GameObject soldOutOverlay;
 
     [HideInInspector] public int index;
     [HideInInspector] public bool isAvailable;
@@ -18,17 +17,14 @@ public class ShopItemUI : MonoBehaviour
         priceText.text = price.ToString();
         isAvailable = available;
         associatedArticle = article; // Associe l'article
-        soldOutOverlay.SetActive(!available);
 
-        var tint = available ? Color.white : new Color(1f, 1f, 1f, 0.5f);
-        candyImage.color = tint;
-        priceText.color = tint;
+        candyImage.color = available ? Color.white : new Color(1f, 1f, 1f, 0.5f);
+        priceText.color = available ? Color.black : new Color(1f, 1f, 1f, 0f);
     }
 
     public void SetSoldOut()
     {
         isAvailable = false;
-        soldOutOverlay.SetActive(true);
         candyImage.color = new Color(1f, 1f, 1f, 0.5f);
         priceText.color = new Color(1f, 1f, 1f, 0.5f);
     }

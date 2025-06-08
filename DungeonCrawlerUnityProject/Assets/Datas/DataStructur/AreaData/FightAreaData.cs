@@ -9,4 +9,12 @@ public class FightAreaData : AreaData
     
     [field: SerializeField] public RewardData reward { get; private set; }
     
+    [field: SerializeField] public GameObject backgroundInThisFight { get; private set; }
+    
+    [field: SerializeField] public Sprite explorationBackgroundAfterThisFight { get; private set; }
+    
+    [field: SerializeField] public Sprite boxVisual { get; private set; }
+    
+    
+    
 }
