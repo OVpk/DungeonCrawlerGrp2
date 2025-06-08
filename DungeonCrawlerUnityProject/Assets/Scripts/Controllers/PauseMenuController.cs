@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EncyclopedieController : PlayerController
+public class PauseMenuController : PlayerController
 {
     protected override void Move(Directions direction)
     {
@@ -15,14 +15,15 @@ public class EncyclopedieController : PlayerController
             Directions.Left => (0, -1),
             _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
         };
-        EncyclopedieManager.Instance.MoveTicketContainer(directionToGo.x);
+        PauseMenuManager.Instance.MoveSelector(directionToGo.x);
     }
     
     protected override void Press(Buttons button)
     {
         switch (button)
         {
-            case Buttons.B : GameManager.Instance.ChangeGameState(GameManager.GameState.InPauseMenu); break;
+            case Buttons.A : PauseMenuManager.Instance.ApplyOption(); break;
+            case Buttons.Y : GameManager.Instance.ChangeGameState(GameManager.GameState.InEncyclopedie); break;
         }
     }
     

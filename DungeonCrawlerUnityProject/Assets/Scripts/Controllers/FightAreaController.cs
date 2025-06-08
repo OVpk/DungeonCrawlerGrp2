@@ -248,7 +248,7 @@ public class FightAreaController : PlayerController
             case Buttons.B : PressB(); break;
             case Buttons.X : PressX(); break;
             case Buttons.Y : PressY(); break;
-            case Buttons.Menu : GameManager.Instance.ChangeGameState(GameManager.GameState.InEncyclopedie); break;
+            case Buttons.Menu : GameManager.Instance.ChangeGameState(GameManager.GameState.InPauseMenu); break;
         }
     }
 
