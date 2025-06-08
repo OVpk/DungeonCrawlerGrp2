@@ -176,8 +176,18 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         LoadFightArea((FightAreaData)ExplorationManager.Instance.currentArea);
     }
 
+    public GameObject backgroundContainer;
+
+    public void InitBackground(GameObject background)
+    {
+        GameObject currentBackground = backgroundContainer.transform.GetChild(0).gameObject;
+        Destroy(currentBackground);
+        Instantiate(background, backgroundContainer.transform).transform.localPosition = new Vector3(0f,0f,0f);
+    }
+
     public void LoadFightArea(FightAreaData data)
     {
+        InitBackground(data.backgroundInThisFight);
         isGameEnded = false;
         InitPack();
         InitEnemyGrid(data.enemyGrid);

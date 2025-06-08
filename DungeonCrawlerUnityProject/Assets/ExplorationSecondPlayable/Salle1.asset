@@ -15,6 +15,6 @@ MonoBehaviour:
   <areaName>k__BackingField: Salle1
   <enemyGrid>k__BackingField: {fileID: 11400000, guid: f4ae2eacbef5b33418520d5e8f84fc4b, type: 2}
   <reward>k__BackingField: {fileID: 11400000, guid: a3bf7700cd9764f4db7cdf3982efea6b, type: 2}
-  <backgroundInThisFight>k__BackingField: {fileID: 3353668733385469208, guid: 13240de0ce37ed64c8d25f8682fe9fc6, type: 3}
-  <explorationBackgroundAfterThisFight>k__BackingField: {fileID: 21300000, guid: deac5888868c8904696ff7dbfdf6ed3a, type: 3}
-  <boxVisual>k__BackingField: {fileID: 21300000, guid: 3f043528d04a9194f91f8c6c9108ad18, type: 3}
+  <backgroundInThisFight>k__BackingField: {fileID: 0}
+  <explorationBackgroundAfterThisFight>k__BackingField: {fileID: 0}
+  <boxVisual>k__BackingField: {fileID: 0}

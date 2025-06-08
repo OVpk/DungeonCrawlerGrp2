@@ -21,6 +21,7 @@ public class ExplorationManager : MonoBehaviour
     public TMP_Text moneyText;
 
 
+    public SpriteRenderer backgroundExplo;
 
     
     private void Awake()
@@ -82,6 +83,7 @@ public class ExplorationManager : MonoBehaviour
         rightAreaBox.sprite = ((FightAreaData)rightArea).boxVisual != null ? ((FightAreaData)rightArea).boxVisual : null;
         UpdateMoneyUI();
         stockDisplayer.RefreshDisplay();
+        backgroundExplo.sprite = ((FightAreaData)currentArea).explorationBackgroundAfterThisFight;
     }
 
     public StockDisplayer stockDisplayer;
