@@ -9,8 +9,8 @@ public class EncyclopedieController : PlayerController
     {
         (int x, int y) directionToGo = direction switch
         {
-            Directions.Down => (-1, 0),
-            Directions.Up => (1, 0),
+            Directions.Down => (1, 0),
+            Directions.Up => (-1, 0),
             Directions.Right => (0, 1),
             Directions.Left => (0, -1),
             _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
