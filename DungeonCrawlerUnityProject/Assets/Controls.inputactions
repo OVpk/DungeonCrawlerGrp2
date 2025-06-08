@@ -112,6 +112,17 @@
                     "action": "Buttons",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eb49ccda-ac9b-4031-92cd-fe63dd027869",
+                    "path": "<XInputController>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Buttons",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

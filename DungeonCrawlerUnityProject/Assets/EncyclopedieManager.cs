@@ -76,9 +76,8 @@ public class EncyclopedieManager : MonoBehaviour
             Instance = this;
         }
         
-        slotHeight = tagadaImg.rectTransform.rect.height;
+        slotHeight = tagadaImg.rectTransform.rect.height * tagadaImg.rectTransform.localScale.y;
 
-        /*
         descriptionSprites = new Sprite[] {
             tagadaDescription,
             carambarDescription,
@@ -90,9 +89,7 @@ public class EncyclopedieManager : MonoBehaviour
             smartieDescription
         };
 
-        
-        UpdateDescriptionSprite();
-        */
+        targetPosition = ticketContainer.transform.localPosition;
     }
 
     public void EntityIsPlaced(EntityData entity)
@@ -138,34 +135,51 @@ public class EncyclopedieManager : MonoBehaviour
             smartieImg.sprite = smartiediscoveredSprite;
         }
     }
+
+    public Vector3 targetPosition;
+    
     
     public void MoveTicketContainer(int verticalMove)
     {
         if (verticalMove == 0) return;
         
         int newIndex = currentIndex + verticalMove;
-        // Clamp to valid range
         newIndex = Mathf.Clamp(newIndex, 0, descriptionSprites.Length - 1);
 
-        // If index hasn't changed, do nothing
         if (newIndex == currentIndex) return;
 
-        // Update currentIndex
         currentIndex = newIndex;
 
-        Vector3 targetPos = ticketContainer.transform.localPosition + new Vector3(0f, slotHeight * verticalMove, 0f);
+        targetPosition += new Vector3(0f, slotHeight * verticalMove, 0f);
 
-        // Animate move and update description when done
-        ticketContainer.transform.DOLocalMove(targetPos, 0.5f)
+        ticketContainer.transform.DOLocalMove(targetPosition, 0.5f)
             .SetEase(Ease.InOutQuad)
             .OnComplete(UpdateDescriptionSprite);
     }
     
-    private void UpdateDescriptionSprite()
+    public void UpdateDescriptionSprite()
     {
-        if (descriptionSprites != null && descriptionSprites.Length > currentIndex)
+        bool discovered = false;
+        switch (currentIndex)
         {
+            case 0: discovered = isTagadaDiscovered; break;
+            case 1: discovered = isCarambarDiscovered; break;
+            case 2: discovered = isVerDiscovered; break;
+            case 3: discovered = isSoucoupeDiscovered; break;
+            case 4: discovered = isTeteBruleeDiscovered; break;
+            case 5: discovered = isMalabarDiscovered; break;
+            case 6: discovered = isSmartiesBoxDiscovered; break;
+            case 7: discovered = isSmartieDiscovered; break;
+        }
+
+        if (discovered)
+        {
+            descriptionDisplayer.gameObject.SetActive(true);
             descriptionDisplayer.sprite = descriptionSprites[currentIndex];
+        }
+        else
+        {
+            descriptionDisplayer.gameObject.SetActive(false);
         }
     }
     

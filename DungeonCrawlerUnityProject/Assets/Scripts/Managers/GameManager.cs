@@ -9,19 +9,23 @@ public class GameManager : MonoBehaviour
     [SerializeField] private FightAreaController fightAreaController;
     [SerializeField] private ShopController shopController;
     [SerializeField] private RefillPackController refillPackController;
+    [SerializeField] private EncyclopedieController encyclopedieController;
 
     private GameObject fightScene => FightManager.Instance.transform.root.gameObject;
     private GameObject explorationScene => ExplorationManager.Instance.transform.root.gameObject;
     private GameObject shopScene => ShopManager.Instance.transform.root.gameObject;
 
     private GameObject refillPackScene => RefillPackManager.Instance.transform.root.gameObject;
+
+    private GameObject encyclopedieScene => EncyclopedieManager.Instance.transform.root.gameObject;
     
     public enum GameState
     {
         InOverWorld,
         InFightArea,
         InShop,
-        InRefillPack
+        InRefillPack,
+        InEncyclopedie
     }
 
     private GameState currentGameState;
@@ -70,24 +74,36 @@ public class GameManager : MonoBehaviour
                 fightScene.SetActive(false);
                 shopScene.SetActive(false);
                 refillPackScene.SetActive(false);
+                encyclopedieScene.SetActive(false);
                 break;
             case GameState.InFightArea :
                 explorationScene.SetActive(false);
                 fightScene.SetActive(true);
                 shopScene.SetActive(false);
                 refillPackScene.SetActive(false);
+                encyclopedieScene.SetActive(false);
                 break;
             case GameState.InShop :
                 explorationScene.SetActive(false);
                 fightScene.SetActive(false);
                 shopScene.SetActive(true);
                 refillPackScene.SetActive(false);
+                encyclopedieScene.SetActive(false);
                 break;
             case GameState.InRefillPack :
                 explorationScene.SetActive(false);
                 fightScene.SetActive(true);
                 shopScene.SetActive(false);
                 refillPackScene.SetActive(true);
+                encyclopedieScene.SetActive(false);
+                break;
+            case GameState.InEncyclopedie :
+                explorationScene.SetActive(false);
+                fightScene.SetActive(true);
+                shopScene.SetActive(false);
+                refillPackScene.SetActive(false);
+                encyclopedieScene.SetActive(true);
+                EncyclopedieManager.Instance.UpdateDescriptionSprite();
                 break;
         }
     }
@@ -101,24 +117,35 @@ public class GameManager : MonoBehaviour
                 fightAreaController.ChangeActiveState(false);
                 shopController.ChangeActiveState(false);
                 refillPackController.ChangeActiveState(false);
+                encyclopedieController.ChangeActiveState(false);
                 break;
             case GameState.InFightArea :
                 overWorldController.ChangeActiveState(false);
                 fightAreaController.ChangeActiveState(true);
                 shopController.ChangeActiveState(false);
                 refillPackController.ChangeActiveState(false);
+                encyclopedieController.ChangeActiveState(false);
                 break;
             case GameState.InShop :
                 overWorldController.ChangeActiveState(false);
                 fightAreaController.ChangeActiveState(false);
                 shopController.ChangeActiveState(true);
                 refillPackController.ChangeActiveState(false);
+                encyclopedieController.ChangeActiveState(false);
                 break;
             case GameState.InRefillPack :
                 overWorldController.ChangeActiveState(false);
                 fightAreaController.ChangeActiveState(false);
                 shopController.ChangeActiveState(false);
                 refillPackController.ChangeActiveState(true);
+                encyclopedieController.ChangeActiveState(false);
+                break;
+            case GameState.InEncyclopedie :
+                overWorldController.ChangeActiveState(false);
+                fightAreaController.ChangeActiveState(false);
+                shopController.ChangeActiveState(false);
+                refillPackController.ChangeActiveState(false);
+                encyclopedieController.ChangeActiveState(true);
                 break;
         }
     }

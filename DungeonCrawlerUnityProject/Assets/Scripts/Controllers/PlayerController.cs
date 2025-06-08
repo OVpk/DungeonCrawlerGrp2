@@ -19,7 +19,8 @@ public abstract class PlayerController : MonoBehaviour
         A,
         B,
         X,
-        Y
+        Y,
+        Menu
     }
     
     public void ChangeActiveState(bool state)
@@ -52,6 +53,7 @@ public abstract class PlayerController : MonoBehaviour
             "buttonEast" => Buttons.B,
             "buttonWest" => Buttons.X,
             "buttonNorth" => Buttons.Y,
+            "start" => Buttons.Menu,
             _ => throw new ArgumentOutOfRangeException()
         };
         Press(pressedButton);

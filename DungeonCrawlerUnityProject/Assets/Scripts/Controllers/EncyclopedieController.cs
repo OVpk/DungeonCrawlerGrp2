@@ -15,14 +15,14 @@ public class EncyclopedieController : PlayerController
             Directions.Left => (0, -1),
             _ => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
         };
-        //EncyclopedieManager.Instance.MoveTicketContainer(directionToGo.x);
+        EncyclopedieManager.Instance.MoveTicketContainer(directionToGo.x);
     }
     
     protected override void Press(Buttons button)
     {
         switch (button)
         {
-            
+            case Buttons.B : GameManager.Instance.ChangeGameState(GameManager.GameState.InFightArea); break;
         }
     }
     
