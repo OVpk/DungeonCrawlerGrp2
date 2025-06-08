@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ExplorationManager : MonoBehaviour
 {
@@ -60,27 +61,44 @@ public class ExplorationManager : MonoBehaviour
         }
     }
 
-    public AreaInWorldDisplayController leftDisplayedArea;
-    public AreaInWorldDisplayController rightDisplayedArea;
+    public RewardDisplayer leftAreaReward;
+    public RewardDisplayer rightAreaReward;
+    public Image leftAreaBox;
+    public Image rightAreaBox;
 
     public void SetDisplay()
     {
-        leftDisplayedArea.Init((FightAreaData)leftArea);
-        rightDisplayedArea.Init((FightAreaData)rightArea);
+        leftAreaReward.DisplayRewards(true,
+            ((FightAreaData)leftArea).reward.rewardType == RewardData.RewardType.Money 
+            ? ((FightAreaData)leftArea).reward.money 
+            : ((FightAreaData)leftArea).reward.nbOfCandy, 
+            ((FightAreaData)leftArea).reward.rewardType);
+        rightAreaReward.DisplayRewards(true,
+            ((FightAreaData)rightArea).reward.rewardType == RewardData.RewardType.Money 
+                ? ((FightAreaData)rightArea).reward.money 
+                : ((FightAreaData)rightArea).reward.nbOfCandy, 
+            ((FightAreaData)rightArea).reward.rewardType);
+        leftAreaBox.sprite = ((FightAreaData)leftArea).boxVisual != null ? ((FightAreaData)leftArea).boxVisual : null;
+        rightAreaBox.sprite = ((FightAreaData)rightArea).boxVisual != null ? ((FightAreaData)rightArea).boxVisual : null;
         UpdateMoneyUI();
+        stockDisplayer.RefreshDisplay();
     }
+
+    public StockDisplayer stockDisplayer;
+
+    public Transform echelleLeftPosition;
+    public Transform echelleRightPosition;
+    public GameObject echelle;
 
     public void MoveAreaSelector((int x, int y) direction)
     {
         switch (direction)
         {
-            case (1, 0) : 
-                leftDisplayedArea.SetHighlight(Color.magenta);
-                rightDisplayedArea.ClearHighlight();
+            case (1, 0) :
+                echelle.transform.position = echelleLeftPosition.transform.position;
                 break;
             case (0, 1) : 
-                rightDisplayedArea.SetHighlight(Color.magenta); 
-                leftDisplayedArea.ClearHighlight();
+                echelle.transform.position = echelleRightPosition.transform.position;
                 break;
             default: throw new Exception("Impossible direction");
         }
