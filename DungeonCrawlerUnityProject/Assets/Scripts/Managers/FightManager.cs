@@ -872,6 +872,7 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         EntityDataInstance[,] gridToPlace = team == TurnState.Player ? playerGrid : enemyGrid;
         gridToPlace[position.x, position.y] = entity.Instance();
         sendInformation.EntitySpawnAt(position, team, gridToPlace[position.x, position.y]);
+        EncyclopedieManager.Instance.EntityIsPlaced(entity);
         return gridToPlace[position.x, position.y];
     }
 
