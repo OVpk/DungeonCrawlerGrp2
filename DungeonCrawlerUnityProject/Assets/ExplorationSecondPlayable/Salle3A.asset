@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: Salle3A
   m_EditorClassIdentifier: 
   <areaName>k__BackingField: Salle3A
-  <iconDistance1>k__BackingField: {fileID: 0}
-  <iconDistance2>k__BackingField: {fileID: 0}
-  <iconDistance3>k__BackingField: {fileID: 0}
-  <description>k__BackingField: 
-  <background>k__BackingField: {fileID: 0}
   <enemyGrid>k__BackingField: {fileID: 11400000, guid: 544a3053c7751d54a94cbef67a7cb02a, type: 2}
   <reward>k__BackingField: {fileID: 11400000, guid: 8e196a8a67af66f47a7aba2c5697bf15, type: 2}
+  <backgroundInThisFight>k__BackingField: {fileID: 3353668733385469208, guid: 13240de0ce37ed64c8d25f8682fe9fc6, type: 3}
+  <explorationBackgroundAfterThisFight>k__BackingField: {fileID: 21300000, guid: 3da08e9dad5e95749899df3ee8183a1a, type: 3}
+  <boxVisual>k__BackingField: {fileID: 21300000, guid: 29dfae77616965e4794dbb0c23c6d520, type: 3}
