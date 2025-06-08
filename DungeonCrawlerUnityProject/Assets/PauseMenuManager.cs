@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenuManager : MonoBehaviour
@@ -53,7 +54,7 @@ public class PauseMenuManager : MonoBehaviour
                 GameManager.Instance.ChangeGameState(GameManager.GameState.InFightArea);
                 break;
             case PauseMenuOptions.MainMenu :
-                GameManager.Instance.ChangeGameState(GameManager.GameState.InMainMenu);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 break;
             case PauseMenuOptions.Quitter :
                 Application.Quit();

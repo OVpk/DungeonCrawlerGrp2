@@ -37,7 +37,6 @@ public class LevelManager : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(this);
         }
     }
 
