@@ -184,6 +184,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         Instantiate(background, backgroundContainer.transform).transform.localPosition = new Vector3(0f,0f,0f);
     }
 
+    
+    
     public void LoadFightArea(FightAreaData data)
     {
         InitBackground(data.backgroundInThisFight);
@@ -471,6 +473,11 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
         foreach (var position in impactedPositions)
         {
             EntityDataInstance entity = gridToApply[position.x, position.y];
+            switch (effectToApply)
+            {
+                case EntityData.EntityEffects.ProtectedHorizontaly : protectedByBubbleHorizontalPositions.Add(position); break;
+                case EntityData.EntityEffects.ProtectedVerticaly : protectedByBubbleVerticalyPositions.Add(position); break;
+            }
             if (entity == null) continue;
             entity.AddEffect(effectToApply);
         }
@@ -765,21 +772,7 @@ private IEnumerator ProcessRegularHits(
         {
             sendInformation.EntityDeathAt(position, TurnState.Player);
             yield return WaitAnimationEvent();
-            
-            List<EntityData.EntityEffects> effectsToPass = new List<EntityData.EntityEffects>();
-            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly))
-                    effectsToPass.Add(EntityData.EntityEffects.ProtectedHorizontaly);
-            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
-                    effectsToPass.Add(EntityData.EntityEffects.ProtectedVerticaly);
-            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.Glue))
-            {
-                effectsToPass.Add(EntityData.EntityEffects.Glue);
-            }
-            EntityDataInstance newLayer = PlaceEntityAtPosition(playerGrid[position.x, position.y].nextLayer, position, TurnState.Player);
-            foreach (var effect in effectsToPass)
-            {
-                newLayer.AddEffect(effect);
-            }
+            PlaceEntityAtPosition(playerGrid[position.x, position.y].nextLayer, position, TurnState.Player);
         }
             
     }
@@ -891,8 +884,8 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
 }
 
 
-
-
+public HashSet<(int x, int y)> protectedByBubbleHorizontalPositions = new HashSet<(int x, int y)>();
+public HashSet<(int x, int y)> protectedByBubbleVerticalyPositions = new HashSet<(int x, int y)>();
 
     public EntityDataInstance PlaceEntityAtPosition(EntityData entity, (int x, int y) position, TurnState team)
     {
@@ -900,6 +893,14 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         gridToPlace[position.x, position.y] = entity.Instance();
         sendInformation.EntitySpawnAt(position, team, gridToPlace[position.x, position.y]);
         EncyclopedieManager.Instance.EntityIsPlaced(entity);
+        if (protectedByBubbleHorizontalPositions.Contains(position))
+        {
+            gridToPlace[position.x, position.y].AddEffect(EntityData.EntityEffects.ProtectedHorizontaly);
+        }
+        if (protectedByBubbleVerticalyPositions.Contains(position))
+        {
+            gridToPlace[position.x, position.y].AddEffect(EntityData.EntityEffects.ProtectedVerticaly);
+        }
         return gridToPlace[position.x, position.y];
     }
 
@@ -917,6 +918,8 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         {
             for (int i = 0; i < gridToApply.GetLength(1); i++)
             {
+                protectedByBubbleHorizontalPositions.Remove((position.x, i));
+                
                 if (gridToApply[position.x, i] == null) continue;
                 if (!gridToApply[position.x, i].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly)) continue;
                 gridToApply[position.x, i].effects.Remove(EntityData.EntityEffects.ProtectedHorizontaly);
@@ -929,6 +932,8 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         {
             for (int i = 0; i < gridToApply.GetLength(0); i++)
             {
+                protectedByBubbleVerticalyPositions.Remove((position.x, i));
+                
                 if (gridToApply[i, position.y] == null) continue;
                 if(!gridToApply[i, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly)) continue;
                 gridToApply[i, position.y].effects.Remove(EntityData.EntityEffects.ProtectedVerticaly);
