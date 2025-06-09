@@ -16,5 +16,5 @@ MonoBehaviour:
   <enemyGrid>k__BackingField: {fileID: 11400000, guid: 3dd610eb62d6d7a408dd8303b93ed04b, type: 2}
   <reward>k__BackingField: {fileID: 11400000, guid: c84f3887eb27feb48b9371b97dec6f3d, type: 2}
   <backgroundInThisFight>k__BackingField: {fileID: 4832961318765157412, guid: 3db7448ac8932504886b35424b4af70a, type: 3}
-  <explorationBackgroundAfterThisFight>k__BackingField: {fileID: 21300000, guid: 3da08e9dad5e95749899df3ee8183a1a, type: 3}
+  <explorationBackgroundAfterThisFight>k__BackingField: {fileID: 21300000, guid: bbdbeca6f91854d48bc039333967cb09, type: 3}
   <boxVisual>k__BackingField: {fileID: 21300000, guid: 3f043528d04a9194f91f8c6c9108ad18, type: 3}
