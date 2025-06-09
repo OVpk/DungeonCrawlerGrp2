@@ -48,9 +48,18 @@ public class ShopManager : MonoBehaviour
         // Filtrer les items disponibles
         availableShopItems = new List<ArticalShopData>();
         currentRefillArticleNb = 0;
-        allShopItems = ShuffleList(allShopItems);
+        
+        var shuffled = ShuffleList(new List<ArticalShopData>(allShopItems));
+        
+        var candyCandidates = shuffled.FindAll(a => a.item is CandyPackData && IsItemAvailable(a));
+        if (candyCandidates.Count > 0)
+        {
+            var firstCandy = candyCandidates[0];
+            availableShopItems.Add(firstCandy);
+            shuffled.Remove(firstCandy);
+        }
 
-        foreach (var article in allShopItems)
+        foreach (var article in shuffled)
         {
             if (availableShopItems.Count >= MaxDisplayedItems)
                 break;
@@ -62,9 +71,11 @@ public class ShopManager : MonoBehaviour
                     if (currentRefillArticleNb >= maxRefillArticleNb) continue;
                     currentRefillArticleNb++;
                     availableShopItems.Add(article);
-                    continue;
                 }
-                availableShopItems.Add(article);
+                else
+                {
+                    availableShopItems.Add(article);
+                }
             }
         }
 

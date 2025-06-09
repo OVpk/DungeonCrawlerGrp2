@@ -23,6 +23,8 @@ public class ExplorationManager : MonoBehaviour
 
     public SpriteRenderer backgroundExplo;
 
+    public bool isLastStageReached = false;
+
     
     private void Awake()
     {
@@ -43,6 +45,12 @@ public class ExplorationManager : MonoBehaviour
     {
         currentAreaPosition = position;
         currentArea = level[currentAreaPosition.x, currentAreaPosition.y];
+        if (level[currentAreaPosition.x + 1, currentAreaPosition.y] == null ||
+            level[currentAreaPosition.x, currentAreaPosition.y + 1] == null)
+        {
+            isLastStageReached = true;
+            return;
+        }
         leftArea = level[currentAreaPosition.x+1, currentAreaPosition.y];
         rightArea = level[currentAreaPosition.x, currentAreaPosition.y+1];
     }
