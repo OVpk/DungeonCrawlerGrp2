@@ -927,7 +927,7 @@ GameObject:
   - component: {fileID: 6270109983223641097}
   - component: {fileID: 2712101585592087741}
   m_Layer: 0
-  m_Name: FxMissed
+  m_Name: MiniFx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1375,6 +1375,11 @@ MonoBehaviour:
   typeText: {fileID: 7997003940446473754}
   bubbleDurabilityText: {fileID: 8960274487368244382}
   bubbleDurabilityNb: 0
+  miniFx: {fileID: 2712101585592087741}
+  miniFxMissed: {fileID: 21300000, guid: 9efd055bf48cecb43955693f7e7e94fb, type: 3}
+  miniFxGlue: {fileID: 21300000, guid: 0bb8baf6b359cc543838ab8824503a01, type: 3}
+  miniFxExplosivePoudre: {fileID: 21300000, guid: c8b3fa1c5b9262f4ca4a53b43a702a39, type: 3}
+  miniFxBoing: {fileID: 21300000, guid: b09e6036c2416af45ba1560f7928dc0f, type: 3}
 --- !u!1001 &420770236076125067
 PrefabInstance:
   m_ObjectHideFlags: 0

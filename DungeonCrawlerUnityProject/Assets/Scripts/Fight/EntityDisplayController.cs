@@ -322,6 +322,9 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         if (!IsConcerned(position, team)) return;
         
         effectDisplayer.explosivePowder.gameObject.SetActive(true);
+        
+        miniFx.sprite = miniFxExplosivePoudre;
+        effectDisplayer.anim.Play("MiniFxSpawn");
     }
     
     public void OnEntityLoseExplosiveEffect((int x, int y) position, FightManager.TurnState team)
@@ -374,12 +377,31 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         
         bubbleDurabilityNb = Math.Clamp(bubbleDurabilityNb--, 0, bubbleDurabilityNb);
         bubbleDurabilityText.text = bubbleDurabilityNb.ToString();
+        
+        miniFx.sprite = miniFxBoing;
+        effectDisplayer.anim.Play("MiniFxSpawn");
     }
+
+    public SpriteRenderer miniFx;
+
+    public Sprite miniFxMissed;
+    public Sprite miniFxGlue;
+    public Sprite miniFxExplosivePoudre;
+    public Sprite miniFxBoing;
 
     public void OnAttackIsMissed((int x, int y) position, FightManager.TurnState team)
     {
         if (!IsConcerned(position, team)) return;
-        
-        effectDisplayer.anim.Play("Missed");
+
+        miniFx.sprite = miniFxMissed;
+        effectDisplayer.anim.Play("MiniFxSpawn");
+    }
+
+    public void OnAttackIsMissedByGlue((int x, int y) position, FightManager.TurnState team)
+    {
+        if (!IsConcerned(position, team)) return;
+
+        miniFx.sprite = miniFxGlue;
+        effectDisplayer.anim.Play("MiniFxSpawn");
     }
 }

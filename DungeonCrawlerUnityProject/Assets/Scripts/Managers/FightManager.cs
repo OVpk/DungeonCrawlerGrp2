@@ -24,6 +24,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
     public Sprite sfxRazzia;
     public Sprite sfxFog;
     public Sprite sfxExplosivePowder;
+    public Sprite sfxAttaqueGroupee;
 
     public void DisplaySfx(Sprite spriteToDisplay, TurnState team)
     {
@@ -339,6 +340,8 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
         
         yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
         
+        sendInformation.AttackIsMissedByGlueAt(attackerPosition, attackerTeam);
+        
         foreach (var (fogger, pos) in foggers)
         {
             if (fogger.durability <= 0)
@@ -380,6 +383,11 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
         // 1) Déclenchement de l'animation d'attaque
         sendInformation.EntityAttackAt(attackerPosition, attackerTeam);
         yield return WaitAnimationEvent();
+
+        if (attacker.name == "EnemySmartiesSingle")
+        {
+            DisplaySfx(sfxAttaqueGroupee, TurnState.Enemy);
+        }
 
         // 2) Calcul des positions impactées et partition
         var impacted = GetImpactedPositions(gridToApplyAttack, attackOriginPosition, attackToApply.pattern.positions);
@@ -518,8 +526,6 @@ private void TryApplyExplosivePowder(
     List<(int x, int y)> damagedPositions,
     TurnState targetTeam)
 {
-    bool mustDisplaySfx = false;
-
     // Parcourt uniquement les positions qui ont pris des dégâts
     foreach (var pos in damagedPositions)
     {
@@ -548,12 +554,6 @@ private void TryApplyExplosivePowder(
             sendInformation.EntityLoseExplosiveEffectAt(attackerPosition, attackerTeam);
         } // un seul spawn, comme avant
 
-        mustDisplaySfx = true;
-    }
-
-    if (mustDisplaySfx)
-    {
-        DisplaySfx(sfxExplosivePowder, targetTeam);
     }
 }
 
@@ -572,7 +572,6 @@ private void TryApplyGlue(
         if (protectedHits.Contains(pos)) continue;
         if (Random.Range(0, 100) >= stage.PercentOfChanceOfGlue)
         {
-            sendInformation.AttackIsMissedAt(pos, targetTeam);
             continue;
         }
         var e = grid[pos.x, pos.y];
@@ -803,6 +802,8 @@ private IEnumerator ProcessRegularHits(
     
 public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
 {
+    DisplaySfx(sfxExplosivePowder, team);
+    
     // 1) Préparation et animation de l'explosion initiale
     sendInformation.EntityLoseExplosiveEffectAt(position, team);
     sendInformation.EntityExplodeAt(position, team);
