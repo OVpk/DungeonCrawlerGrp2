@@ -320,7 +320,34 @@ public IEnumerator Attack((int x, int y) attackerPosition, int attackIndex, (int
     if (attacker.effects.Contains(EntityData.EntityEffects.Glue))
     {
         yield return new WaitForSeconds(2f);
+        
+        var foggers = new List<(EntityDataInstance fogger, (int x, int y) pos)>();
+        
+        for (int i = 0; i < enemyGrid.GetLength(0); i++)
+        {
+            for (int j = 0; j < enemyGrid.GetLength(1); j++)
+            {
+                EntityDataInstance entity = enemyGrid[i, j];
+                if (entity != null && entity.effects.Contains(EntityData.EntityEffects.Fogger))
+                    foggers.Add((entity, (i,j)));
+            }
+        }
+        
         yield return EntityTakeDamage(attacker, attackerPosition, attackToApply.selfDamage);
+        
+        foreach (var (fogger, pos) in foggers)
+        {
+            if (fogger.durability <= 0)
+            {
+                EntityApplyFogEffect(
+                    fogger,
+                    fogger is CharacterDataInstance ? TurnState.Player : TurnState.Enemy,
+                    pos,
+                    fogger is CharacterDataInstance ? playerGrid : enemyGrid,
+                    fogger.patternWhereFogGone.positions);
+            }
+        }
+        
         UpdateGlue(attacker, attackerPosition, attackerTeam);
         yield return new WaitForSeconds(2f);
 
