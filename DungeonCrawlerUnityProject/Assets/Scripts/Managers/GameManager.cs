@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MainMenuController mainMenuController;
     [SerializeField] private GameOverController gameOverController;
     [SerializeField] private VictoryController victoryController;
+    [SerializeField] private CreditController creditController;
 
     private GameObject fightScene => FightManager.Instance.transform.root.gameObject;
     private GameObject explorationScene => ExplorationManager.Instance.transform.root.gameObject;
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
     private GameObject mainMenuScene => MainMenuManager.Instance.transform.root.gameObject;
     private GameObject gameOverScene => GameOverManager.Instance.transform.root.gameObject;
     private GameObject victoryScene => VictoryScreenManager.Instance.transform.root.gameObject;
+    private GameObject creditScene => CreditManager.Instance.transform.root.gameObject;
     
     public enum GameState
     {
@@ -40,7 +42,8 @@ public class GameManager : MonoBehaviour
         InMainMenu,
         InPauseMenu,
         InGameOver,
-        InVictoryScreen
+        InVictoryScreen,
+        InCredit
     }
 
     private GameState currentGameState;
@@ -78,6 +81,17 @@ public class GameManager : MonoBehaviour
         currentGameState = newGameState;
         ChangeDisplayedScene(currentGameState);
         ChangeController(currentGameState);
+        ChangeMusic(currentGameState);
+    }
+
+    private void ChangeMusic(GameState newGameState)
+    {
+        switch (newGameState)
+        {
+            case GameState.InMainMenu : MusicManager.Instance.PlayShopMusic(); break;
+            case GameState.InFightArea : MusicManager.Instance.PlayFightMusic(); break;
+            case GameState.InOverWorld : MusicManager.Instance.PlayShopMusic(); break;
+        }
     }
 
     private void ChangeDisplayedScene(GameState newGameState)
@@ -163,6 +177,7 @@ public class GameManager : MonoBehaviour
                 mainMenuScene.SetActive(true);
                 gameOverScene.SetActive(false);
                 victoryScene.SetActive(false);
+                creditScene.SetActive(false);
                 break;
             case GameState.InGameOver :
                 explorationScene.SetActive(false);
@@ -185,6 +200,18 @@ public class GameManager : MonoBehaviour
                 mainMenuScene.SetActive(false);
                 gameOverScene.SetActive(false);
                 victoryScene.SetActive(true);
+                break;
+            case GameState.InCredit :
+                explorationScene.SetActive(false);
+                fightScene.SetActive(false);
+                shopScene.SetActive(false);
+                refillPackScene.SetActive(false);
+                encyclopedieScene.SetActive(false);
+                pauseMenuScene.SetActive(false);
+                mainMenuScene.SetActive(false);
+                gameOverScene.SetActive(false);
+                victoryScene.SetActive(false);
+                creditScene.SetActive(true);
                 break;
         }
     }
@@ -269,6 +296,7 @@ public class GameManager : MonoBehaviour
                 mainMenuController.ChangeActiveState(true);
                 gameOverController.ChangeActiveState(false);
                 victoryController.ChangeActiveState(false);
+                creditController.ChangeActiveState(false);
                 break;
             case GameState.InGameOver :
                 overWorldController.ChangeActiveState(false);
@@ -291,6 +319,18 @@ public class GameManager : MonoBehaviour
                 mainMenuController.ChangeActiveState(false);
                 gameOverController.ChangeActiveState(false);
                 victoryController.ChangeActiveState(true);
+                break;
+            case GameState.InCredit :
+                overWorldController.ChangeActiveState(false);
+                fightAreaController.ChangeActiveState(false);
+                shopController.ChangeActiveState(false);
+                refillPackController.ChangeActiveState(false);
+                encyclopedieController.ChangeActiveState(false);
+                pauseMenuController.ChangeActiveState(false);
+                mainMenuController.ChangeActiveState(false);
+                gameOverController.ChangeActiveState(false);
+                victoryController.ChangeActiveState(false);
+                creditController.ChangeActiveState(true);
                 break;
         }
     }

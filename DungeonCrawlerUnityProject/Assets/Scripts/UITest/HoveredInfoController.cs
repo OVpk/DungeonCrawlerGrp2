@@ -40,6 +40,6 @@ public class HoveredInfoController : MonoBehaviour
         currentLayerInfo.text = "???";
         nextLayerInfo.text = "???";
         characterSprite.gameObject.SetActive(false);
-        description.text = "EMPLACEMENT VIDE";
+        description.text = "";
     }
 }

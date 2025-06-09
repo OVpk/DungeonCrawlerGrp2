@@ -83,6 +83,15 @@ public class PauseMenuManager : MonoBehaviour
                 break;
         }
     }
-    
-    
+
+    public Image son;
+    public Sprite sonOn;
+    public Sprite sonOff;
+
+    public void ChangeMusicState()
+    {
+        MusicManager.Instance.ToggleMute();
+        son.sprite = son.sprite == sonOn ? sonOff : sonOn;
+    }
+
 }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7202151735109076634}
   - component: {fileID: 1066914901349942554}
-  - component: {fileID: 4815898187493121740}
+  - component: {fileID: 8674862654810563553}
   m_Layer: 0
   m_Name: CreditPrefab
   m_TagString: Untagged
@@ -85,24 +85,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &4815898187493121740
-Animator:
-  serializedVersion: 5
+--- !u!111 &8674862654810563553
+Animation:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2021461417738582791}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e849886a5b86f994a9b2b79bf207d259, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 85f44938dbe8a7f4583f865d365832a7, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 85f44938dbe8a7f4583f865d365832a7, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0

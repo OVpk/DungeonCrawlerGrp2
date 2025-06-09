@@ -927,7 +927,7 @@ GameObject:
   - component: {fileID: 6270109983223641097}
   - component: {fileID: 2712101585592087741}
   m_Layer: 0
-  m_Name: MiniFx
+  m_Name: FxMissed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -17,8 +17,6 @@ public class ExplorationManager : MonoBehaviour
     private AreaData rightArea;
     
     [SerializeField] private CustomLevelData customLevelData;
-    
-    public TMP_Text moneyText;
 
 
     public SpriteRenderer backgroundExplo;
@@ -93,7 +91,6 @@ public class ExplorationManager : MonoBehaviour
             ((FightAreaData)rightArea).reward.rewardType);
         leftAreaBox.sprite = ((FightAreaData)leftArea).boxVisual != null ? ((FightAreaData)leftArea).boxVisual : null;
         rightAreaBox.sprite = ((FightAreaData)rightArea).boxVisual != null ? ((FightAreaData)rightArea).boxVisual : null;
-        UpdateMoneyUI();
         stockDisplayer.RefreshDisplay();
         backgroundExplo.sprite = ((FightAreaData)currentArea).explorationBackgroundAfterThisFight;
     }
@@ -118,10 +115,6 @@ public class ExplorationManager : MonoBehaviour
         }
     }
     
-    private void UpdateMoneyUI()
-    {
-        moneyText.text = GameManager.Instance.money.ToString();
-    }
 
     public void GoToShop()
     {
