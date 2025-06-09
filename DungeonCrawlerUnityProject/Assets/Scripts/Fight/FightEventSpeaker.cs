@@ -251,4 +251,12 @@ public class FightEventSpeaker : MonoBehaviour
             listener.OnAttackIsMissed(position, team);
         }
     }
+    
+    public void AttackIsMissedByGlueAt((int x, int y) position, FightManager.TurnState team)
+    {
+        foreach (var listener in listeners)
+        {
+            listener.OnAttackIsMissedByGlue(position, team);
+        }
+    }
 }
