@@ -79,6 +79,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         }
             
     }
+
+
     
     
     private void UpdateFog(EntityDataInstance[,] gridToUpdate, TurnState teamToUpdate)
@@ -907,6 +909,18 @@ public HashSet<(int x, int y)> protectedByBubbleVerticalyPositions = new HashSet
     public void BreakLayerAt((int x, int y) position)
     {
         StartCoroutine(CharacterDeathAt(position));
+    }
+    
+    public bool CanBubbleBePlaced((int x, int y) originPosition, PatternData pattern)
+    {
+        List<(int x, int y)> positionsToCheck = GetImpactedPositions(playerGrid, originPosition, pattern.positions);
+        foreach (var position in positionsToCheck)
+        {
+            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly)
+                || playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+                return false;
+        }
+        return true;
     }
 
     public void RemoveBubbleAt((int x, int y) position, EntityDataInstance[,] gridToApply)

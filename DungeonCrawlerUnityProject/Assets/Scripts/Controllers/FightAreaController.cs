@@ -184,6 +184,11 @@ public class FightAreaController : PlayerController
     private void SelectAttack()
     {
         if (FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attacks[currentAttackIndex]) == null) return;
+        if ((FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attacks[currentAttackIndex]).Effect 
+            is EntityData.EntityEffects.ProtectedHorizontaly 
+            or EntityData.EntityEffects.ProtectedVerticaly)
+            && !FightManager.Instance.CanBubbleBePlaced(playerGridSelectorPosition, 
+                FightManager.Instance.FindBestUnlockedStage(selectedCharacter.attacks[currentAttackIndex]).pattern)) return;
         
         SwitchState(SelectorState.SelectAttackPosition);
         
