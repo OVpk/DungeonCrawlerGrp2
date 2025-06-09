@@ -15,6 +15,14 @@ public class MusicManager : MonoBehaviour
 
     public AudioClip shopIntro;
     public AudioClip shopLoop;
+    
+    public enum MusicMode
+    {
+        InExplo,
+        InFight
+    }
+
+    public MusicMode currentMusicMode = MusicMode.InExplo;
 
     private void Awake()
     {
@@ -30,12 +38,16 @@ public class MusicManager : MonoBehaviour
 
     public void PlayFightMusic()
     {
+        if (currentMusicMode == MusicMode.InFight) return;
         PlayMusic(fightIntro, fightLoop);
+        currentMusicMode = MusicMode.InFight;
     }
     
     public void PlayShopMusic()
     {
+        if (currentMusicMode == MusicMode.InExplo) return;
         PlayMusic(shopIntro, shopLoop);
+        currentMusicMode = MusicMode.InExplo;
     }
 
     public void ToggleMute()
