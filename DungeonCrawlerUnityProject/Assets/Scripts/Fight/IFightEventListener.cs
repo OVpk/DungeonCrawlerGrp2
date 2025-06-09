@@ -45,5 +45,7 @@ public interface IFightEventListener
     void OnBubbleTakeDamage((int x, int y) position, FightManager.TurnState team);
     
     void OnAttackIsMissed((int x, int y) position, FightManager.TurnState team);
+    
+    void OnAttackIsMissedByGlue((int x, int y) position, FightManager.TurnState team);
 
 }
