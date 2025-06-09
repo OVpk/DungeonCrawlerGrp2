@@ -1016,9 +1016,16 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         yield return new WaitForSeconds(3f);
         if (whereGo == GameManager.GameState.InOverWorld)
         {
-            ShopManager.Instance.InitShop();
-            GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
-            ExplorationManager.Instance.SetDisplay();
+            if (ExplorationManager.Instance.isLastStageReached)
+            {
+                GameManager.Instance.ChangeGameState(GameManager.GameState.InVictoryScreen);
+            }
+            else
+            {
+                ShopManager.Instance.InitShop();
+                GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
+                ExplorationManager.Instance.SetDisplay();
+            }
         }
         if (whereGo == GameManager.GameState.InRefillPack)
         {
