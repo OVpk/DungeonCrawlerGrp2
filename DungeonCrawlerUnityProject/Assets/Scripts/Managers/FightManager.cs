@@ -891,7 +891,7 @@ public HashSet<(int x, int y)> protectedByBubbleVerticalyPositions = new HashSet
     {
         EntityDataInstance[,] gridToPlace = team == TurnState.Player ? playerGrid : enemyGrid;
         gridToPlace[position.x, position.y] = entity.Instance();
-        sendInformation.EntitySpawnAt(position, team, gridToPlace[position.x, position.y]);
+        StartCoroutine(sendInformation.EntitySpawnAt(position, team, gridToPlace[position.x, position.y]));
         EncyclopedieManager.Instance.EntityIsPlaced(entity);
         if (protectedByBubbleHorizontalPositions.Contains(position))
         {
