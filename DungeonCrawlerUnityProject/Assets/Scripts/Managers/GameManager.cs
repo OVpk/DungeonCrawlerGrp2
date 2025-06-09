@@ -78,6 +78,17 @@ public class GameManager : MonoBehaviour
         currentGameState = newGameState;
         ChangeDisplayedScene(currentGameState);
         ChangeController(currentGameState);
+        ChangeMusic(currentGameState);
+    }
+
+    private void ChangeMusic(GameState newGameState)
+    {
+        switch (newGameState)
+        {
+            case GameState.InMainMenu : MusicManager.Instance.PlayShopMusic(); break;
+            case GameState.InFightArea : MusicManager.Instance.PlayFightMusic(); break;
+            case GameState.InOverWorld : MusicManager.Instance.PlayShopMusic(); break;
+        }
     }
 
     private void ChangeDisplayedScene(GameState newGameState)
