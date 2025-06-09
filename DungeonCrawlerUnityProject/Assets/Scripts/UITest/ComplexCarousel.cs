@@ -134,21 +134,11 @@ public class ComplexCarousel : MonoBehaviour
         
         currentAttackStage = newEntry;
 
-        Vector2 topTarget    = dir > 0 ? topEntryPos    : centerEntryPos;
-        Vector2 centerTarget = dir > 0 ? centerEntryPos : bottomEntryPos;
-        Vector2 bottomTarget = dir > 0 ? bottomEntryPos : topEntryPos;
+        
 
-        var seq = DOTween.Sequence();
-        seq.Join(topEntry.DOAnchorPos(topTarget, verticalDuration).SetEase(verticalEase));
-        seq.Join(centerEntry.DOAnchorPos(centerTarget, verticalDuration).SetEase(verticalEase));
-        seq.Join(bottomEntry.DOAnchorPos(bottomTarget, verticalDuration).SetEase(verticalEase));
-
-        seq.OnComplete(() =>
-        {
-            ResetVerticalPositions();
-            UpdateDisplay();
-            isVerticalAnimating = false;
-        });
+        ResetVerticalPositions();
+        UpdateDisplay();
+        isVerticalAnimating = false;
     }
 
     private void ResetHorizontalPositions()
