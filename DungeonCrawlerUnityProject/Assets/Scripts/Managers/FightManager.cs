@@ -79,6 +79,8 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         }
             
     }
+
+
     
     
     private void UpdateFog(EntityDataInstance[,] gridToUpdate, TurnState teamToUpdate)
@@ -153,6 +155,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         PlaceEntityAtPosition(pack.data.candyData, position, TurnState.Player);
         pack.currentStock--;
         packDisplayer.UpdateDisplay();
+        if (IsCleaningGridNecessary(TurnState.Player)) CleanAlreadyPlayedPositions(TurnState.Player);
     }
 
     public static FightManager Instance;
@@ -891,7 +894,7 @@ public HashSet<(int x, int y)> protectedByBubbleVerticalyPositions = new HashSet
     {
         EntityDataInstance[,] gridToPlace = team == TurnState.Player ? playerGrid : enemyGrid;
         gridToPlace[position.x, position.y] = entity.Instance();
-        sendInformation.EntitySpawnAt(position, team, gridToPlace[position.x, position.y]);
+        StartCoroutine(sendInformation.EntitySpawnAt(position, team, gridToPlace[position.x, position.y]));
         EncyclopedieManager.Instance.EntityIsPlaced(entity);
         if (protectedByBubbleHorizontalPositions.Contains(position))
         {
@@ -907,6 +910,19 @@ public HashSet<(int x, int y)> protectedByBubbleVerticalyPositions = new HashSet
     public void BreakLayerAt((int x, int y) position)
     {
         StartCoroutine(CharacterDeathAt(position));
+        if (IsCleaningGridNecessary(TurnState.Player)) CleanAlreadyPlayedPositions(TurnState.Player);
+    }
+    
+    public bool CanBubbleBePlaced((int x, int y) originPosition, PatternData pattern)
+    {
+        List<(int x, int y)> positionsToCheck = GetImpactedPositions(playerGrid, originPosition, pattern.positions);
+        foreach (var position in positionsToCheck)
+        {
+            if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly)
+                || playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
+                return false;
+        }
+        return true;
     }
 
     public void RemoveBubbleAt((int x, int y) position, EntityDataInstance[,] gridToApply)

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -34,8 +35,14 @@ public class FightEventSpeaker : MonoBehaviour
         }
     }
 
-    public void EntitySpawnAt((int x, int y) position, FightManager.TurnState team, EntityDataInstance entityData)
+
+    public IEnumerator EntitySpawnAt((int x, int y) position, FightManager.TurnState team, EntityDataInstance entityData)
     {
+        while (listeners.Count == 0)
+        {
+            yield return null;
+        }
+
         foreach (var listener in listeners)
         {
             listener.OnEntitySpawn(position, team, entityData);

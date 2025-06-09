@@ -404,6 +404,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5943159915301257386}
     m_Modifications:
+    - target: {fileID: 547112774952520703, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0.3135
+      objectReference: {fileID: 0}
+    - target: {fileID: 547112774952520703, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.9406
+      objectReference: {fileID: 0}
+    - target: {fileID: 547112774952520703, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.012
+      objectReference: {fileID: 0}
+    - target: {fileID: 547112774952520703, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.877
+      objectReference: {fileID: 0}
+    - target: {fileID: 584772636691541828, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1685624830261388758, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
       propertyPath: m_LocalPosition.x
       value: -23.85725
@@ -444,9 +464,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5074793300863967175, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5344161961294527540, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 85152def9163d0748a6dabb3f0b628de, type: 3}
+    - target: {fileID: 6350162421279605273, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7275090760508939029, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d01a2d481b9be1d4a8d6a02ba58428b2, type: 3}
     - target: {fileID: 8086419871987164073, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
       propertyPath: m_Name
       value: FightSceneUi
+      objectReference: {fileID: 0}
+    - target: {fileID: 8880045016562377082, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0.318
+      objectReference: {fileID: 0}
+    - target: {fileID: 8880045016562377082, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.9539
+      objectReference: {fileID: 0}
+    - target: {fileID: 8880045016562377082, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.0142002
+      objectReference: {fileID: 0}
+    - target: {fileID: 8880045016562377082, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.203
+      objectReference: {fileID: 0}
+    - target: {fileID: 9194082153032994427, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
