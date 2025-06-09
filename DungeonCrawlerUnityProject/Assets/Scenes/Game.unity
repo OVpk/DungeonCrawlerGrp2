@@ -1101,11 +1101,11 @@ MonoBehaviour:
   smartiesBox: {fileID: 11400000, guid: 3705cb25e8b31a143addb34c1058ddf7, type: 2}
   smartie: {fileID: 11400000, guid: c47b9ad93d1332e41a9594077601a477, type: 2}
   tagadaDescription: {fileID: 21300000, guid: 7a7ee21a78423c24492e476f37167f9c, type: 3}
-  carambarDescription: {fileID: 21300000, guid: 3b5124d6d5e33824ba1e15b415a65233, type: 3}
+  carambarDescription: {fileID: 21300000, guid: 5000a8360cf0d2a46bf37b689cbc5f6d, type: 3}
   verDescription: {fileID: 21300000, guid: d9607bc1aa0e77747872c185e3be392f, type: 3}
-  soucoupeDescription: {fileID: 21300000, guid: 3057bff7b8a6544499adc7e5976dab73, type: 3}
+  soucoupeDescription: {fileID: 21300000, guid: 70e8afa4f8ed09447a93def007e725bc, type: 3}
   teteBruleeDescription: {fileID: 21300000, guid: 1e52b66e2b0a94b4394e91d42ff80696, type: 3}
-  malabarDescription: {fileID: 21300000, guid: 0198304bffbc2f6478d9c8f6a3289dbb, type: 3}
+  malabarDescription: {fileID: 21300000, guid: 55718f036633a1c43bd29a080993fae1, type: 3}
   smartiesBoxDescription: {fileID: 21300000, guid: 3858012939920df44bd51e6f5ef862ae, type: 3}
   smartieDescription: {fileID: 21300000, guid: 86def829959cd0b4bacf6ecfb9c6f6fa, type: 3}
   descriptionDisplayer: {fileID: 1229178202}
