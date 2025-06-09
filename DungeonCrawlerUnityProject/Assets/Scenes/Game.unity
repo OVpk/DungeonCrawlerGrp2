@@ -9474,12 +9474,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 59b2c9cb8c500ed4aa7e9b935ec80d59, type: 2}
   - {fileID: 11400000, guid: 21b9aeacbaeb345458ea7109d85e6a54, type: 2}
   - {fileID: 11400000, guid: 736bcbb455caca341bb28c87f83683ee, type: 2}
-  - {fileID: 11400000, guid: 8afc9cb95ca3e7941a8c4e952926252e, type: 2}
+  - {fileID: 11400000, guid: b716e7d9e8011ac489bea2b968d376e1, type: 2}
   - {fileID: 11400000, guid: 8afc9cb95ca3e7941a8c4e952926252e, type: 2}
   - {fileID: 11400000, guid: 04bc0fa338f371a4b875f2797ff3afa3, type: 2}
   - {fileID: 11400000, guid: 710d24f550942a34694148cc09d77eda, type: 2}
   - {fileID: 11400000, guid: 351d4bbf59df9b74f8aef96a098fdfaa, type: 2}
   - {fileID: 11400000, guid: bb9a349ab4fe67c40a129fa09afe8bbb, type: 2}
+  - {fileID: 11400000, guid: c165ffab71dd9ca41aace83cbc291817, type: 2}
+  - {fileID: 11400000, guid: b02bf6e0f55a51e46b43dc80705fb909, type: 2}
   descriptionShop: {fileID: 1588879968}
   stockDisplayer: {fileID: 2063194226}
   maxRefillArticleNb: 2

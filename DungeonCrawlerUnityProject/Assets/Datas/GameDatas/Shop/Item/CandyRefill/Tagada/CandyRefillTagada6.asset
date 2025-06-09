@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: CandyRefillTagada6
   m_EditorClassIdentifier: 
   <visualInShop>k__BackingField: {fileID: 21300000, guid: 29999ca736286f34985b3dc0035aa951, type: 3}
+  <descriptionInShop>k__BackingField: 4 TAGADAS
   <packToRefill>k__BackingField: {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
   <nbToRefill>k__BackingField: 4
