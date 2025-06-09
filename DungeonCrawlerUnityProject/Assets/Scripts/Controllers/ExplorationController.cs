@@ -33,10 +33,10 @@ public class ExplorationController : PlayerController
     {
         if (cursorPosition == (0,0)) return;
         
-        ExplorationManager.Instance.EnterArea((
+        StartCoroutine(ExplorationManager.Instance.EnterArea((
             ExplorationManager.Instance.currentAreaPosition.x + cursorPosition.x,
             ExplorationManager.Instance.currentAreaPosition.y + cursorPosition.y
-            ));
+            )));
         cursorPosition = (0, 0);
     }
 }

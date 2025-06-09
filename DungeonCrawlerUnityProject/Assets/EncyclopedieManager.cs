@@ -98,41 +98,49 @@ public class EncyclopedieManager : MonoBehaviour
         {
             isTagadaDiscovered = true;
             tagadaImg.sprite = tagadadiscoveredSprite;
+            DisplayPopupAlert();
         }
         else if (!isCarambarDiscovered && entity == carambar)
         {
             isCarambarDiscovered = true;
             carambarImg.sprite = carambardiscoveredSprite;
+            DisplayPopupAlert();
         }
         else if (!isVerDiscovered && entity == ver)
         {
             isVerDiscovered = true;
             verImg.sprite = verdiscoveredSprite;
+            DisplayPopupAlert();
         }
         else if (!isSoucoupeDiscovered && entity == soucoupe)
         {
             isSoucoupeDiscovered = true;
             soucoupeImg.sprite = soucoupediscoveredSprite;
+            DisplayPopupAlert();
         }
         else if (!isTeteBruleeDiscovered && entity == teteBrulee)
         {
             isTeteBruleeDiscovered = true;
             teteBruleeImg.sprite = teteBruleediscoveredSprite;
+            DisplayPopupAlert();
         }
         else if (!isMalabarDiscovered && entity == malabar)
         {
             isMalabarDiscovered = true;
             malabarImg.sprite = malabardiscoveredSprite;
+            DisplayPopupAlert();
         }
         else if (!isSmartiesBoxDiscovered && entity == smartiesBox)
         {
             isSmartiesBoxDiscovered = true;
             smartiesBoxImg.sprite = smartiesBoxdiscoveredSprite;
+            DisplayPopupAlert();
         }
         else if (!isSmartieDiscovered && entity == smartie)
         {
             isSmartieDiscovered = true;
             smartieImg.sprite = smartiediscoveredSprite;
+            DisplayPopupAlert();
         }
     }
 
@@ -182,5 +190,12 @@ public class EncyclopedieManager : MonoBehaviour
             descriptionDisplayer.gameObject.SetActive(false);
         }
     }
-    
+
+    public Animation popupAlert;
+
+    public void DisplayPopupAlert()
+    {
+        popupAlert.Play();
+    }
+
 }

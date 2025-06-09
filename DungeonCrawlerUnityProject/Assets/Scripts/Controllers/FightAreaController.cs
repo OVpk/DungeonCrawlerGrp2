@@ -66,13 +66,13 @@ public class FightAreaController : PlayerController
     private void WantSeePack()
     {
         SwitchState(SelectorState.SelectPack);
-        uiController.ToggleC();
+        uiController.ToggleC(true);
     }
 
     private void DontWantSeePack()
     {
         SwitchState(SelectorState.OnPlayerGrid);
-        uiController.ToggleC();
+        uiController.ToggleC(false);
     }
 
     private void DontWantSelectAttack()
@@ -83,7 +83,7 @@ public class FightAreaController : PlayerController
         FightManager.Instance.sendInformation.EntityNoLongerSelectedAt(playerGridSelectorPosition, FightManager.TurnState.Player);
         FightManager.Instance.sendInformation.EntityHoveredAt(playerGridSelectorPosition, FightManager.TurnState.Player);
         SwitchState(SelectorState.OnPlayerGrid);
-        uiController.SwitchAB();
+        uiController.SwitchAB(false);
     }
 
     private void SelectPack()
@@ -154,7 +154,7 @@ public class FightAreaController : PlayerController
         
         SwitchState(SelectorState.SelectAttack);
         
-        uiController.SwitchAB();
+        uiController.SwitchAB(true);
         attackSelectorController.LoadData(selectedCharacter.attacks);
         SetAttackOriginPosition();
         MoveAttackSelector((0,0));
@@ -292,6 +292,13 @@ public class FightAreaController : PlayerController
             case SelectorState.OnPlayerGrid : WantSeePack(); break;
             case SelectorState.SelectAttackPosition : ; break;
         }
+    }
+
+    public void GoToInitialState()
+    {
+        PressB();
+        PressB();
+        PressB();
     }
     
 }

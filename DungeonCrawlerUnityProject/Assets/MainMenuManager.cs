@@ -51,6 +51,7 @@ public class MainMenuManager : MonoBehaviour
         {
             case MainMenuOptions.Jouer :
                 GameManager.Instance.ChangeGameState(GameManager.GameState.InFightArea);
+                FightManager.Instance.LoadFightArea((FightAreaData)ExplorationManager.Instance.currentArea);
                 break;
             case MainMenuOptions.Credits :
                 // afficher crédits

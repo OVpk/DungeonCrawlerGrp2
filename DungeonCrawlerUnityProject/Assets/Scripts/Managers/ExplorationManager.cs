@@ -54,8 +54,10 @@ public class ExplorationManager : MonoBehaviour
         leftArea = level[currentAreaPosition.x+1, currentAreaPosition.y];
         rightArea = level[currentAreaPosition.x, currentAreaPosition.y+1];
     }
+
+    public FightAreaController fightController;
     
-    public void EnterArea((int x, int y) position)
+    public IEnumerator EnterArea((int x, int y) position)
     {
         SwitchCurrentAreaTo(position);
 
@@ -63,6 +65,8 @@ public class ExplorationManager : MonoBehaviour
         {
             GameManager.Instance.ChangeGameState(GameManager.GameState.InFightArea);
             FightManager.Instance.LoadFightArea(data);
+            yield return null;
+            fightController.GoToInitialState();
         }
         else
         {
