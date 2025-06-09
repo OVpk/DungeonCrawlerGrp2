@@ -1102,7 +1102,7 @@ MonoBehaviour:
   smartie: {fileID: 11400000, guid: c47b9ad93d1332e41a9594077601a477, type: 2}
   tagadaDescription: {fileID: 21300000, guid: 7a7ee21a78423c24492e476f37167f9c, type: 3}
   carambarDescription: {fileID: 21300000, guid: 3b5124d6d5e33824ba1e15b415a65233, type: 3}
-  verDescription: {fileID: 21300000, guid: 7da09d86a1c7ff94faa085d4eb39b121, type: 3}
+  verDescription: {fileID: 21300000, guid: d9607bc1aa0e77747872c185e3be392f, type: 3}
   soucoupeDescription: {fileID: 21300000, guid: 3057bff7b8a6544499adc7e5976dab73, type: 3}
   teteBruleeDescription: {fileID: 21300000, guid: 1e52b66e2b0a94b4394e91d42ff80696, type: 3}
   malabarDescription: {fileID: 21300000, guid: 0198304bffbc2f6478d9c8f6a3289dbb, type: 3}
@@ -6970,8 +6970,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 17.28
+  m_fontSizeBase: 17.28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
