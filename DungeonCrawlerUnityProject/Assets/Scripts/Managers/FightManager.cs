@@ -897,13 +897,16 @@ public HashSet<(int x, int y)> protectedByBubbleVerticalyPositions = new HashSet
         gridToPlace[position.x, position.y] = entity.Instance();
         StartCoroutine(sendInformation.EntitySpawnAt(position, team, gridToPlace[position.x, position.y]));
         EncyclopedieManager.Instance.EntityIsPlaced(entity);
-        if (protectedByBubbleHorizontalPositions.Contains(position))
+        if (team == TurnState.Player)
         {
-            gridToPlace[position.x, position.y].AddEffect(EntityData.EntityEffects.ProtectedHorizontaly);
-        }
-        if (protectedByBubbleVerticalyPositions.Contains(position))
-        {
-            gridToPlace[position.x, position.y].AddEffect(EntityData.EntityEffects.ProtectedVerticaly);
+            if (protectedByBubbleHorizontalPositions.Contains(position))
+            {
+                gridToPlace[position.x, position.y].AddEffect(EntityData.EntityEffects.ProtectedHorizontaly);
+            }
+            if (protectedByBubbleVerticalyPositions.Contains(position))
+            {
+                gridToPlace[position.x, position.y].AddEffect(EntityData.EntityEffects.ProtectedVerticaly);
+            }
         }
         return gridToPlace[position.x, position.y];
     }
