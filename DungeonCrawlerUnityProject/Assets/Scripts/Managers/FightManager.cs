@@ -55,7 +55,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         
         if (IsCleaningGridNecessary(currentTurn)) CleanAlreadyPlayedPositions(currentTurn);
 
-        if (currentTurn == TurnState.Player) canUseControlls = true;
+        if (currentTurn == TurnState.Player && !isGameEnded) canUseControlls = true;
         
         if (currentTurn == TurnState.Enemy) aiController.PlayTurn();
     }
@@ -196,6 +196,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         CleanAlreadyPlayedPositions(TurnState.Player);
         CleanAlreadyPlayedPositions(TurnState.Enemy);
         if (currentTurn == TurnState.Enemy) SwitchTurn();
+        canUseControlls = true;
     }
 
     #region Display
@@ -1043,11 +1044,13 @@ public IEnumerator EntityExplodeAt((int x, int y) position, TurnState team)
         
         if (HaveLoose(TurnState.Player))
         {
+            canUseControlls = false;
             isGameEnded = true;
-            throw new Exception("l'enemi a gagné");
+            GameManager.Instance.ChangeGameState(GameManager.GameState.InGameOver);
         }
         else if (HaveLoose(TurnState.Enemy))
         {
+            canUseControlls = false;
             isGameEnded = true;
             ShowReward(true);
             GiveMoney();
