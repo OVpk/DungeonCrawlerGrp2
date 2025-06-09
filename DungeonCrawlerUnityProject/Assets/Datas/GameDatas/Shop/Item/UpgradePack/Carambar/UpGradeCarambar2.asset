@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: UpGradeCarambar2
   m_EditorClassIdentifier: 
   <visualInShop>k__BackingField: {fileID: 21300000, guid: 4edfbd3b1c3d7674bad8cba9cfac47ae, type: 3}
-  <descriptionInShop>k__BackingField: 
+  <descriptionInShop>k__BackingField: AMELIORE LA CAPACITE DU PAQUET DE CARAMBARS
+    DE 8 A 10
   <packToUpgrade>k__BackingField: {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}
   <newMaxStock>k__BackingField: 10
   <necessaryUpgradeToSeeThisOneInShop>k__BackingField: {fileID: 11400000, guid: 2bad8aa4e4f24584683a40207c3b9e7a, type: 2}
