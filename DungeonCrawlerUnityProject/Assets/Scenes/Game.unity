@@ -5001,7 +5001,7 @@ MonoBehaviour:
   pauseMenuController: {fileID: 727970726}
   mainMenuController: {fileID: 727970727}
   gameOverController: {fileID: 727970728}
-  victoryController: {fileID: 0}
+  victoryController: {fileID: 727970729}
   firstPacks:
   - {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
   money: 0
@@ -9816,6 +9816,7 @@ MonoBehaviour:
   customLevelData: {fileID: 11400000, guid: 2423f0ca304e18549997563ad95f9a7b, type: 2}
   moneyText: {fileID: 8552435939546448976}
   backgroundExplo: {fileID: 622998665}
+  isLastStageReached: 0
   leftAreaReward: {fileID: 1492800716}
   rightAreaReward: {fileID: 444610209}
   leftAreaBox: {fileID: 2403345071080513555}
