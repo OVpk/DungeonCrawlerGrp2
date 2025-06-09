@@ -24,6 +24,7 @@ public class PauseMenuController : PlayerController
         {
             case Buttons.A : PauseMenuManager.Instance.ApplyOption(); break;
             case Buttons.Y : GameManager.Instance.ChangeGameState(GameManager.GameState.InEncyclopedie); break;
+            case Buttons.X : PauseMenuManager.Instance.ChangeMusicState(); break;
         }
     }
     

@@ -18,11 +18,12 @@ public class MusicManager : MonoBehaviour
     
     public enum MusicMode
     {
+        Nothing,
         InExplo,
         InFight
     }
 
-    public MusicMode currentMusicMode = MusicMode.InExplo;
+    public MusicMode currentMusicMode = MusicMode.Nothing;
 
     private void Awake()
     {
