@@ -155,6 +155,7 @@ public class FightManager : MonoBehaviour, IFightDisplayerListener
         PlaceEntityAtPosition(pack.data.candyData, position, TurnState.Player);
         pack.currentStock--;
         packDisplayer.UpdateDisplay();
+        if (IsCleaningGridNecessary(TurnState.Player)) CleanAlreadyPlayedPositions(TurnState.Player);
     }
 
     public static FightManager Instance;
@@ -909,6 +910,7 @@ public HashSet<(int x, int y)> protectedByBubbleVerticalyPositions = new HashSet
     public void BreakLayerAt((int x, int y) position)
     {
         StartCoroutine(CharacterDeathAt(position));
+        if (IsCleaningGridNecessary(TurnState.Player)) CleanAlreadyPlayedPositions(TurnState.Player);
     }
     
     public bool CanBubbleBePlaced((int x, int y) originPosition, PatternData pattern)
