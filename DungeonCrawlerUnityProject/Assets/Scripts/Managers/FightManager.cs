@@ -922,6 +922,7 @@ public HashSet<(int x, int y)> protectedByBubbleVerticalyPositions = new HashSet
         List<(int x, int y)> positionsToCheck = GetImpactedPositions(playerGrid, originPosition, pattern.positions);
         foreach (var position in positionsToCheck)
         {
+            if (playerGrid[position.x, position.y] == null) continue;
             if (playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedHorizontaly)
                 || playerGrid[position.x, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly))
                 return false;
