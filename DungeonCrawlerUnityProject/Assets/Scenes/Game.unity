@@ -5488,7 +5488,7 @@ MonoBehaviour:
   gameOverController: {fileID: 727970728}
   victoryController: {fileID: 727970729}
   firstPacks:
-  - {fileID: 11400000, guid: 25755beb1138dfd4aa3ec11b9d3ff8eb, type: 2}
+  - {fileID: 11400000, guid: 87de8e431fcdb6747b5312edd4d06485, type: 2}
   money: 0
 --- !u!4 &1165411351
 Transform:
