@@ -424,6 +424,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 928489787407805014, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1495489999256706300, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 69ddf71a2194f044685fb3f391e13e70, type: 3}
     - target: {fileID: 1685624830261388758, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
       propertyPath: m_LocalPosition.x
       value: -23.85725
@@ -464,6 +472,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1827144984599669451, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582731406953129164, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3416305549209004458, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 2.4933
+      objectReference: {fileID: 0}
+    - target: {fileID: 3416305549209004458, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 2.5368
+      objectReference: {fileID: 0}
+    - target: {fileID: 3416305549209004458, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.47890475
+      objectReference: {fileID: 0}
+    - target: {fileID: 3416305549209004458, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.157
+      objectReference: {fileID: 0}
+    - target: {fileID: 3416305549209004458, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.358
+      objectReference: {fileID: 0}
     - target: {fileID: 5074793300863967175, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -472,9 +508,29 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 85152def9163d0748a6dabb3f0b628de, type: 3}
+    - target: {fileID: 5548219786225555126, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 69ddf71a2194f044685fb3f391e13e70, type: 3}
     - target: {fileID: 6350162421279605273, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7002074923908659901, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f94f172893855e0458e611aafae7ec58, type: 3}
+    - target: {fileID: 7002074923908659901, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_Color.b
+      value: 0.8584906
+      objectReference: {fileID: 0}
+    - target: {fileID: 7002074923908659901, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8584906
+      objectReference: {fileID: 0}
+    - target: {fileID: 7002074923908659901, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8584906
       objectReference: {fileID: 0}
     - target: {fileID: 7275090760508939029, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
       propertyPath: m_Sprite
@@ -502,7 +558,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9194082153032994427, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
