@@ -1066,18 +1066,16 @@ public HashSet<(int x, int y)> protectedByBubbleVerticalyPositions = new HashSet
     private IEnumerator ExitArea(GameManager.GameState whereGo)
     {
         yield return new WaitForSeconds(3f);
+        if (ExplorationManager.Instance.isLastStageReached)
+        {
+            GameManager.Instance.ChangeGameState(GameManager.GameState.InVictoryScreen);
+            yield break;
+        }
         if (whereGo == GameManager.GameState.InOverWorld)
         {
-            if (ExplorationManager.Instance.isLastStageReached)
-            {
-                GameManager.Instance.ChangeGameState(GameManager.GameState.InVictoryScreen);
-            }
-            else
-            {
-                ShopManager.Instance.InitShop();
-                GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
-                ExplorationManager.Instance.SetDisplay();
-            }
+            ShopManager.Instance.InitShop();
+            GameManager.Instance.ChangeGameState(GameManager.GameState.InOverWorld);
+            ExplorationManager.Instance.SetDisplay();
         }
         if (whereGo == GameManager.GameState.InRefillPack)
         {
