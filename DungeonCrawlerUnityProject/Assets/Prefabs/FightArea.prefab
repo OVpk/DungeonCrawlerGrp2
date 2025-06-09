@@ -250,14 +250,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96144d12f0316154d8d6bc5494167114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rewardDisplayer: {fileID: 0}
   <sendInformation>k__BackingField: {fileID: 5283387031583828146}
+  sfxAnimatorPlayer: {fileID: 0}
+  sfxAnimatorEnemy: {fileID: 0}
+  sfxGlue: {fileID: 0}
+  sfxBulle: {fileID: 0}
+  sfxRazzia: {fileID: 0}
+  sfxFog: {fileID: 0}
+  sfxExplosivePowder: {fileID: 0}
   <aiController>k__BackingField: {fileID: 3283769598550774789}
   canUseControlls: 1
   packDisplayer: {fileID: 682914180578344334}
+  backgroundContainer: {fileID: 0}
   entityLocationPrefab: {fileID: 8523470483974167307, guid: 9c8e5ee742a23fc4db3a87c295e976b1, type: 3}
   playerGridContainer: {fileID: 629203391736174719}
   enemyGridContainer: {fileID: 6023638562927487757}
-  rewardText: {fileID: 7472296024221292392}
 --- !u!114 &3283769598550774789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,7 +376,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 024331d217ad6454786476ef07d57816, type: 3}
     - target: {fileID: 8289071666537621820, guid: b05aceae9a60803478b919394ee503c2, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8830825410751023211, guid: b05aceae9a60803478b919394ee503c2, type: 3}
       propertyPath: m_IsActive
@@ -436,30 +444,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4257714863416939805, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 4637478625797093524, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 14.3626
-      objectReference: {fileID: 0}
-    - target: {fileID: 4637478625797093524, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 7.3317
-      objectReference: {fileID: 0}
-    - target: {fileID: 4637478625797093524, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 3.64
-      objectReference: {fileID: 0}
-    - target: {fileID: 4637478625797093524, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 3.07
-      objectReference: {fileID: 0}
-    - target: {fileID: 7202736212177672986, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8086419871987164073, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
       propertyPath: m_Name
       value: FightSceneUi
@@ -485,14 +469,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1685624830261388758, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
   m_PrefabInstance: {fileID: 4151370393701985703}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7472296024221292392 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6786446093927856847, guid: 1db76f97d61714347a4059b3e2127cde, type: 3}
-  m_PrefabInstance: {fileID: 4151370393701985703}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
