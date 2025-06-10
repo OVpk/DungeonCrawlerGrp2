@@ -218,14 +218,14 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
                     case 0 :
                         if (state)
                         {
-                            effectDisplayer.anim.Play("BubbleHorizontalLeftOn");
+                            effectDisplayer.animForBubble.Play("BubbleHorizontalLeftOn");
                             isBubbleHLeftActive = true;
                         }
                         else
                         {
                             if (isBubbleHLeftActive == true)
                             {
-                                effectDisplayer.anim.Play("BubbleHorizontalLeftOff");
+                                effectDisplayer.animForBubble.Play("BubbleHorizontalLeftOff");
                                 isBubbleHLeftActive = false;
                             }
                         }
@@ -233,14 +233,14 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
                     case 1 :
                         if (state)
                         {
-                            effectDisplayer.anim.Play("BubbleHorizontalMiddleOn");
+                            effectDisplayer.animForBubble.Play("BubbleHorizontalMiddleOn");
                             isBubbleHMiddleActive = true;
                         }
                         else
                         {
                             if (isBubbleHMiddleActive == true)
                             {
-                                effectDisplayer.anim.Play("BubbleHorizontalMiddleOff");
+                                effectDisplayer.animForBubble.Play("BubbleHorizontalMiddleOff");
                                 isBubbleHMiddleActive = false;
                             }
                         }
@@ -248,14 +248,14 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
                     case 2 :
                         if (state)
                         {
-                            effectDisplayer.anim.Play("BubbleHorizontalRightOn");
+                            effectDisplayer.animForBubble.Play("BubbleHorizontalRightOn");
                             isBubbleHRightActive = true;
                         }
                         else
                         {
                             if (isBubbleHRightActive == true)
                             {
-                                effectDisplayer.anim.Play("BubbleHorizontalRightOff");
+                                effectDisplayer.animForBubble.Play("BubbleHorizontalRightOff");
                                 isBubbleHRightActive = false;
                             }
                         }
@@ -265,14 +265,14 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
             case BubbleDirections.Vertical :
                 if (state)
                 {
-                    effectDisplayer.anim.Play("BubbleVerticalOn");
+                    effectDisplayer.animForBubble.Play("BubbleVerticalOn");
                     isBubbleVActive = true;
                 }
                 else
                 {
                     if (isBubbleVActive == true)
                     {
-                        effectDisplayer.anim.Play("BubbleVerticalOff");
+                        effectDisplayer.animForBubble.Play("BubbleVerticalOff");
                         isBubbleVActive = false;
                     }
                 }
@@ -323,7 +323,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     {
         if (!IsConcerned(position, team)) return;
         
-        effectDisplayer.anim.Play("Explosion");
+        effectDisplayer.animForExplosion.Play("Explosion");
     }
 
     public void OnEntityGetExplosiveEffect((int x, int y) position, FightManager.TurnState team)
@@ -332,8 +332,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         
         effectDisplayer.explosivePowder.gameObject.SetActive(true);
         
-        miniFx.sprite = miniFxExplosivePoudre;
-        effectDisplayer.anim.Play("MiniFxSpawn");
+        effectDisplayer.animForMiniFxExplosivePoudre.Play("MiniFxSpawn");
     }
     
     public void OnEntityLoseExplosiveEffect((int x, int y) position, FightManager.TurnState team)
@@ -387,30 +386,22 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
         bubbleDurabilityNb = Math.Clamp(bubbleDurabilityNb--, 0, bubbleDurabilityNb);
         bubbleDurabilityText.text = bubbleDurabilityNb.ToString();
         
-        miniFx.sprite = miniFxBoing;
-        effectDisplayer.anim.Play("MiniFxSpawn");
+        effectDisplayer.animForMiniFxBoing.Play("MiniFxSpawn");
     }
 
-    public SpriteRenderer miniFx;
 
-    public Sprite miniFxMissed;
-    public Sprite miniFxGlue;
-    public Sprite miniFxExplosivePoudre;
-    public Sprite miniFxBoing;
 
     public void OnAttackIsMissed((int x, int y) position, FightManager.TurnState team)
     {
         if (!IsConcerned(position, team)) return;
 
-        miniFx.sprite = miniFxMissed;
-        effectDisplayer.anim.Play("MiniFxSpawn");
+        effectDisplayer.animForMiniFxMissed.Play("MiniFxSpawn");
     }
 
     public void OnAttackIsMissedByGlue((int x, int y) position, FightManager.TurnState team)
     {
         if (!IsConcerned(position, team)) return;
 
-        miniFx.sprite = miniFxGlue;
-        effectDisplayer.anim.Play("MiniFxSpawn");
+        effectDisplayer.animForMiniFxGlue.Play("MiniFxSpawn");
     }
 }

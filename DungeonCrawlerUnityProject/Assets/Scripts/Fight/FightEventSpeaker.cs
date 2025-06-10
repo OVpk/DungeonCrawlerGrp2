@@ -259,4 +259,5 @@ public class FightEventSpeaker : MonoBehaviour
             listener.OnAttackIsMissedByGlue(position, team);
         }
     }
+
 }

@@ -955,7 +955,7 @@ public HashSet<(int x, int y)> protectedByBubbleVerticalyPositions = new HashSet
         {
             for (int i = 0; i < gridToApply.GetLength(0); i++)
             {
-                protectedByBubbleVerticalyPositions.Remove((position.x, i));
+                protectedByBubbleVerticalyPositions.Remove((i, position.y));
                 
                 if (gridToApply[i, position.y] == null) continue;
                 if(!gridToApply[i, position.y].effects.Contains(EntityData.EntityEffects.ProtectedVerticaly)) continue;

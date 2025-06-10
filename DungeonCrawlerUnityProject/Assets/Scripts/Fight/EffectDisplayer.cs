@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class EffectDisplayer : MonoBehaviour
 {
-    public Animation anim;
+    public Animation animForBubble;
+    public Animation animForExplosion;
     public Animator explosivePowder;
+    
+    public Animation animForMiniFxMissed;
+    public Animation animForMiniFxGlue;
+    public Animation animForMiniFxExplosivePoudre;
+    public Animation animForMiniFxBoing;
 
     public Animator glueAnim;
     
