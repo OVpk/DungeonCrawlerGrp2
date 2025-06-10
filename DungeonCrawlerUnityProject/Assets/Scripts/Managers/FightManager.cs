@@ -7,6 +7,8 @@ using Random = UnityEngine.Random;
 
 public class FightManager : MonoBehaviour, IFightDisplayerListener
 {
+    public bool isAttackPatternMovingToDisplay = false;
+    
     public RewardDisplayer rewardDisplayer;
     
     [field: SerializeField] public FightEventSpeaker sendInformation { get; private set; }

@@ -12,6 +12,8 @@ public class HoveredInfoController : MonoBehaviour
     public Image characterSprite;
     public TMP_Text description;
 
+    public Image logoPoubelle;
+
     public void UpdateInformations(CharacterDataInstance character)
     {
         if (character == null) {UpdateInformationWithEmpty(); return;}
@@ -23,10 +25,12 @@ public class HoveredInfoController : MonoBehaviour
         {
             string nextType = character.nextLayer.type == EntityData.EntityTypes.Mou ? "<sprite index=3>" : "<sprite index=0>";
             nextLayerInfo.text = character.nextLayer.durability + "<sprite index=4> / " + nextType;
+            logoPoubelle.gameObject.SetActive(false);
         }
         else
         {
-            nextLayerInfo.text = "MORT";
+            nextLayerInfo.text = "";
+            logoPoubelle.gameObject.SetActive(true);
         }
         
         characterSprite.gameObject.SetActive(true);
@@ -41,5 +45,6 @@ public class HoveredInfoController : MonoBehaviour
         nextLayerInfo.text = "???";
         characterSprite.gameObject.SetActive(false);
         description.text = "";
+        logoPoubelle.gameObject.SetActive(false);
     }
 }

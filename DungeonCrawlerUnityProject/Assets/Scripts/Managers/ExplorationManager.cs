@@ -38,6 +38,26 @@ public class ExplorationManager : MonoBehaviour
         level = customLevelData.customLevel2d;
         SwitchCurrentAreaTo((0,0));
     }
+    
+    public (int x, int y)? FindAreaPosition(string targetName)
+    {
+        int width  = level.GetLength(0);
+        int height = level.GetLength(1);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                var area = level[x, y];
+                if (area != null && area.areaName == targetName)
+                {
+                    return (x, y);
+                }
+            }
+        }
+
+        return null; // pas trouvée
+    }
 
     private void SwitchCurrentAreaTo((int x, int y) position)
     {

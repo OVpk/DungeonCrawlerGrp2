@@ -22,6 +22,7 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     private Color orange = new Color(1f, 0.5f, 0f);
     private Color pink = new Color(1f, 0.4f, 0.7f);
     private Color hibiscus = new Color(0.772f, 0.192f, 0.412f);
+    private Color darkOrange = new Color(0.772f, 0.386f, 0f);
     
     #endregion
 
@@ -137,9 +138,17 @@ public class EntityDisplayController : MonoBehaviour, IFightEventListener
     public void OnEntityTargeted((int x, int y) position, FightManager.TurnState team)
     {
         if (!IsConcerned(position, team)) return;
-        
-        entityLocation.SetHighlight(orange);
-        entity.SetHighlight(orange);
+
+        if (FightManager.Instance.isAttackPatternMovingToDisplay)
+        {
+            entityLocation.SetHighlight(darkOrange);
+            entity.SetHighlight(darkOrange);
+        }
+        else
+        {
+            entityLocation.SetHighlight(orange);
+            entity.SetHighlight(orange);
+        }
     }
     
     public void OnEntityNoLongerTargeted((int x, int y) position, FightManager.TurnState team)

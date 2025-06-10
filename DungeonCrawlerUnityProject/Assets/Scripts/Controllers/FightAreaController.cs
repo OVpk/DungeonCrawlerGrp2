@@ -238,6 +238,16 @@ public class FightAreaController : PlayerController
     private void SwitchState(SelectorState newState)
     {
         currentState = newState;
+        
+        if (currentState == SelectorState.SelectAttackPosition)
+        {
+            FightManager.Instance.isAttackPatternMovingToDisplay = true;
+        }
+        else
+        {
+            FightManager.Instance.isAttackPatternMovingToDisplay = false;
+        }
+        
         buttonHelpController.DisplayHelp(currentState);
     }
     

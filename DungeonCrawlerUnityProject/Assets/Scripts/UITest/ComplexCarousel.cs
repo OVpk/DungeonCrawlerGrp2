@@ -202,6 +202,22 @@ public class ComplexCarousel : MonoBehaviour
         {
             centerConditionText.text = attackStage.unlockCondition.description;
         }
-        centerResultText.text    = attackStage.effectDescription;
+
+        if (attackStage.Effect is EntityData.EntityEffects.ProtectedHorizontaly
+            or EntityData.EntityEffects.ProtectedVerticaly)
+        {
+            logoDegat.gameObject.SetActive(false);
+            logoBulle.gameObject.SetActive(true);
+            centerResultText.text = attackStage.BubbleDurability.ToString();
+        }
+        else
+        {
+            logoDegat.gameObject.SetActive(true);
+            logoBulle.gameObject.SetActive(false);
+            centerResultText.text = attackStage.damage.ToString();
+        }
     }
+
+    public Image logoDegat;
+    public Image logoBulle;
 }
