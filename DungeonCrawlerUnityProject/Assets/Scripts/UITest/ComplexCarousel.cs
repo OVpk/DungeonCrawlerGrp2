@@ -208,16 +208,26 @@ public class ComplexCarousel : MonoBehaviour
         {
             logoDegat.gameObject.SetActive(false);
             logoBulle.gameObject.SetActive(true);
+            logoGlue.gameObject.SetActive(false);
             centerResultText.text = attackStage.BubbleDurability.ToString();
+        }
+        else if (attackStage.Effect is EntityData.EntityEffects.Glue)
+        {
+            logoDegat.gameObject.SetActive(false);
+            logoBulle.gameObject.SetActive(false);
+            logoGlue.gameObject.SetActive(true);
+            centerResultText.text = "";
         }
         else
         {
             logoDegat.gameObject.SetActive(true);
             logoBulle.gameObject.SetActive(false);
+            logoGlue.gameObject.SetActive(false);
             centerResultText.text = attackStage.damage.ToString();
         }
     }
 
     public Image logoDegat;
     public Image logoBulle;
+    public Image logoGlue;
 }
